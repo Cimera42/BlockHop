@@ -2,7 +2,7 @@
 #define ANGLE_H_INCLUDED
 
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include "logger.h"
 
 #define M_2PI 6.28318530
