@@ -28,22 +28,22 @@ void Mesh::createVAO()
         int inc = 0;
         GLuint vertLoc = 0;
         glEnableVertexAttribArray(vertLoc);
-        glVertexAttribPointer(vertLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) inc); //attribute, size, type, is normalised?, stride, offset
+        glVertexAttribPointer(vertLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (intptr_t) inc); //attribute, size, type, is normalised?, stride, offset
         inc += sizeof(glm::vec3);
 
         GLuint uvLoc = 1;
         glEnableVertexAttribArray(uvLoc);
-        glVertexAttribPointer(uvLoc, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) inc);
+        glVertexAttribPointer(uvLoc, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (intptr_t) inc);
         inc += sizeof(glm::vec2);
 
         GLuint normLoc = 2;
         glEnableVertexAttribArray(normLoc);
-        glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) inc);
+        glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) (intptr_t) inc);
         inc += sizeof(glm::vec3);
 
         GLuint matLoc = 3;
         glEnableVertexAttribArray(matLoc);
-        glVertexAttribIPointer(matLoc, 1, GL_INT, sizeof(Vertex), (void*) inc);
+        glVertexAttribIPointer(matLoc, 1, GL_INT, sizeof(Vertex), (void*) (intptr_t) inc);
         inc += sizeof(int);
     glSetBindVertexArray(0);
 }
