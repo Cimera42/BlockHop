@@ -36,7 +36,7 @@ Texture::~Texture()
 bool Texture::load(std::vector<std::string> inFilenames)
 {
     filenames.swap(inFilenames);
-    load();
+    return load();
 }
 
 bool Texture::load()
@@ -44,7 +44,7 @@ bool Texture::load()
     stbi_set_flip_vertically_on_load(true);
     int maxW = 0;
     int maxH = 0;
-    for(int i = 0; i < filenames.size(); i++)
+    for(unsigned int i = 0; i < filenames.size(); i++)
     {
         int tempWidth, tempHeight, tempComp;
         imageData.push_back(stbi_load(filenames[i].c_str(), &tempWidth, &tempHeight, &tempComp, STBI_rgb_alpha));
@@ -62,7 +62,7 @@ bool Texture::load()
         {
             loaded = false;
             Logger(1) << "Texture not loaded: " << filenames[i] << " - " << stbi_failure_reason();
-            return 0;
+            return false;
         }
     }
 
@@ -76,7 +76,7 @@ bool Texture::load()
 
     glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
 
-    for(int i = 0; i < imageData.size(); i++)
+    for(unsigned int i = 0; i < imageData.size(); i++)
     {
         if(imageData[i])
         {

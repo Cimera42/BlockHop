@@ -82,7 +82,7 @@ bool initGLFW()
     return true;
 }
 
-bool initGLEW(bool printExtensions)
+bool initGLEW()
 {
     glewExperimental = (GLboolean) true;
     GLenum err = glewInit();

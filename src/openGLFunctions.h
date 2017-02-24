@@ -12,6 +12,6 @@ void glSetBindFramebuffer(GLenum, GLuint);
 void glSetUseProgram(GLuint);
 
 bool initGLFW();
-bool initGLEW(bool printExtensions);
+bool initGLEW();
 
 #endif // OPENGLBITS_H_INCLUDED

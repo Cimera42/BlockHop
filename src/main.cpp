@@ -34,7 +34,7 @@ int main()
     Window window("Template", 640, 480);
     window.cursorMode(GLFW_CURSOR_DISABLED);
 
-    initGLEW(false);
+    initGLEW();
 
     glfwSetWindowCloseCallback(window.glfwWindow, windowCloseEvent);
     glfwSetCursorPosCallback(window.glfwWindow, mouseMoveEvent);
@@ -88,7 +88,7 @@ int main()
 
         camera.update();
 
-        for(int i = 0; i < model.parts.size(); i++)
+        for(unsigned int i = 0; i < model.parts.size(); i++)
         {
             Part part = model.parts[i];
             glm::mat4 modelMatrix = glm::translate(part.position);
@@ -135,7 +135,7 @@ int main()
             }
         }
 
-        for(int i = 0; i < modelBone.parts.size(); i++)
+        for(unsigned int i = 0; i < modelBone.parts.size(); i++)
         {
             Part part = modelBone.parts[i];
             glm::mat4 modelMatrix = glm::translate(part.position);

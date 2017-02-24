@@ -65,16 +65,16 @@ void Mesh::genBuffers()
 
 void Mesh::load(aiMesh* assimpMesh)
 {
-    for(int j = 0; j < assimpMesh->mNumFaces; j++)
+    for(unsigned int j = 0; j < assimpMesh->mNumFaces; j++)
     {
         aiFace& assimpFace = assimpMesh->mFaces[j];
 
-        for(int k = 0; k < assimpFace.mNumIndices; k++)
+        for(unsigned int k = 0; k < assimpFace.mNumIndices; k++)
         {
             indices.push_back(assimpFace.mIndices[k]);
         }
     }
-    for(int j = 0; j < assimpMesh->mNumVertices; j++)
+    for(unsigned int j = 0; j < assimpMesh->mNumVertices; j++)
     {
         aiVector3D vertex = assimpMesh->mVertices[j];
         glm::vec3 glmVert = glm::vec3(vertex.x,vertex.y,vertex.z);
@@ -110,7 +110,7 @@ void Mesh::loadWithVectors(std::vector<glm::vec3> inVertices, std::vector<glm::v
     for(int i = 0; inIndices.size(); i++)
         materialIndices.push_back(0);
 
-    for(int i = 0; i < vertices.size(); i++)
+    for(unsigned int i = 0; i < vertices.size(); i++)
     {
         Vertex collatedVertex;
         collatedVertex.pos = vertices[i];

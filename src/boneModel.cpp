@@ -51,7 +51,7 @@ void BoneModel::load()
         return;
     }
 
-    for(int i = 0; i < scene->mNumMaterials; i++)
+    for(unsigned int i = 0; i < scene->mNumMaterials; i++)
     {
         aiMaterial* assimpMaterial = scene->mMaterials[i];
 
@@ -72,7 +72,7 @@ void BoneModel::load()
     }
 
     std::vector<std::string> texPaths;
-    for(int i = 0; i < materials.size(); i++)
+    for(unsigned int i = 0; i < materials.size(); i++)
     {
         if(materials[i].texturePath.find_first_not_of(' ') != std::string::npos)
         {
@@ -92,7 +92,7 @@ void BoneModel::load()
 
     nodeLoop(scene->mRootNode, 0, glm::mat4());
 
-    for(int i = 0; i < scene->mNumMeshes; i++)
+    for(unsigned int i = 0; i < scene->mNumMeshes; i++)
     {
         aiMesh* assimpMesh = scene->mMeshes[i];
         if(assimpMesh->mNumBones > 0)
@@ -157,7 +157,7 @@ void BoneModel::nodeLoop(aiNode* assimpNode, int indent, glm::mat4 incrementalTr
         parts.push_back(part);
     }
 
-    for(int i = 0; i < assimpNode->mNumChildren; i++)
+    for(unsigned int i = 0; i < assimpNode->mNumChildren; i++)
     {
         aiNode* childNode = assimpNode->mChildren[i];
         nodeLoop(childNode, indent+1, newTransform);

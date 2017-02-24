@@ -23,32 +23,32 @@ void BoneMesh::createVAO()
         int inc = 0;
         GLuint vertLoc = 0;
         glEnableVertexAttribArray(vertLoc);
-        glVertexAttribPointer(vertLoc, 3, GL_FLOAT, GL_FALSE, sizeof(BoneVertex), (void*) inc); //attribute, size, type, is normalised?, stride, offset
+        glVertexAttribPointer(vertLoc, 3, GL_FLOAT, GL_FALSE, sizeof(BoneVertex), (void*) (intptr_t) inc); //attribute, size, type, is normalised?, stride, offset
         inc += sizeof(glm::vec3);
 
         GLuint uvLoc = 1;
         glEnableVertexAttribArray(uvLoc);
-        glVertexAttribPointer(uvLoc, 2, GL_FLOAT, GL_FALSE, sizeof(BoneVertex), (void*) inc);
+        glVertexAttribPointer(uvLoc, 2, GL_FLOAT, GL_FALSE, sizeof(BoneVertex), (void*) (intptr_t) inc);
         inc += sizeof(glm::vec2);
 
         GLuint normLoc = 2;
         glEnableVertexAttribArray(normLoc);
-        glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, sizeof(BoneVertex), (void*) inc);
+        glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, sizeof(BoneVertex), (void*) (intptr_t) inc);
         inc += sizeof(glm::vec3);
 
         GLuint matLoc = 3;
         glEnableVertexAttribArray(matLoc);
-        glVertexAttribIPointer(matLoc, 1, GL_INT, sizeof(BoneVertex), (void*) inc);
+        glVertexAttribIPointer(matLoc, 1, GL_INT, sizeof(BoneVertex), (void*) (intptr_t) inc);
         inc += sizeof(int);
 
         GLuint boneIdLoc = 4;
         glEnableVertexAttribArray(boneIdLoc);
-        glVertexAttribIPointer(boneIdLoc, 4, GL_INT, sizeof(BoneVertex), (void*) inc);
+        glVertexAttribIPointer(boneIdLoc, 4, GL_INT, sizeof(BoneVertex), (void*) (intptr_t) inc);
         inc += sizeof(int[4]);
 
         GLuint boneWeightLoc = 5;
         glEnableVertexAttribArray(boneWeightLoc);
-        glVertexAttribPointer(boneWeightLoc, 4, GL_FLOAT, GL_FALSE, sizeof(BoneVertex), (void*) inc);
+        glVertexAttribPointer(boneWeightLoc, 4, GL_FLOAT, GL_FALSE, sizeof(BoneVertex), (void*) (intptr_t) inc);
         inc += sizeof(int[4]);
     glSetBindVertexArray(0);
 }
@@ -72,16 +72,16 @@ void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
 {
     assimpNodes = nodes;
 
-    for(int j = 0; j < assimpMesh->mNumFaces; j++)
+    for(unsigned int j = 0; j < assimpMesh->mNumFaces; j++)
     {
         aiFace& assimpFace = assimpMesh->mFaces[j];
 
-        for(int k = 0; k < assimpFace.mNumIndices; k++)
+        for(unsigned int k = 0; k < assimpFace.mNumIndices; k++)
         {
             indices.push_back(assimpFace.mIndices[k]);
         }
     }
-    for(int j = 0; j < assimpMesh->mNumVertices; j++)
+    for(unsigned int j = 0; j < assimpMesh->mNumVertices; j++)
     {
         aiVector3D vertex = assimpMesh->mVertices[j];
         glm::vec3 glmVert = glm::vec3(vertex.x,vertex.y,vertex.z);
@@ -105,7 +105,7 @@ void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
         collatedVertices.push_back(collatedVertex);
     }
 
-    for(int i = 0; i < assimpMesh->mNumBones; i++)
+    for(unsigned int i = 0; i < assimpMesh->mNumBones; i++)
     {
         aiBone* assimpBone = assimpMesh->mBones[i];
 
@@ -115,12 +115,12 @@ void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
         bone.offsetMatrix = AToGMat(assimpBone->mOffsetMatrix);
         bones.push_back(bone);
 
-        for(int j = 0; j < assimpBone->mNumWeights; j++)
+        for(unsigned int j = 0; j < assimpBone->mNumWeights; j++)
         {
             aiVertexWeight assimpWeight = assimpBone->mWeights[j];
 
             BoneVertex vert = collatedVertices[assimpWeight.mVertexId];
-            for(int k = 0; k < 4; k++)
+            for(unsigned int k = 0; k < 4; k++)
             {
                 if(vert.BoneWeights[k] <= 0.0f)
                 {
@@ -138,7 +138,7 @@ void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
 
 aiNode* BoneMesh::FindNode(std::string findThis)
 {
-    for(int i = 0; i < assimpNodes.size(); i++)
+    for(unsigned int i = 0; i < assimpNodes.size(); i++)
     {
         if(assimpNodes[i]->mName.C_Str() == findThis)
             return assimpNodes[i];
@@ -148,7 +148,7 @@ aiNode* BoneMesh::FindNode(std::string findThis)
 
 Bone* BoneMesh::FindBone(std::string findThis)
 {
-    for(int i = 0; i < bones.size(); i++)
+    for(unsigned int i = 0; i < bones.size(); i++)
     {
         if(bones[i].name == findThis)
             return &bones[i];
@@ -158,7 +158,7 @@ Bone* BoneMesh::FindBone(std::string findThis)
 
 void BoneMesh::transformBones()
 {
-    for(int i = 0; i < bones.size(); i++)
+    for(unsigned int i = 0; i < bones.size(); i++)
     {
         aiNode* node = FindNode(bones[i].name);
         Bone* parentBone = FindBone(node->mParent->mName.C_Str());
@@ -170,7 +170,7 @@ void BoneMesh::transformBones()
         bones[i].transform = AToGMat(node->mTransformation);
     }
 
-    for(int i = 0; i < bones.size(); i++)
+    for(unsigned int i = 0; i < bones.size(); i++)
     {
         Bone bone = bones[i];
         Bone* parent = bones[i].parentBone;
@@ -202,10 +202,10 @@ void BoneMesh::loadWithVectors(std::vector<glm::vec3> inVertices, std::vector<gl
     uvs.swap(inUvs);
     normals.swap(inNormals);
     indices.swap(inIndices);
-    for(int i = 0; inIndices.size(); i++)
+    for(unsigned int i = 0; inIndices.size(); i++)
         materialIndices.push_back(0);
 
-    for(int i = 0; i < vertices.size(); i++)
+    for(unsigned int i = 0; i < vertices.size(); i++)
     {
         BoneVertex collatedVertex;
         collatedVertex.pos = vertices[i];
