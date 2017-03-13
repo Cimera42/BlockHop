@@ -36,14 +36,17 @@ class BoneModel
         std::vector<Material> materials;
         Texture texture;
 
-        std::map<unsigned int, Mesh> normalMeshes;
-        std::map<unsigned int, BoneMesh> boneMeshes;
+        std::map<unsigned int, Mesh*> normalMeshes;
+        std::map<unsigned int, BoneMesh*> boneMeshes;
         std::vector<Part> parts;
 
         std::vector<aiNode*> assimpNodes;
+        std::vector<aiNodeAnim*> animNodes;
 
         void load();
         void nodeLoop(aiNode* assimpNode, int indent, glm::mat4 incrementalTransform);
+
+        void renderModel(Shader plainShader, Shader boneShader, Camera camera);
 };
 
 glm::mat4 AToGMat(aiMatrix4x4 aiMat);

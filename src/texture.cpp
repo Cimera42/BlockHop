@@ -30,6 +30,8 @@ Texture::Texture(std::vector<std::string> inFilenames) : Texture(inFilenames, tr
 
 Texture::~Texture()
 {
+    for(auto singleImageData : imageData)
+        stbi_image_free(singleImageData);
     glDeleteTextures(1, &textureID);
 }
 
