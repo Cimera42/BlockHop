@@ -35,7 +35,7 @@ bool Shader::addLoc(const char* name)
 
 GLint Shader::getLoc(const char* name)
 {
-    std::map<const char*,GLint>::iterator iter = locations.find(name);
+    auto iter = locations.find(name);
     if(iter != locations.end())
         return iter->second;
     return -1;
