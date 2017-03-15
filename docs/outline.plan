@@ -1,0 +1,170 @@
+
+Indexing of names of events, assets, other things:
+	For most things, we assign a unique ID and save an indexing file.
+	Each 'client' and server would need to have a copy of any indexed files.
+	Essentially each sub-version/build of the game would be reindexed.
+	The names that have been given to items inside the files however mustn't be overwritten.
+	Perform a checksum/hash and compare to server to ensure that people haven't editted critical files.
+	Food for thought: Would be great if we could write some middleware that before compiling translates
+	the "names" that we use for indexed files into indices so that clients don't need to do string searches.
+
+	Basic Indexed Files:
+		for each item:
+			- index
+			- name
+
+			
+	
+Assets:
+	Each asset indexed.
+	
+	Asset Index Info:
+		- index/id
+		- src/filename
+		- name (to be used elsewhere)
+	
+	This indexing needs to be updated each time we add new assets (we'd just need to write an automated 
+	indexer). By default the src/filename will also be assigned to the name but can be changed by us (ie
+	the automated indexer can't override the names we give things).
+	
+	Asset types:
+		- Models - includes animations
+		- Sounds
+		- Textures
+	
+	Two types of asset loaders:
+		- State pre-loaders
+		- on the fly loaders
+		
+		
+		
+Configuration:
+	Each variable is indexed.
+	
+	Config Index Info:
+		- index/id
+		- var name
+		- var value
+		
+	Allows us to send variable info with events. 
+	TODO: Should configurable variables (like attack damage etc. be stored separate to events or within them)?
+	TODO: Should these variables be extended to more than just events...
+	
+
+		
+Game States:
+	Each game state indexed.
+	
+	Game State Index Info:
+		- index/id
+		- name
+		- type
+		- *stateDescription*
+
+	TODO: Do you agree with seperating the states into individual categories? Otherwise they are too distinct
+	and we cant really describe them easily. This of course can be tailored to the type of game you're making.
+	
+	Game State Types:
+		- menu
+		- game start
+		- game end
+		- ...Ability to add more
+		
+	TODO: Description of each type, including the specific systems that run in each
+	
+	All low level systems run in every game state.
+	The game state can specify which high level systems run.
+	
+	States also have a few generic functions/properties:
+		- Pre-loader
+		- Initial Variable Setup
+		- Initial Event Dispatching
+	
+
+	
+Game Process Overview:
+	Enter Game State -> State Pre-loader (loads important assets) -> Initial State Setup -> 
+	Initial Event Dispatch -> Game Systems...
+
+Low Level Game Systems:
+	- Asset Loader
+	- Generic Event Dispatcher/Receiver
+	
+High Level Game Systems:
+	- Animations - reactive
+	- Sound - reactive
+	- Drawing - ongoing
+	- Physics - active
+	- etc.
+	
+Active and Reactive Systems:
+	- active = dispatchers, systems that send signals for events to be processed and created - potentially to server (if we have networking)
+	- reactive = receivers, systems that get signals and cause changes on client side - potentially don't need to run continuously only on dispatched events
+	
+Ongoing Systems:
+	- just continually process items given certain information. Don't dispatch and don't recieve events.
+	
+TODO: Potentially need a few 'processing' systems between dispatchers and receivers? Do some use cases to confirm how this would work.
+
+
+	
+Events:
+	Broken down into specific categories - each event has a corresponding reactive system to handle its client side.
+	
+	Each event is indexed.
+	
+	Event Index Info:
+		- index/id
+		- name
+		- type
+		- *eventDescription*
+		
+	Events are dispatched from any active (or potentially processing) system. 
+	
+	Event types correspond to high level reactive systems. Each different type of event will need different information
+	to allow it to function, but the hope is that events will be our communication method between systems. Information
+	might include assets, config variables etc.
+	
+	
+
+Event Groups:
+	Each event group is indexed.
+	
+	Event Group Index Info:
+		- index/id
+		- name
+		- array of event ids/names
+		
+	Easy way for us to describe a group of events. Eg. A player attacks someone else - the event group is named "player_hit"
+	and contains multiple events such as - a hit animation, sound, ui shake, etc (idk)
+	
+	
+	
+Example Use Cases:
+Overview - player attacks another player
+What happens:
+	Player left clicks -> Keyboard System (active) recieves signal and interprets this to mean something... dispatches 'attack' event
+	-> first dispatching system/function sends to server -> *processing happens* event group is dispatched back -> event group broken
+	into individual events and received by client high level systems, playing animations, music etc...
+Things to consider:
+	TODO: Do events only get dispatched after sending to server or do we played animations etc. before in anticipation? HMMM
+	
+	
+	
+Entity Component System:
+
+	Entities hold components...
+	Components hold data and act as singals for specific systems to run.
+	Systems are the things which manipulate data...
+	No cross component communication...
+	
+
+What challenges do you remember facing with SDD game?
+Ones that I hope this addresses is:
+	State management (remember the disgusting enums for state and seperate system loops)
+	Cross system communication and splitting of systems into better groups
+	
+What else to deal with:
+	We had a LOT of systems and components, but how much do we need to seperate things up.
+	Where do all the inanimate things like shadows, fog, specific shaders etc go? Are they
+	just classed as ongoing systems?

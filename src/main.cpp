@@ -3,9 +3,14 @@
 #include "boneModel.h"
 #include "camera.h"
 #include "window.h"
+#include "ecs/ecsManager.h"
+#include "ecs/TestClass.h"
+#include "ecs/TestSystem.h"
 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
+
+#define TEST_MAIN 1
 
 glm::vec2 lastPos;
 glm::vec3 worldPos(0,0,0);
@@ -26,6 +31,23 @@ void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
     lastPos = glm::vec2(xpos,ypos);
 }
 
+#ifdef TEST_MAIN
+int main() {
+    Logger(1)<<"test"<<std::endl;
+    json j1 = {{"test", true}};
+    TestClass* e = static_cast<TestClass*> (ECSManager::createComponent("testComponent", j1));
+    Logger(1)<< e->testInt << std::endl;
+
+    // NOTE: Interesting proposal would be to move the system creation to the cpp of the system
+    // itself, so its created in global space but isn't accessible without extern.
+    // This would also allow us to set the components required their rather than in an external
+    // file.
+    std::vector<std::string> ttt;
+    ttt.push_back("testComponent");
+    TestSystem* f = static_cast<TestSystem*> (ECSManager::createSystem("testSystem", ttt));
+    Logger(1)<< f->ok << std::endl;
+}
+#else
 int main()
 {
     Logger(1) << "First Line of Program";
@@ -191,3 +213,4 @@ int main()
     window.destroy();
     glfwTerminate();
 }
+#endif
