@@ -19,9 +19,11 @@ struct Logger
     Logger(bool doEndLine)
     {
         endLine = doEndLine;
+        between = "";
     }
     Logger(std::string inBetween)
     {
+        endLine = false;
         between = inBetween;
     }
     Logger(bool doEndLine, std::string inBetween)
