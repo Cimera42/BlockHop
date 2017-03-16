@@ -3,6 +3,7 @@
 #include "boneModel.h"
 #include "camera.h"
 #include "window.h"
+#include "text.h"
 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
@@ -49,18 +50,30 @@ int main()
     camera.update();
     camera.perspective(90.0f, (float)window.width/window.height, 0.001f, 100.0f);
 
-    Shader genericShader("shaders/basic3d/3dvert.vert", "shaders/basic3d/3dfrag.frag");
-    genericShader.addLoc("modelMat");
-    genericShader.addLoc("viewMat");
-    genericShader.addLoc("projMat");
-    genericShader.addLoc("textureSampler");
+    Shader* genericShader = new Shader("shaders/basic3d/3dvert.vert", "shaders/basic3d/3dfrag.frag");
+    genericShader->addLoc("modelMat");
+    genericShader->addLoc("viewMat");
+    genericShader->addLoc("projMat");
+    genericShader->addLoc("textureSampler");
 
-    Shader boneShader("shaders/bone3d/boneVert.vert", "shaders/bone3d/boneFrag.frag", "shaders/flat.geom");
-    boneShader.addLoc("modelMat");
-    boneShader.addLoc("viewMat");
-    boneShader.addLoc("projMat");
-    boneShader.addLoc("textureSampler");
-    boneShader.addLoc("boneMats");
+    Shader* boneShader = new Shader("shaders/bone3d/boneVert.vert", "shaders/bone3d/boneFrag.frag", "shaders/flat.geom");
+    boneShader->addLoc("modelMat");
+    boneShader->addLoc("viewMat");
+    boneShader->addLoc("projMat");
+    boneShader->addLoc("textureSampler");
+    boneShader->addLoc("boneMats");
+    
+    Shader* textShader = new Shader("shaders/text/textVert.vert", "shaders/text/textFrag.frag");
+    textShader->addLoc("modelMat");
+    textShader->addLoc("projMat");
+    textShader->addLoc("textureSampler");
+    textShader->addLoc("u_colour");
+    textShader->addLoc("u_min");
+    textShader->addLoc("u_max");
+    
+    Font* f = new Font();
+    Text* text = new Text(f);
+    text->add("ABCDEFG");
 
     float delta = 0;
     float lastFrame = (float) glfwGetTime();
@@ -90,13 +103,17 @@ int main()
 
         model.renderModel(genericShader, boneShader, camera);
         modelBone.renderModel(genericShader, boneShader, camera);
+        
+        text->set("#" + std::to_string(glfwGetTime()));
+        text->render(textShader);
 
         if(glfwGetKey(window.glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             shouldExit = true;
         glfwPollEvents();
         glfwSwapBuffers(window.glfwWindow);
     }
-
+    
+    delete text;
     window.destroy();
     glfwTerminate();
 }
