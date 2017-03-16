@@ -4,18 +4,32 @@
 #include <iostream>
 #include <sstream>
 #include <chrono>
+#include <string>
 
 struct Logger
 {
     bool endLine;
+    std::string between;
 
     Logger()
     {
         endLine = false;
+        between = "";
     }
     Logger(bool doEndLine)
     {
         endLine = doEndLine;
+        between = "";
+    }
+    Logger(std::string inBetween)
+    {
+        endLine = false;
+        between = inBetween;
+    }
+    Logger(bool doEndLine, std::string inBetween)
+    {
+        endLine = doEndLine;
+        between = inBetween;
     }
 
     std::stringstream buffer;
@@ -24,14 +38,14 @@ struct Logger
     Logger& operator<<(const T& val)
     {
         //Push input to stringstream
-        buffer << val;
+        buffer << val << between;
         return *this;
     }
 
     //Function for special stream types, eg endl
     Logger& operator<<(std::ostream& (*val)(std::ostream &))
     {
-        buffer << val;
+        buffer << val << between;
         return *this;
     }
 
