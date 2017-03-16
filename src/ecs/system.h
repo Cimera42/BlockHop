@@ -27,10 +27,23 @@ public:
         static System* create() {return new T; };
     void setRequiredComponents(std::vector<std::string> inComps);
 
-    void subscribeEntity(Entity* entToSub);
-    void unsubscribeEntity(Entity* entToUnSub);
+    /*
+     * Functions for adding/removing entities from the system.
+     * Should only be called from the Entity class.
+     */
+    bool subscribeEntity(Entity* entToSub);
+    bool unsubscribeEntity(Entity* entToUnSub);
 
-    /*virtual void update(); //TODO do we pass in dt?*/
+    /*
+     * Helpers to retrieved subscribed entities
+     */
+    std::vector<Entity*> getEntities();
+
+    /*
+     * Updates are called by the engine to run the system.
+     */
+    virtual void update();
+    virtual void update(double dt);
 
 private:
     /*

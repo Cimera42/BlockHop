@@ -6,6 +6,7 @@
 
 using json = nlohmann::json;
 
+//TODO Should a component hold its own name so we don't accidently pass in the wrong name to things!?
 class Component {
 public:
     /*

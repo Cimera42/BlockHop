@@ -4,8 +4,8 @@
 #include "camera.h"
 #include "window.h"
 #include "ecs/ecsManager.h"
-#include "ecs/TestClass.h"
-#include "ecs/TestSystem.h"
+#include "ecs/testComponent.h"
+#include "ecs/testSystem.h"
 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
@@ -33,19 +33,49 @@ void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 
 #ifdef TEST_MAIN
 int main() {
-    Logger(1)<<"test"<<std::endl;
-    json j1 = {{"test", true}};
-    TestClass* e = static_cast<TestClass*> (ECSManager::createComponent("testComponent", j1));
-    Logger(1)<< e->testInt << std::endl;
-
-    // NOTE: Interesting proposal would be to move the system creation to the cpp of the system
-    // itself, so its created in global space but isn't accessible without extern.
-    // This would also allow us to set the components required their rather than in an external
-    // file.
     std::vector<std::string> ttt;
     ttt.push_back("testComponent");
-    TestSystem* f = static_cast<TestSystem*> (ECSManager::createSystem("testSystem", ttt));
-    Logger(1)<< f->ok << std::endl;
+    TestSystem* f = static_cast<TestSystem*> (ECSManager::i()->createSystem("testSystem", ttt));
+    Logger(1)<< "Test value: "<<f->ok;
+
+    json j1 = {{"test", true}};
+    TestComponent* e = static_cast<TestComponent*> (ECSManager::i()->createComponent("testComponent", j1));
+    Logger(1)<< "Test value: "<<e->testInt;
+
+
+    //Entity creation
+    std::vector<json> vvv;
+    vvv.push_back(j1);
+    std::vector<std::string> bbb;
+    bbb.push_back("testComponent");
+    Entity* newEnt = ECSManager::i()->createEntity("Ent", bbb, vvv);
+
+    //Testing
+    //TODO Create a test
+    for(auto ent : f->getEntities()) {
+        Logger(1)<<"These should match: "<<ent<<" "<<newEnt;
+    }
+
+    newEnt->removeComponent("testComponent");
+    Logger(1)<<"System should have no subbed entities. Entity size: "<<f->getEntities().size();
+
+    newEnt->addComponent("testComponent", e);
+    Logger(1)<<"System should have 1 subbed entity. Entity size: "<<f->getEntities().size();
+
+    f->update();
+
+    Entity* confirm = ECSManager::i()->findEntity("Ent");
+    Logger(1)<<"These should also match: "<<newEnt<<" "<<confirm;
+
+    System* searchSys = ECSManager::i()->findSystem("testSystem");
+    Logger(1)<<"So should these: "<<searchSys<<" "<<f;
+
+    Logger(1)<<"And this should be null: "<<ECSManager::i()->findEntity("ent");
+
+    TestComponent* getComp = static_cast<TestComponent*> (newEnt->getComponent("testComponent"));
+    Logger(1)<<"This should show test value again: "<<getComp->testInt;
+
+    Logger(1)<<"And this should be null once again: "<<newEnt->getComponent("testSystem");
 }
 #else
 int main()

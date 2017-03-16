@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(libraries/include)
 
 file(GLOB_RECURSE source ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-set(SOURCE_FILES ${source} src/ecs/ecsManager.h src/ecs/escManager.cpp src/ecs/escLoader.cpp src/ecs/escLoader.h src/ecs/TestClass.cpp src/ecs/TestClass.h src/ecs/TestSystem.cpp src/ecs/TestSystem.h)
+set(SOURCE_FILES ${source})
 add_executable(BlockHop_CLion ${SOURCE_FILES})
 
 find_package(OpenGL REQUIRED)

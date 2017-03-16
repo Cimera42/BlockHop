@@ -21,21 +21,28 @@ public:
     ECSManager();
     ~ECSManager();
 
-    /*int findComponent(std::string name); See if we can input a classType and return a string? ie from the map
+    /*
+     * Helper functions
+     * Will return nullptr if a match cannot be found
+     */
     System* findSystem(std::string name);
-    Entity* findEntity(std::string name);*/
+    Entity* findEntity(std::string name);
 
-    //addComponentToEntity(Entity* ent, std::string comp);
-    //deleteComponentFromEntity(Entity* ent, std::string comp);
+    //Is there a point to this when we could just call addComponent on the entity itself
+    //static void addComponentToEntity(Entity* ent, std::string comp);
+    //static void removeComponentFromEntity(Entity* ent, std::string comp);
 
-    static Component* createComponent(std::string name, json compData);
-    static System* createSystem(std::string name, std::vector<std::string> compsNeeded);
+    /*
+     * Functions for the generation of game elements
+     */
+    Component* createComponent(std::string name, json compData);
+    System* createSystem(std::string name, std::vector<std::string> compsNeeded);
     //TODO consider merging compsToSub and compsData into one larger json which we process?
-    static Entity* createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData);
+    Entity* createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData);
 
     //Used to generate references to systems by string
     template<typename T>
-    static bool exportSystem(std::string name) {
+    bool exportSystem(std::string name) {
         SystemFactoryPtr sysFunc = &System::create<T>;
         gameSystemExports.insert(std::make_pair(name, sysFunc));
         return true;
@@ -43,7 +50,7 @@ public:
 
     //Used to generate references to components, allowing for creation by string
     template<typename T>
-    static bool exportComponent(std::string name) {
+    bool exportComponent(std::string name) {
         ComponentFactoryPtr compFunc = &Component::create<T>;
         gameComponentExports.insert(std::make_pair(name, compFunc));
         return true;
@@ -51,14 +58,28 @@ public:
 
     /*
      * ECS data accessible to public
+     * TODO Add getters/settings and force this to be private
+     * TODO Add vector/another way to maintain order of systems for use in updating
      */
-    static std::map<std::string, Entity*> gameEntities;
-    static std::map<std::string, System*> gameSystems;
+    std::map<std::string, Entity*> gameEntities;
+    std::map<std::string, System*> gameSystems;
+
+    /*
+     * Singleton pattern. Must use i()-> to access any class methods.
+     * Prevents static initialisation hell.
+     */
+    static ECSManager *i()
+    {
+        if (!c_instance)
+            c_instance = new ECSManager;
+        return c_instance;
+    }
 
 private:
+    static ECSManager *c_instance;
     //Holds references to exports for use in creation
-    static std::map<std::string, SystemFactoryPtr> gameSystemExports;
-    static std::map<std::string, ComponentFactoryPtr> gameComponentExports;
+    std::map<std::string, SystemFactoryPtr> gameSystemExports;
+    std::map<std::string, ComponentFactoryPtr> gameComponentExports;
 };
 
 #endif //BLOCKHOP_CLION_ECSMANAGER_H

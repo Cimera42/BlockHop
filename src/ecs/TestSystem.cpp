@@ -2,9 +2,13 @@
 // Created by Jono on 14/03/2017.
 //
 
-#include "TestSystem.h"
+#include "testSystem.h"
 
-bool System::exported = ECSManager::exportSystem<TestSystem>("testSystem");
+bool System::exported = ECSManager::i()->exportSystem<TestSystem>("testSystem");
 
 TestSystem::TestSystem() {}
 TestSystem::~TestSystem() {}
+
+void TestSystem::update() {
+    Logger(1)<<"Virtual inheritance test works!";
+}

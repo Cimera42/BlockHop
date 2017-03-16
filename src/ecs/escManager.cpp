@@ -2,15 +2,26 @@
 // Created by Jono on 03/03/2017.
 //
 #include "ecsManager.h"
-#include "../logger.h"
 
-std::map<std::string,SystemFactoryPtr> ECSManager::gameSystemExports;
-std::map<std::string,ComponentFactoryPtr> ECSManager::gameComponentExports;
-std::map<std::string,Entity*> ECSManager::gameEntities;
-std::map<std::string, System*> ECSManager::gameSystems;
+ECSManager *ECSManager::c_instance = 0;
 
 ECSManager::ECSManager() {}
 ECSManager::~ECSManager() {}
+
+//Helpers for ECS
+System* ECSManager::findSystem(std::string name) {
+    auto it = gameSystems.find(name);
+    if(it != gameSystems.end())
+        return it->second;
+    return nullptr;
+}
+
+Entity* ECSManager::findEntity(std::string name) {
+    auto it = gameEntities.find(name);
+    if(it != gameEntities.end())
+        return it->second;
+    return nullptr;
+}
 
 //Generation of ESC Classes
 Component* ECSManager::createComponent(std::string name, json compData) {
@@ -59,7 +70,7 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
     //Get components and create each of them
     for(int i = 0 ; i < compsToSub.size(); i++) {
         Component* newComp = createComponent(compsToSub[i], compsData[i]);
-        e->addComponent(newComp, compsToSub[i]);
+        e->addComponent(compsToSub[i], newComp);
     }
     //Add to global gameEntities store
     gameEntities.insert(std::make_pair(name, e));
