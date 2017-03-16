@@ -10,10 +10,10 @@ Table of contents
 ### Background
 Was initially intended as a playground to get features I haven't done properly before working.
 
-| Feature                  | Backend    | Interface   |
-|--------------------------|------------|-------------|
-| Skeletal animation       | Completed  | Not started |
-| Efficient text rendering | Incomplete | Not Started |
+| Feature            | Backend   | Interface   |
+|--------------------|-----------|-------------|
+| Skeletal animation | Completed | Not started |
+| SDF text rendering | Completed | Not Started |
 
 ### Models
 Models made using Blender and exported as [`.fbx`](https://en.wikipedia.org/wiki/FBX).
