@@ -46,7 +46,7 @@ class BoneModel
         void load();
         void nodeLoop(aiNode* assimpNode, int indent, glm::mat4 incrementalTransform);
 
-        void renderModel(Shader plainShader, Shader boneShader, Camera camera);
+        void renderModel(Shader* plainShader, Shader* boneShader, Camera camera);
 };
 
 glm::mat4 AToGMat(aiMatrix4x4 aiMat);

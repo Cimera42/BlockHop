@@ -179,7 +179,7 @@ void BoneModel::nodeLoop(aiNode* assimpNode, int indent, glm::mat4 incrementalTr
     }
 }
 
-void BoneModel::renderModel(Shader plainShader, Shader boneShader, Camera camera)
+void BoneModel::renderModel(Shader* plainShader, Shader* boneShader, Camera camera)
 {
     for(unsigned int i = 0; i < parts.size(); i++)
     {
@@ -191,15 +191,15 @@ void BoneModel::renderModel(Shader plainShader, Shader boneShader, Camera camera
         if(normalMeshes.find(part.mesh) != normalMeshes.end())
         {
             Mesh* mesh = normalMeshes[part.mesh];
-            plainShader.use();
-            glUniformMatrix4fv(plainShader.getLoc("viewMat"), 1, GL_FALSE, &camera.viewMatrix[0][0]);
-            glUniformMatrix4fv(plainShader.getLoc("projMat"), 1, GL_FALSE, &camera.projectionMatrix[0][0]);
+            plainShader->use();
+            glUniformMatrix4fv(plainShader->getLoc("viewMat"), 1, GL_FALSE, &camera.viewMatrix[0][0]);
+            glUniformMatrix4fv(plainShader->getLoc("projMat"), 1, GL_FALSE, &camera.projectionMatrix[0][0]);
 
             glSetActiveTexture(GL_TEXTURE0);
             glSetBindTexture(GL_TEXTURE_2D_ARRAY, texture.textureID);
-            glUniform1i(plainShader.getLoc("textureSampler"), 0);
+            glUniform1i(plainShader->getLoc("textureSampler"), 0);
 
-            glUniformMatrix4fv(plainShader.getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
+            glUniformMatrix4fv(plainShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
 
             glSetBindVertexArray(mesh->VAO);
             glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
@@ -208,21 +208,21 @@ void BoneModel::renderModel(Shader plainShader, Shader boneShader, Camera camera
         else
         {
             BoneMesh* boneMesh = boneMeshes[part.mesh];
-            boneShader.use();
-            glUniformMatrix4fv(boneShader.getLoc("viewMat"), 1, GL_FALSE, &camera.viewMatrix[0][0]);
-            glUniformMatrix4fv(boneShader.getLoc("projMat"), 1, GL_FALSE, &camera.projectionMatrix[0][0]);
+            boneShader->use();
+            glUniformMatrix4fv(boneShader->getLoc("viewMat"), 1, GL_FALSE, &camera.viewMatrix[0][0]);
+            glUniformMatrix4fv(boneShader->getLoc("projMat"), 1, GL_FALSE, &camera.projectionMatrix[0][0]);
 
             glSetActiveTexture(GL_TEXTURE0);
             glSetBindTexture(GL_TEXTURE_2D_ARRAY, texture.textureID);
-            glUniform1i(boneShader.getLoc("textureSampler"), 0);
+            glUniform1i(boneShader->getLoc("textureSampler"), 0);
 
-            glUniformMatrix4fv(boneShader.getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
+            glUniformMatrix4fv(boneShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
 
             unsigned int matsNum = boneMesh->boneMats.size();
             if(matsNum)
             {
                 boneMesh->transformBones((float) glfwGetTime()*24.0f);
-                int matsLoc = boneShader.getLoc("boneMats");
+                int matsLoc = boneShader->getLoc("boneMats");
                 glUniformMatrix4fv(matsLoc, matsNum,
                                    GL_FALSE, &boneMesh->boneMats.data()[0][0][0]);
             }
