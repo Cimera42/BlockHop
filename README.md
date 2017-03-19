@@ -10,10 +10,12 @@ Table of contents
 ### Background
 Was initially intended as a playground to get features I haven't done properly before working.
 
-| Feature            | Backend   | Interface   |
-|--------------------|-----------|-------------|
-| Skeletal animation | Completed | Not started |
-| SDF text rendering | Completed | Not Started |
+| Feature            | Backend            | ECS Interface |
+|--------------------|--------------------|---------------|
+| Skeletal animation | Completed          | Not started   |
+| SDF text rendering | Completed          | Not Started   |
+| Sound              | Not started        | Not Started   |
+| Physics engine     | Looking at engines | Not Started   |
 
 ### Models
 Models made using Blender and exported as [`.fbx`](https://en.wikipedia.org/wiki/FBX).
