@@ -4,9 +4,16 @@
 #include "camera.h"
 #include "window.h"
 #include "text.h"
+#include "sound.h"
 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
+#include <al.h>
+#include <alc.h>
+#include <efx.h>
+#include <efx-creative.h>
+#include <xram.h>
+#include <ALUT/alut.h>
 
 glm::vec2 lastPos;
 glm::vec3 worldPos(0,0,0);
@@ -26,6 +33,8 @@ void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 
     lastPos = glm::vec2(xpos,ypos);
 }
+
+extern LPALGENEFFECTS alGenEffects;
 
 int main()
 {
@@ -74,7 +83,24 @@ int main()
     Font* f = new Font();
     Text* text = new Text(f);
     text->add("ABCDEFG");
+    
+    Sound* sound = new Sound();
+    
+    alutInit(0, NULL);
+    alGetError();
+    
+    alGenEffects();
+    
+    //sound.buffer = alutCreateBufferFromFile("./sounds/sample.wav");
+    sound->buffer = alutCreateBufferWaveform(ALUT_WAVEFORM_SINE, 300, 0, 100);
+    alGenSources(1, &sound->source);
+    alSourcei(sound->source, AL_BUFFER, sound->buffer);
+    alSourcei(sound->source, AL_LOOPING, AL_TRUE);
+    alSourcePlay(sound->source);
 
+    alSource3f(sound->source,AL_VELOCITY, 0,0,0);
+    alSource3f(sound->source,AL_POSITION, 0,0,0);
+    
     float delta = 0;
     float lastFrame = (float) glfwGetTime();
 
@@ -98,6 +124,11 @@ int main()
             worldPos += glm::vec3(0,1,0)*delta*5.0f;
         if(glfwGetKey(window.glfwWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
             worldPos -= glm::vec3(0,1,0)*delta*5.0f;
+        
+        alListener3f(AL_POSITION, worldPos.x, worldPos.y, worldPos.z);
+        float vec[6] = {camera.forward.x,camera.forward.y,camera.forward.z,
+                        camera.up.x,camera.up.y,camera.up.z};
+        alListenerfv(AL_ORIENTATION, vec);
 
         camera.update();
 
@@ -112,8 +143,11 @@ int main()
         glfwPollEvents();
         glfwSwapBuffers(window.glfwWindow);
     }
+
+    alutExit();
     
     delete text;
+    delete sound;
     window.destroy();
     glfwTerminate();
 }
