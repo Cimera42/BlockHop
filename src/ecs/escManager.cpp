@@ -28,7 +28,7 @@ Component* ECSManager::createComponent(std::string name, json compData) {
     try {
         //Get component from map and create a new instance
         auto createFunc = gameComponentExports.at(name);
-        Component *t = createFunc();
+        Component *t = createFunc(); //TODO: Add the components name/type to either factory or protected and use friend?
         try {
             t->setValues(compData);
         } catch(...) {

@@ -22,6 +22,8 @@ public:
      * Should be used to enable/disable functionality of an
      * entity.
      */
+
+    //TODO: Move compName to within the component itself...
     void addComponent(std::string compName, Component* comp);
     void removeComponent(std::string compName);
 

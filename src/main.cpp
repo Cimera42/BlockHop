@@ -6,6 +6,7 @@
 #include "ecs/ecsManager.h"
 #include "ecs/testComponent.h"
 #include "ecs/testSystem.h"
+#include "ecs/ecsLoader.h"
 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
@@ -33,7 +34,12 @@ void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 
 #ifdef TEST_MAIN
 int main() {
-    std::vector<std::string> ttt;
+
+    ECSLoader loader = ECSLoader();
+    loader.readStream("testjson.json");
+
+
+    /*std::vector<std::string> ttt;
     ttt.push_back("testComponent");
     TestSystem* f = static_cast<TestSystem*> (ECSManager::i()->createSystem("testSystem", ttt));
     Logger(1)<< "Test value: "<<f->ok;
@@ -75,7 +81,7 @@ int main() {
     TestComponent* getComp = static_cast<TestComponent*> (newEnt->getComponent("testComponent"));
     Logger(1)<<"This should show test value again: "<<getComp->testInt;
 
-    Logger(1)<<"And this should be null once again: "<<newEnt->getComponent("testSystem");
+    Logger(1)<<"And this should be null once again: "<<newEnt->getComponent("testSystem");*/
 }
 #else
 int main()
