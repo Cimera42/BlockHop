@@ -4,6 +4,7 @@
 
 #ifndef BLOCKHOP_CLION_TESTCOMPONENT_H
 #define BLOCKHOP_CLION_TESTCOMPONENT_H
+
 #include "component.h"
 #include "ecsManager.h"
 

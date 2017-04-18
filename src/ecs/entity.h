@@ -22,9 +22,7 @@ public:
      * Should be used to enable/disable functionality of an
      * entity.
      */
-
-    //TODO: Move compName to within the component itself...
-    void addComponent(std::string compName, Component* comp);
+    void addComponent(Component* comp);
     void removeComponent(std::string compName);
 
     /*
@@ -34,7 +32,7 @@ public:
     Component* getComponent(std::string compName);
 private:
     void subscribeToSystems();
-    std::map<std::string, Component*> subbedComponents;
+    std::vector<Component*> subbedComponents;
 };
 
 #endif // ENTITY_H_INCLUDED

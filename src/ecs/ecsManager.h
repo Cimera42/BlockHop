@@ -37,7 +37,6 @@ public:
      */
     Component* createComponent(std::string name, json compData);
     System* createSystem(std::string name, std::vector<std::string> compsNeeded);
-    //TODO consider merging compsToSub and compsData into one larger json which we process?
     Entity* createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData);
 
     //Used to generate references to systems by string
@@ -62,7 +61,8 @@ public:
      * TODO Add vector/another way to maintain order of systems for use in updating
      */
     std::map<std::string, Entity*> gameEntities;
-    std::map<std::string, System*> gameSystems;
+    //std::map<std::string, System*> gameSystems;
+    std::vector<std::pair<std::string, System*> > gameSystems;
 
     /*
      * Singleton pattern. Must use i()-> to access any class methods.

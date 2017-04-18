@@ -4,8 +4,6 @@
 #include "camera.h"
 #include "window.h"
 #include "ecs/ecsManager.h"
-#include "ecs/testComponent.h"
-#include "ecs/testSystem.h"
 #include "ecs/ecsLoader.h"
 
 #include <glm/gtx/transform.hpp>
@@ -39,49 +37,30 @@ int main() {
     loader.readStream("testjson.json");
 
 
-    /*std::vector<std::string> ttt;
-    ttt.push_back("testComponent");
-    TestSystem* f = static_cast<TestSystem*> (ECSManager::i()->createSystem("testSystem", ttt));
-    Logger(1)<< "Test value: "<<f->ok;
+    std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
+    start = std::chrono::steady_clock::now();
+    previous = start;
+    bool exitFlag = false;
+    while(!exitFlag) {
+        //Run update on our systems! Woohoo
+        for (auto sysPair : ECSManager::i()->gameSystems) {
+            auto system = sysPair.second;
+            //Get time difference for updating systems
+            current = std::chrono::steady_clock::now();
+            std::chrono::duration<double> dt = (current - previous);
+            previous = current;
 
-    json j1 = {{"test", true}};
-    TestComponent* e = static_cast<TestComponent*> (ECSManager::i()->createComponent("testComponent", j1));
-    Logger(1)<< "Test value: "<<e->testInt;
+            //Call both basic update and one with timestep, implementation dependant
+            system->update(dt.count());
 
+            //Total clock duration
+            std::chrono::duration<double> totalTime = current - start;
+            //Logger()<<dt.count()<<" "<<totalTime.count();
 
-    //Entity creation
-    std::vector<json> vvv;
-    vvv.push_back(j1);
-    std::vector<std::string> bbb;
-    bbb.push_back("testComponent");
-    Entity* newEnt = ECSManager::i()->createEntity("Ent", bbb, vvv);
-
-    //Testing
-    //TODO Create a test
-    for(auto ent : f->getEntities()) {
-        Logger(1)<<"These should match: "<<ent<<" "<<newEnt;
+            if(totalTime.count() > 3) //Only run for 3 seconds for now!
+                exitFlag = true;
+        }
     }
-
-    newEnt->removeComponent("testComponent");
-    Logger(1)<<"System should have no subbed entities. Entity size: "<<f->getEntities().size();
-
-    newEnt->addComponent("testComponent", e);
-    Logger(1)<<"System should have 1 subbed entity. Entity size: "<<f->getEntities().size();
-
-    f->update();
-
-    Entity* confirm = ECSManager::i()->findEntity("Ent");
-    Logger(1)<<"These should also match: "<<newEnt<<" "<<confirm;
-
-    System* searchSys = ECSManager::i()->findSystem("testSystem");
-    Logger(1)<<"So should these: "<<searchSys<<" "<<f;
-
-    Logger(1)<<"And this should be null: "<<ECSManager::i()->findEntity("ent");
-
-    TestComponent* getComp = static_cast<TestComponent*> (newEnt->getComponent("testComponent"));
-    Logger(1)<<"This should show test value again: "<<getComp->testInt;
-
-    Logger(1)<<"And this should be null once again: "<<newEnt->getComponent("testSystem");*/
 }
 #else
 int main()

@@ -13,31 +13,42 @@ void ECSLoader::readStream(std::string fileName) {
 
     //Open a stream
     std::ifstream i(fileName);
+    if(!i.is_open()) {
+        Logger() << "ECSLoader failed as the file '" + fileName + "' could not be opened." << std::endl;
+        exit(-4);
+    }
 
     //Attempt to read file into json object
     json j;
-
     try {
         i >> j;
 
-        //Get components first
-        for (auto& comp : j["components"]) {
-            std::cout << comp << '\n';
-            //ECSManager::i()->createComponent(comp, j1)
-            //TODO: Just realised we dont need to use createComponent here because we can
-            // just create entities and supply with component data
+        //All components should already be exported
+
+        //Just need to sort out our systems that need certain components
+        for (auto& sys : j["systems"]) {
+            std::vector<std::string> compsToSub = sys["compsToSub"];
+            ECSManager::i()->createSystem(sys["name"], compsToSub);
         }
 
-        //Get systems
-
         //Get entities
+        for (auto& ent : j["entities"]) {
+
+            //Collate all components for entity
+            std::vector<std::string> compNames;
+            std::vector<json> compData;
+            for(auto &comp : ent["components"]) {
+                compNames.push_back(comp["name"]);
+                compData.push_back(comp["values"]);
+            }
+
+            ECSManager::i()->createEntity(ent["name"], compNames, compData);
+        }
 
     } catch (...) {
-        Logger()<<"This didnt work"<<std::endl;
+        Logger()<<"There's something wrong with the file "+fileName+", cannot read all values. Exiting."<<std::endl;
+        exit(-5);
     }
 
-
-
-
-
+    i.close();
 };

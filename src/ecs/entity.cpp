@@ -4,14 +4,19 @@
 Entity::Entity() {}
 Entity::~Entity(){}
 
-void Entity::addComponent(std::string compName, Component* comp) {
-    subbedComponents.insert(std::make_pair(compName, comp));
+void Entity::addComponent(Component* comp) {
+    subbedComponents.push_back(comp);
     //After updating our subscribed components, redo system subscription
     subscribeToSystems();
 }
 
 void Entity::removeComponent(std::string compName) {
-    subbedComponents.erase(compName);//TODO test this works
+    std::vector<Component*>::iterator it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
+        return (o->getName() == compName);
+    });
+
+    if (it != subbedComponents.end())
+        subbedComponents.erase(it);
     //After updating our subscribed components, redo system subscription
     subscribeToSystems();
 }
@@ -19,15 +24,18 @@ void Entity::removeComponent(std::string compName) {
 std::vector<std::string> Entity::getComponents() {
     std::vector<std::string> compNames;
     for(auto &comp : subbedComponents) {
-        compNames.push_back(comp.first);
+        compNames.push_back(comp->getName());
     }
     return compNames;
 }
 
 Component* Entity::getComponent(std::string compName) {
-    auto it = subbedComponents.find(compName);
+    std::vector<Component*>::iterator it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
+        return (o->getName() == compName);
+    });
+
     if (it != subbedComponents.end())
-        return it->second;
+        return *it;
     return nullptr;
 }
 

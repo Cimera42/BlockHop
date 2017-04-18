@@ -10,7 +10,11 @@ ECSManager::~ECSManager() {}
 
 //Helpers for ECS
 System* ECSManager::findSystem(std::string name) {
-    auto it = gameSystems.find(name);
+
+    std::vector<std::pair<std::string, System*> >::iterator it =
+            std::find_if(gameSystems.begin(), gameSystems.end(), [&name](std::pair<std::string, System*> o) {
+        return (o.first == name);
+    });
     if(it != gameSystems.end())
         return it->second;
     return nullptr;
@@ -28,7 +32,8 @@ Component* ECSManager::createComponent(std::string name, json compData) {
     try {
         //Get component from map and create a new instance
         auto createFunc = gameComponentExports.at(name);
-        Component *t = createFunc(); //TODO: Add the components name/type to either factory or protected and use friend?
+        Component *t = createFunc();
+        t->setName(name);
         try {
             t->setValues(compData);
         } catch(...) {
@@ -50,7 +55,7 @@ System* ECSManager::createSystem(std::string name, std::vector<std::string> comp
         //Add to list of required components for this system
         t->setRequiredComponents(compsNeeded);
         //Add to global gameSystems store
-        gameSystems.insert(std::make_pair(name, t));
+        gameSystems.push_back(std::make_pair(name, t));
         return t;
     }
     catch (...) {
@@ -70,7 +75,7 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
     //Get components and create each of them
     for(int i = 0 ; i < compsToSub.size(); i++) {
         Component* newComp = createComponent(compsToSub[i], compsData[i]);
-        e->addComponent(compsToSub[i], newComp);
+        e->addComponent(newComp);
     }
     //Add to global gameEntities store
     gameEntities.insert(std::make_pair(name, e));

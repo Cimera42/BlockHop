@@ -42,7 +42,6 @@ public:
     /*
      * Updates are called by the engine to run the system.
      */
-    virtual void update();
     virtual void update(double dt);
 
 private:

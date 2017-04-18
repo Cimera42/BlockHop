@@ -1,5 +1,23 @@
 {
-	"components": [
-		"testComponent"
+	"systems": [
+		{
+			"name": "testSystem",
+			"compsToSub": [
+				"testComponent"
+			]
+		}
+	],
+	"entities": [
+		{
+			"name": "EntityOne",
+			"components": [
+				{
+					"name": "testComponent",
+					"values": {
+						"test": true
+					}
+				}
+			]
+		}
 	]
 }

@@ -42,5 +42,4 @@ std::vector<Entity*> System::getEntities() {
     return subbedEntities;
 }
 
-void System::update() {}
 void System::update(double dt) {}

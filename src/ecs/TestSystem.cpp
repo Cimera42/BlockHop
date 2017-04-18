@@ -9,6 +9,6 @@ bool System::exported = ECSManager::i()->exportSystem<TestSystem>("testSystem");
 TestSystem::TestSystem() {}
 TestSystem::~TestSystem() {}
 
-void TestSystem::update() {
-    Logger(1)<<"Virtual inheritance test works!";
+void TestSystem::update(double dt) {
+    //Logger(1)<<"Virtual inheritance test works!";
 }

@@ -14,7 +14,7 @@ public:
     ~TestSystem();
 
     int ok = 100;
-    void update();
+    void update(double dt);
 };
 
 #endif //BLOCKHOP_CLION_TESTSYSTEM_H

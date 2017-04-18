@@ -6,8 +6,6 @@
 
 using json = nlohmann::json;
 
-//TODO Should a component hold its own name so we don't accidently pass in the wrong name to things!?
-//The answer is yes, at creation we should ensure it stores its name - somehow
 class Component {
 public:
     /*
@@ -32,6 +30,8 @@ public:
     template<typename T>
         static Component* create() {return new T; };
     virtual void setValues(json inValues);
+    void setName(std::string inName) {name = inName; };
+    std::string getName() {return name; };
 
 private:
     /*
@@ -40,6 +40,8 @@ private:
      *      bool Component::exported = ECSManager::exportComponent<ComponentClass>("componentName");
      */
     static bool exported;
+
+    std::string name;
 };
 
 #endif // COMPONENT_H_INCLUDED
