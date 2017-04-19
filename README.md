@@ -14,7 +14,7 @@ Was initially intended as a playground to get features I haven't done properly b
 |--------------------|--------------------|---------------|
 | Skeletal animation | Completed          | Not started   |
 | SDF text rendering | Completed          | Not Started   |
-| Sound              | Not started        | Not Started   |
+| Sound              | Started            | Not Started   |
 | Physics engine     | Looking at engines | Not Started   |
 
 ### Models
