@@ -30,7 +30,7 @@ void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
     lastPos = glm::vec2(xpos,ypos);
 }
 
-#ifdef TEST_MAIN
+#if TEST_MAIN
 int main() {
 
     ECSLoader loader = ECSLoader();
