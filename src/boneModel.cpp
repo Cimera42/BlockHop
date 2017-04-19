@@ -26,9 +26,9 @@ BoneModel::BoneModel(std::string inFilename)
 BoneModel::~BoneModel()
 {
     for(auto nM : normalMeshes)
-        nM.second.destruct();
+        nM.second->destruct();
     for(auto bM : boneMeshes)
-        bM.second.destruct();
+        bM.second->destruct();
 }
 
 void BoneModel::load()
@@ -49,6 +49,20 @@ void BoneModel::load()
         Logger(1) << importer.GetErrorString();
         Logger(1) << "Could not load Mesh. Error importing";
         return;
+    }
+
+    Logger(1) << "Animations: " << scene->mNumAnimations;
+    for(unsigned int i = 0; i < scene->mNumAnimations; i++)
+    {
+        aiAnimation* assimpAnimation = scene->mAnimations[i];
+        Logger(1) << "TPS: " << assimpAnimation->mTicksPerSecond;
+
+        Logger(1) << "Animation name: " << assimpAnimation->mName.C_Str();
+        Logger(1) << "Animation channels: " << assimpAnimation->mNumChannels;
+        for(unsigned int j = 0; j < assimpAnimation->mNumChannels; j++)
+        {
+            animNodes.push_back(assimpAnimation->mChannels[j]);
+        }
     }
 
     for(unsigned int i = 0; i < scene->mNumMaterials; i++)
@@ -97,11 +111,11 @@ void BoneModel::load()
         aiMesh* assimpMesh = scene->mMeshes[i];
         if(assimpMesh->mNumBones > 0)
         {
-            boneMeshes[i] = BoneMesh(assimpMesh, assimpNodes);
+            boneMeshes[i] = new BoneMesh(assimpMesh, assimpNodes, animNodes);
         }
         else
         {
-            normalMeshes[i] = Mesh(assimpMesh);
+            normalMeshes[i] = new Mesh(assimpMesh);
         }
     }
 }
@@ -110,10 +124,6 @@ void BoneModel::nodeLoop(aiNode* assimpNode, int indent, glm::mat4 incrementalTr
 {
     assimpNodes.push_back(assimpNode);
 
-    std::string indents;
-    for(int i = 0; i < indent; i++)
-        indents += "        ";
-    Logger(1) << indents << assimpNode->mName.C_Str();
     aiVector3D lscale;
     aiVector3D lposition;
     aiQuaternion lrotation;
@@ -136,24 +146,29 @@ void BoneModel::nodeLoop(aiNode* assimpNode, int indent, glm::mat4 incrementalTr
     glm::vec4 nperspective;
     glm::decompose(nodeMatrix, nscale, nrotation, nposition, nskew, nperspective);
 
+    /*std::string indents;
+    for(int i = 0; i < indent; i++)
+        indents += "        ";
+    Logger(1) << indents << assimpNode->mName.C_Str();
+
     Logger(1) << indents << "    S1: " << scale.x << " = " << scale.y << " = " << scale.z;
     Logger(1) << indents << "    P1: " << position.x << " = " << position.y << " = " << position.z;
     Logger(1) << indents << "    R1: " << rotation.x << " = " << rotation.y << " = " << rotation.z << " = " << rotation.w;
 
     Logger(1) << indents << "    S2: " << nscale.x << " = " << nscale.y << " = " << nscale.z;
     Logger(1) << indents << "    P2: " << nposition.x << " = " << nposition.y << " = " << nposition.z;
-    Logger(1) << indents << "    R2: " << nrotation.x << " = " << nrotation.y << " = " << nrotation.z << " = " << nrotation.w;
+    Logger(1) << indents << "    R2: " << nrotation.x << " = " << nrotation.y << " = " << nrotation.z << " = " << nrotation.w;*/
 
     if(assimpNode->mNumMeshes)
     {
         Part part;
         part.mesh = assimpNode->mMeshes[0];
         part.position = glm::vec3(position.x, position.y, position.z);
-        Logger(1) << "Part pos: " << position.x << " = " << position.y << " = " << position.z;
+        //Logger(1) << "Part pos: " << position.x << " = " << position.y << " = " << position.z;
         part.scale = glm::vec3(scale.x, scale.y, scale.z);
         part.rotation = rotation;
         part.name = assimpNode->mName.C_Str();
-        Logger(1) << "Part: " << part.name;
+        //Logger(1) << "Part: " << part.name;
         parts.push_back(part);
     }
 
@@ -161,5 +176,60 @@ void BoneModel::nodeLoop(aiNode* assimpNode, int indent, glm::mat4 incrementalTr
     {
         aiNode* childNode = assimpNode->mChildren[i];
         nodeLoop(childNode, indent+1, newTransform);
+    }
+}
+
+void BoneModel::renderModel(Shader* plainShader, Shader* boneShader, Camera camera)
+{
+    for(unsigned int i = 0; i < parts.size(); i++)
+    {
+        Part part = parts[i];
+        glm::mat4 modelMatrix = glm::translate(part.position);
+        modelMatrix = glm::scale(modelMatrix, part.scale);
+        modelMatrix = modelMatrix * glm::toMat4(part.rotation);
+
+        if(normalMeshes.find(part.mesh) != normalMeshes.end())
+        {
+            Mesh* mesh = normalMeshes[part.mesh];
+            plainShader->use();
+            glUniformMatrix4fv(plainShader->getLoc("viewMat"), 1, GL_FALSE, &camera.viewMatrix[0][0]);
+            glUniformMatrix4fv(plainShader->getLoc("projMat"), 1, GL_FALSE, &camera.projectionMatrix[0][0]);
+
+            glSetActiveTexture(GL_TEXTURE0);
+            glSetBindTexture(GL_TEXTURE_2D_ARRAY, texture.textureID);
+            glUniform1i(plainShader->getLoc("textureSampler"), 0);
+
+            glUniformMatrix4fv(plainShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
+
+            glSetBindVertexArray(mesh->VAO);
+            glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+            glSetBindVertexArray(0);
+        }
+        else
+        {
+            BoneMesh* boneMesh = boneMeshes[part.mesh];
+            boneShader->use();
+            glUniformMatrix4fv(boneShader->getLoc("viewMat"), 1, GL_FALSE, &camera.viewMatrix[0][0]);
+            glUniformMatrix4fv(boneShader->getLoc("projMat"), 1, GL_FALSE, &camera.projectionMatrix[0][0]);
+
+            glSetActiveTexture(GL_TEXTURE0);
+            glSetBindTexture(GL_TEXTURE_2D_ARRAY, texture.textureID);
+            glUniform1i(boneShader->getLoc("textureSampler"), 0);
+
+            glUniformMatrix4fv(boneShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
+
+            unsigned int matsNum = boneMesh->boneMats.size();
+            if(matsNum)
+            {
+                boneMesh->transformBones((float) glfwGetTime()*24.0f);
+                int matsLoc = boneShader->getLoc("boneMats");
+                glUniformMatrix4fv(matsLoc, matsNum,
+                                   GL_FALSE, &boneMesh->boneMats.data()[0][0][0]);
+            }
+
+            glSetBindVertexArray(boneMesh->VAO);
+            glDrawElements(GL_TRIANGLES, boneMesh->indices.size(), GL_UNSIGNED_INT, 0);
+            glSetBindVertexArray(0);
+        }
     }
 }
