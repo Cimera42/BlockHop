@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 include_directories(libraries/include)
 
-file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 add_executable(BlockHop_CLion ${SOURCE_FILES})
 
 find_package(OpenGL REQUIRED)
