@@ -4,7 +4,7 @@
 
 #include "positionComponent.h"
 
-bool a = ECSManager::i()->exportComponent<PositionComponent>("positionComponent");
+bool PositionComponent::exported = ECSManager::i()->exportComponent<PositionComponent>("positionComponent");
 
 PositionComponent::PositionComponent() {}
 PositionComponent::~PositionComponent() {}

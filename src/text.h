@@ -7,29 +7,13 @@
 
 #include "texture.h"
 #include "shader.h"
+#include "components/TextComponent.h"
 #include <vector>
 #include <glm/glm.hpp>
 #include <map>
 #include <array>
 #include <string>
 #include <GL/glew.h>
-
-class Font
-{
-public:
-    Font();
-    ~Font();
-    
-    Texture* texture;
-    int spacing = 3;
-    std::map<std::string, std::array<int, 7> > metrics;
-};
-
-struct Vertex2D
-{
-    glm::vec2 pos;
-    glm::vec2 uv;
-};
 
 class Text
 {

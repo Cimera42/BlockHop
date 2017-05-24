@@ -4,7 +4,7 @@
             "name": "testSystem",
             "compsToSub": [
                 "positionComponent",
-                "textComponent"
+                "TextComponent"
             ]
         }
     ],
@@ -18,9 +18,12 @@
                         "x": 1,
                         "y": 2,
                         "z": 3
-                    },
+                    }
+                },
+                {
                     "name": "TextComponent",
                     "values": {
+                        "dummy": 1
                     }
                 }
             ]

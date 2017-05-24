@@ -13,6 +13,9 @@
 #include "../ecs/component.h"
 #include <glm/glm.hpp>
 
+// for convenience
+using json = nlohmann::json;
+
 class Font
 {
 public:
@@ -21,7 +24,7 @@ public:
 
     Texture* texture;
     int spacing = 3;
-    std::map<std::string, std::array<int, 7> > metrics;
+    json metrics;
 };
 
 struct Vertex2D
@@ -36,6 +39,7 @@ public:
     TextComponent();
     ~TextComponent();
     void setValues(json inValues);
+	static bool exported;
 
     Font* font;
     std::vector<Vertex2D> vertices;

@@ -15,7 +15,8 @@ public:
     PositionComponent();
     ~PositionComponent();
     void setValues(json inValues);
-
+    static bool exported;
+    
     glm::vec3 position;
 
     friend std::ostream &operator<< (std::ostream &os, PositionComponent const &p) {
