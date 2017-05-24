@@ -1,0 +1,29 @@
+{
+    "systems": [
+        {
+            "name": "testSystem",
+            "compsToSub": [
+                "positionComponent",
+                "textComponent"
+            ]
+        }
+    ],
+    "entities": [
+        {
+            "name": "EntityOne",
+            "components": [
+                {
+                    "name": "positionComponent",
+                    "values": {
+                        "x": 1,
+                        "y": 2,
+                        "z": 3
+                    },
+                    "name": "TextComponent",
+                    "values": {
+                    }
+                }
+            ]
+        }
+    ]
+}
