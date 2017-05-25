@@ -87,6 +87,12 @@
 				{
 					"name": "keyboardControlComponent",
 					"values": {
+						"forward":"W",
+						"back":"S",
+						"left":"A",
+						"right":"D",
+						"up":" ",
+						"down":"340"
 					}
 				}
 			]

@@ -13,6 +13,10 @@ class KeyboardInputSystem : public System
 public:
     KeyboardInputSystem();
     ~KeyboardInputSystem();
+	
+	std::map<int, int> keyList;
+
+	bool isKeyPressed(int keyCode);
 
     void update(double dt);
 };
