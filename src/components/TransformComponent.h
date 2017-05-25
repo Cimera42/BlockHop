@@ -18,9 +18,12 @@ public:
     ~TransformComponent();
     void setValues(json inValues);
     
+    glm::mat4 matrix;
     glm::vec3 position;
     glm::quat rotation;
     glm::vec3 scale;
+    
+    void genMatrix();
 
     friend std::ostream &operator<< (std::ostream &os, TransformComponent const &t) {
         os << "TransformComponent: ";

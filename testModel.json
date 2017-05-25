@@ -8,6 +8,13 @@
             ]
         },
         {
+            "name": "animatedModelSystem",
+            "compsToSub": [
+                "transformComponent",
+                "boneModelComponent"
+            ]
+        },
+        {
             "name": "textSystem",
             "compsToSub": [
                 "transformComponent",
@@ -17,7 +24,7 @@
     ],
     "entities": [
         {
-            "name": "EntityOne",
+            "name": "TextEntity",
             "components": [
                 {
                     "name": "transformComponent",
@@ -43,7 +50,39 @@
                 {
                     "name": "textComponent",
                     "values": {
-                        "dummy": 1
+                        "text": "${dt}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "ModelEntity",
+            "components": [
+                {
+                    "name": "transformComponent",
+                    "values": {
+                        "position": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 5
+                        },
+                        "rotation": {
+                            "w": 1,
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "scale": {
+                            "x": 3,
+                            "y": 1,
+                            "z": 1
+                        }
+                    }
+                },
+                {
+                    "name": "boneModelComponent",
+                    "values": {
+                        "filename": "models/Org/org3.fbx"
                     }
                 }
             ]

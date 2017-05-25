@@ -34,7 +34,6 @@ void TextSystem::update(double dt)
         TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
         TextComponent* text = entity->getComponent<TextComponent>("textComponent");
 
-        Logger(1) << *transform;
         text->set(std::to_string(dt));
         renderText(transform, text);
     }
@@ -43,7 +42,8 @@ void TextSystem::update(double dt)
 void TextSystem::renderText(TransformComponent *trans, TextComponent *text)
 {
     glm::mat4 p = glm::ortho(-320.0f, 320.0f, 240.0f, -240.0f);
-    glm::mat4 m = glm::translate(trans->position);
+    glm::mat4 m = glm::mat4();
+    m *= glm::translate(trans->position);
     m *= glm::toMat4(trans->rotation);
     m *= glm::scale(trans->scale);
 

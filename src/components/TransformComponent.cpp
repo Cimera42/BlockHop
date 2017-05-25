@@ -3,6 +3,9 @@
 //
 
 #include "TransformComponent.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 COMPONENT_EXPORT(TransformComponent, "transformComponent")
 
@@ -23,4 +26,14 @@ void TransformComponent::setValues(json inValues) {
     scale.x = inValues["scale"]["x"].get<float>();
     scale.y = inValues["scale"]["y"].get<float>();
     scale.z = inValues["scale"]["z"].get<float>();
+	
+	genMatrix();
+}
+
+void TransformComponent::genMatrix()
+{
+    matrix = glm::mat4();
+    matrix *= glm::translate(position);
+    matrix *= glm::toMat4(rotation);
+    matrix *= glm::scale(scale);
 }

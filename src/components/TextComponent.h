@@ -13,7 +13,6 @@
 #include "../ecs/component.h"
 #include <glm/glm.hpp>
 
-// for convenience
 using json = nlohmann::json;
 
 class Font
