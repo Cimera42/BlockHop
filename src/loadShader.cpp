@@ -1,7 +1,6 @@
 #include "loadShader.h"
 #include "logger.h"
 #include <fstream>
-#include <string>
 #include <vector>
 #include <glm/glm.hpp>
 #include <map>

@@ -2,8 +2,6 @@
 #include "openGLFunctions.h"
 #include "logger.h"
 
-#include <assimp/scene.h>
-
 Mesh::Mesh(){}
 Mesh::Mesh(aiMesh* assimpMesh)
 {

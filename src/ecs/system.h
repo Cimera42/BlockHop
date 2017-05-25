@@ -60,7 +60,7 @@ private:
      * Usage inside systems's cpp file:
      *      bool System::exported = ECSManager::exportSystem<SystemClass>("systemName");
      */
-    static bool exported;
+    //static bool exported;
 };
 
 #endif // SYSTEM_H_INCLUDED

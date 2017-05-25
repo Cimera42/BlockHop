@@ -4,7 +4,6 @@
 
 #include <fstream>
 #include "ecsLoader.h"
-#include "../logger.h"
 
 ECSLoader::ECSLoader() {};
 ECSLoader::~ECSLoader() {};

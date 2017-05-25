@@ -1,5 +1,5 @@
 #include "camera.h"
-#include <cmath>
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 

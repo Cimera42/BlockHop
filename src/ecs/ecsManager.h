@@ -2,8 +2,8 @@
 // Created by Jono on 03/03/2017.
 //
 
-#ifndef BLOCKHOP_CLION_ECSMANAGER_H
-#define BLOCKHOP_CLION_ECSMANAGER_H
+#ifndef BLOCKHOP_ECSMANAGER_H
+#define BLOCKHOP_ECSMANAGER_H
 
 #include "entity.h"
 #include "component.h"
@@ -15,6 +15,9 @@
 
 typedef Component* (*ComponentFactoryPtr)();
 typedef System* (*SystemFactoryPtr)();
+
+#define COMPONENT_EXPORT(type, name) bool type::exported = ECSManager::i()->exportComponent<type>(name);//#type to use <X>Component as a string literal
+#define SYSTEM_EXPORT(type, name) bool type::exported = ECSManager::i()->exportSystem<type>(name);
 
 class ECSManager {
 public:
@@ -82,4 +85,4 @@ private:
     std::map<std::string, ComponentFactoryPtr> gameComponentExports;
 };
 
-#endif //BLOCKHOP_CLION_ECSMANAGER_H
+#endif //BLOCKHOP_ECSMANAGER_H

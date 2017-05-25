@@ -2,8 +2,8 @@
 // Created by Tim on 24/05/2017.
 //
 
-#ifndef BLOCKHOP_CLION_TEXTCOMPONENT_H
-#define BLOCKHOP_CLION_TEXTCOMPONENT_H
+#ifndef BLOCKHOP_TEXTCOMPONENT_H
+#define BLOCKHOP_TEXTCOMPONENT_H
 
 #include <array>
 #include <map>
@@ -35,11 +35,11 @@ struct Vertex2D
 
 class TextComponent : public Component
 {
+    static bool exported;
 public:
     TextComponent();
     ~TextComponent();
     void setValues(json inValues);
-	static bool exported;
 
     Font* font;
     std::vector<Vertex2D> vertices;
@@ -56,9 +56,7 @@ public:
     void createBuffers();
     void fillBuffers();
     void createVAO();
-    void render(Shader* shader);
-
 };
 
 
-#endif //BLOCKHOP_CLION_TEXTCOMPONENT_H
+#endif //BLOCKHOP_TEXTCOMPONENT_H

@@ -2,8 +2,8 @@
 // Created by Jono on 16/03/2017.
 //
 
-#ifndef BLOCKHOP_CLION_ECSLOADER_H
-#define BLOCKHOP_CLION_ECSLOADER_H
+#ifndef BLOCKHOP_ECSLOADER_H
+#define BLOCKHOP_ECSLOADER_H
 
 #include "ecsManager.h"
 #include <string>
@@ -20,4 +20,4 @@ public:
     //Then entities
 };
 
-#endif //BLOCKHOP_CLION_ECSLOADER_H
+#endif //BLOCKHOP_ECSLOADER_H

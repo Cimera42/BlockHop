@@ -3,8 +3,15 @@
         {
             "name": "testSystem",
             "compsToSub": [
-                "positionComponent",
-                "TextComponent"
+                "transformComponent",
+                "textComponent"
+            ]
+        },
+        {
+            "name": "textSystem",
+            "compsToSub": [
+                "transformComponent",
+                "textComponent"
             ]
         }
     ],
@@ -13,15 +20,28 @@
             "name": "EntityOne",
             "components": [
                 {
-                    "name": "positionComponent",
+                    "name": "transformComponent",
                     "values": {
-                        "x": 1,
-                        "y": 2,
-                        "z": 3
+                        "position": {
+                            "x": -310,
+                            "y": 100,
+                            "z": 0
+                        },
+                        "rotation": {
+                            "w": 0.924,
+                            "x": 0,
+                            "y": 0,
+                            "z": 0.383
+                        },
+                        "scale": {
+                            "x": 1,
+                            "y": 1,
+                            "z": 1
+                        }
                     }
                 },
                 {
-                    "name": "TextComponent",
+                    "name": "textComponent",
                     "values": {
                         "dummy": 1
                     }

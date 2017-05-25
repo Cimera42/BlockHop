@@ -5,12 +5,9 @@
 #include "TextComponent.h"
 #include "../ecs/ecsManager.h"
 #include "../openGLFunctions.h"
-#include "../shader.h"
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/transform.hpp>
 #include <fstream>
 
-bool TextComponent::exported = ECSManager::i()->exportComponent<TextComponent>("TextComponent");
+COMPONENT_EXPORT(TextComponent, "textComponent")
 
 Font::Font()
 {
@@ -42,7 +39,6 @@ void TextComponent::setValues(json inValues)
 {
     //Will throw if incorrect/should automatically be caught by ECSManager
     font = new Font();
-    int dummy = inValues["dummy"].get<int>();
 
     createBuffers();
 }
@@ -95,8 +91,8 @@ void TextComponent::add(std::string inText)
     text += inText;
     for(unsigned int i = 0; i < inText.size(); i++)
     {
-		json chars = font->metrics["chars"];
-        std::vector<int> metric = chars.at(inText.at(i));
+        json a = font->metrics["chars"][std::string(1, inText.at(i))];
+        std::vector<int> metric = a;
         float scale = 1.5f;
         int width = metric[0];
         int height = metric[1];
@@ -139,28 +135,4 @@ void TextComponent::add(std::string inText)
     }
 
     fillBuffers();
-}
-
-void TextComponent::render(Shader *shader)
-{
-    glm::mat4 p = glm::ortho(-320.0f, 320.0f, 240.0f, -240.0f);
-    glm::mat4 m = glm::translate(glm::vec3(-310.0f, 100.0f, 0));
-    m *= glm::rotate(glm::radians(45.f), glm::vec3(0, 0, 1));
-
-    shader->use();
-    glUniformMatrix4fv(shader->getLoc("projMat"), 1, GL_FALSE, &p[0][0]);
-
-    glSetActiveTexture(GL_TEXTURE0);
-    glSetBindTexture(GL_TEXTURE_2D_ARRAY, font->texture->textureID);
-    glUniform1i(shader->getLoc("textureSampler"), 0);
-
-    glUniformMatrix4fv(shader->getLoc("modelMat"), 1, GL_FALSE, &m[0][0]);
-
-    glUniform4f(shader->getLoc("u_colour"), 0.0f, 0.0f, 0.0f, 1.0f);
-    glUniform1f(shader->getLoc("u_min"), 0.675f);
-    glUniform1f(shader->getLoc("u_max"), 0.775f);
-
-    glSetBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-    glSetBindVertexArray(0);
 }

@@ -1,5 +1,4 @@
 #include "boneModel.h"
-#include "logger.h"
 
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/postprocess.h>     // Post processing fla

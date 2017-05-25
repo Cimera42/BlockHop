@@ -39,7 +39,7 @@ private:
      * Usage inside components's cpp file:
      *      bool Component::exported = ECSManager::exportComponent<ComponentClass>("componentName");
      */
-    static bool exported;
+    //static bool exported;
 
     std::string name;
 };

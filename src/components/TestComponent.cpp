@@ -4,7 +4,7 @@
 
 #include "TestComponent.h"
 
-bool Component::exported = ECSManager::i()->exportComponent<TestComponent>("testComponent");
+COMPONENT_EXPORT(TestComponent, "testComponent")
 
 TestComponent::TestComponent() {}
 TestComponent::~TestComponent() {}
