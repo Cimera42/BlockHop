@@ -54,7 +54,7 @@ void mouseMoveInputEvent(GLFWwindow *window, double xpos, double ypos)
 		MouseControlComponent* mouseControl = entity->getComponent<MouseControlComponent>("mouseControlComponent");
 		
 		glm::quat rotation = transform->getRotation();
-		glm::quat y = glm::angleAxis((float) (-yaw*(mouseControl->getXSensitivity()/100)), transform->getUp());
+		glm::quat y = glm::angleAxis((float) (-yaw*(mouseControl->getXSensitivity()/100)), glm::vec3(0,1,0));
 		glm::quat p = glm::angleAxis((float) (pitch*(mouseControl->getYSensitivity()/100)), transform->getRight());
 		rotation *= p*y;
 		transform->setRotation(rotation);

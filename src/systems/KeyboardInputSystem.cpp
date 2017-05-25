@@ -15,7 +15,6 @@ KeyboardInputSystem::~KeyboardInputSystem() {}
 
 void KeyboardInputSystem::update(double dt) 
 {
-	Logger(1) << "----------" << dt;
     for(auto entity : getEntities())
     {
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");

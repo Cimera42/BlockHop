@@ -67,10 +67,6 @@ int main()
     //Load scene from file
     ECSLoader loader = ECSLoader();
     loader.readStream("testModel.json");
-    
-    //camera.link(&worldPos);
-    //camera.update();
-    //camera.perspective(90.0f, (float) window.width / window.height, 0.001f, 100.0f);
 
     std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
     start = std::chrono::steady_clock::now();
@@ -91,7 +87,6 @@ int main()
             //Get time difference for updating systems
 
             //Call both basic update and one with timestep, implementation dependant
-			//Logger(1) << "############" << dt.count();
             system->update(dt.count());
 
             //Total clock duration
@@ -104,53 +99,7 @@ int main()
         glfwPollEvents();
         glfwSwapBuffers(window->glfwWindow);
     }
-/*
-    BoneModel model("models/TestBonePlane/TestBonePlane.fbx");
-    model.load();
-
-    BoneModel modelBone("models/Org/org3.fbx");
-    modelBone.load();
-
-
-    float delta = 0;
-    float lastFrame = (float) glfwGetTime();
-
-    while(!shouldExit)
-    {
-        delta = ((float) glfwGetTime() - lastFrame);
-        lastFrame = (float) glfwGetTime();
-
-        glClearColor(0.55f, 0.65f, 0.8f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        if(glfwGetKey(window.glfwWindow, GLFW_KEY_W) == GLFW_PRESS)
-            worldPos += camera.forward * delta * 5.0f;
-        if(glfwGetKey(window.glfwWindow, GLFW_KEY_S) == GLFW_PRESS)
-            worldPos -= camera.forward * delta * 5.0f;
-        if(glfwGetKey(window.glfwWindow, GLFW_KEY_A) == GLFW_PRESS)
-            worldPos -= camera.right * delta * 5.0f;
-        if(glfwGetKey(window.glfwWindow, GLFW_KEY_D) == GLFW_PRESS)
-            worldPos += camera.right * delta * 5.0f;
-        if(glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE) == GLFW_PRESS)
-            worldPos += glm::vec3(0, 1, 0) * delta * 5.0f;
-        if(glfwGetKey(window.glfwWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            worldPos -= glm::vec3(0, 1, 0) * delta * 5.0f;
-
-        camera.update();
-
-        model.renderModel(genericShader, boneShader, camera);
-        modelBone.renderModel(genericShader, boneShader, camera);
-
-        text->set("#" + std::to_string(glfwGetTime()));
-        text->render(textShader);
-
-        if(glfwGetKey(window.glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            shouldExit = true;
-        glfwPollEvents();
-        glfwSwapBuffers(window.glfwWindow);
-    }
-
-    delete text;*/
+	
     delete window;
     glfwTerminate();
 }
