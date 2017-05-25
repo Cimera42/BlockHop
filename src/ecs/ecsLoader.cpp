@@ -44,6 +44,10 @@ void ECSLoader::readStream(std::string fileName) {
             ECSManager::i()->createEntity(ent["name"], compNames, compData);
         }
 
+    }catch (std::invalid_argument invalidArgument) {
+        Logger(1) << invalidArgument.what();
+        Logger(1)<<"There's something wrong with the file "+fileName+", cannot read all values. Exiting."<<std::endl;
+        exit(-5);
     } catch (...) {
         Logger()<<"There's something wrong with the file "+fileName+", cannot read all values. Exiting."<<std::endl;
         exit(-5);

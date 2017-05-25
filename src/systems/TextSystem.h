@@ -21,7 +21,7 @@ public:
 
     void update(double dt);
 
-    void renderText(TransformComponent *trans, TextComponent *text);
+    void renderText(TransformComponent *transform, TextComponent *text);
 };
 
 #endif //BLOCKHOP_TEXTSYSTEM_H

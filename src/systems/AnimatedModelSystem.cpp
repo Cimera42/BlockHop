@@ -7,6 +7,7 @@
 #include "../components/BoneModelComponent.h"
 #include "../openGLFunctions.h"
 #include "../components/TransformComponent.h"
+#include "../components/CameraComponent.h"
 #include <glm/gtx/transform.hpp>
 
 SYSTEM_EXPORT(AnimatedModelSystem, "animatedModelSystem")
@@ -33,9 +34,11 @@ AnimatedModelSystem::~AnimatedModelSystem()
 	delete boneShader;
 }
 
-extern Camera camera;
 void AnimatedModelSystem::update(double dt) 
 {
+	Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
+	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>("cameraComponent");
+	
     for(auto entity : getEntities())
     {
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
@@ -44,7 +47,7 @@ void AnimatedModelSystem::update(double dt)
 		for(unsigned int i = 0; i < boneModel->parts.size(); i++)
 		{
 			Part part = boneModel->parts[i];
-			glm::mat4 modelMatrix = transform->matrix;
+			glm::mat4 modelMatrix = transform->getMatrix();
 			modelMatrix *= glm::translate(part.position);
 			modelMatrix = glm::scale(modelMatrix, part.scale);
 			modelMatrix = modelMatrix * glm::toMat4(part.rotation);
@@ -53,8 +56,8 @@ void AnimatedModelSystem::update(double dt)
 			{
 				Mesh* mesh = boneModel->normalMeshes[part.mesh];
 				genericShader->use();
-				glUniformMatrix4fv(genericShader->getLoc("viewMat"), 1, GL_FALSE, &camera.viewMatrix[0][0]);
-				glUniformMatrix4fv(genericShader->getLoc("projMat"), 1, GL_FALSE, &camera.projectionMatrix[0][0]);
+				glUniformMatrix4fv(genericShader->getLoc("viewMat"), 1, GL_FALSE, &camera->getViewMatrix()[0][0]);
+				glUniformMatrix4fv(genericShader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
 
 				glSetActiveTexture(GL_TEXTURE0);
 				glSetBindTexture(GL_TEXTURE_2D_ARRAY, boneModel->texture.textureID);
@@ -70,8 +73,8 @@ void AnimatedModelSystem::update(double dt)
 			{
 				BoneMesh* boneMesh = boneModel->boneMeshes[part.mesh];
 				boneShader->use();
-				glUniformMatrix4fv(boneShader->getLoc("viewMat"), 1, GL_FALSE, &camera.viewMatrix[0][0]);
-				glUniformMatrix4fv(boneShader->getLoc("projMat"), 1, GL_FALSE, &camera.projectionMatrix[0][0]);
+				glUniformMatrix4fv(boneShader->getLoc("viewMat"), 1, GL_FALSE, &camera->getViewMatrix()[0][0]);
+				glUniformMatrix4fv(boneShader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
 
 				glSetActiveTexture(GL_TEXTURE0);
 				glSetBindTexture(GL_TEXTURE_2D_ARRAY, boneModel->texture.textureID);

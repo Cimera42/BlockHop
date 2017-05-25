@@ -9,17 +9,6 @@ ECSManager::ECSManager() {}
 ECSManager::~ECSManager() {}
 
 //Helpers for ECS
-System* ECSManager::findSystem(std::string name) {
-
-    std::vector<std::pair<std::string, System*> >::iterator it =
-            std::find_if(gameSystems.begin(), gameSystems.end(), [&name](std::pair<std::string, System*> o) {
-        return (o.first == name);
-    });
-    if(it != gameSystems.end())
-        return it->second;
-    return nullptr;
-}
-
 Entity* ECSManager::findEntity(std::string name) {
     auto it = gameEntities.find(name);
     if(it != gameEntities.end())

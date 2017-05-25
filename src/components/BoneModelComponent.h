@@ -9,7 +9,6 @@
 #include "../texture.h"
 #include "../mesh.h"
 #include "../boneMesh.h"
-#include "../camera.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <assimp/scene.h>

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <chrono>
 #include <string>
+#include <glm/vec3.hpp>
 
 struct Logger
 {
@@ -39,6 +40,13 @@ struct Logger
     {
         //Push input to stringstream
         buffer << val << between;
+        return *this;
+    }
+    
+    Logger& operator<<(const glm::vec3 val)
+    {
+        //Push input to stringstream
+        buffer << val.x << ", " << val.y << ", " << val.z << between;
         return *this;
     }
 

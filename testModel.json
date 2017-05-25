@@ -7,6 +7,27 @@
                 "textComponent"
             ]
         },
+		{
+			"name": "mouseInputSystem",
+			"compsToSub": [
+				"transformComponent",
+				"mouseControlComponent"
+			]
+		},
+		{
+			"name": "keyboardInputSystem",
+			"compsToSub": [
+				"transformComponent",
+				"keyboardControlComponent"
+			]
+		},
+		{
+			"name": "cameraSystem",
+			"compsToSub": [
+				"transformComponent",
+				"cameraComponent"
+			]
+		},
         {
             "name": "animatedModelSystem",
             "compsToSub": [
@@ -23,6 +44,53 @@
         }
     ],
     "entities": [
+        {
+			"name": "Camera",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "cameraComponent",
+					"values": {
+						"fov": 90,
+						"aspectRatio": 1.3333,
+						"nearDist": 0.001,
+						"farDist": 100
+					}
+				},
+				{
+					"name": "mouseControlComponent",
+					"values": {
+						"xSensitivity": 50, 
+						"ySensitivity": 50 
+					}
+				},
+				{
+					"name": "keyboardControlComponent",
+					"values": {
+					}
+				}
+			]
+        },
         {
             "name": "TextEntity",
             "components": [

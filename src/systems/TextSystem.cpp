@@ -39,13 +39,10 @@ void TextSystem::update(double dt)
     }
 }
 
-void TextSystem::renderText(TransformComponent *trans, TextComponent *text)
+void TextSystem::renderText(TransformComponent *transform, TextComponent *text)
 {
     glm::mat4 p = glm::ortho(-320.0f, 320.0f, 240.0f, -240.0f);
-    glm::mat4 m = glm::mat4();
-    m *= glm::translate(trans->position);
-    m *= glm::toMat4(trans->rotation);
-    m *= glm::scale(trans->scale);
+    glm::mat4 m = transform->getMatrix();
 
     textShader->use();
     glUniformMatrix4fv(textShader->getLoc("projMat"), 1, GL_FALSE, &p[0][0]);
@@ -61,6 +58,6 @@ void TextSystem::renderText(TransformComponent *trans, TextComponent *text)
     glUniform1f(textShader->getLoc("u_max"), 0.775f);
 
     glSetBindVertexArray(text->VAO);
-    glDrawArrays(GL_TRIANGLES, 0, text->vertices.size());
+    glDrawArrays(GL_TRIANGLES, 0, (GLint) text->vertices.size());
     glSetBindVertexArray(0);
 }

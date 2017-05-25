@@ -28,7 +28,16 @@ public:
      * Helper functions
      * Will return nullptr if a match cannot be found
      */
-    System* findSystem(std::string name);
+	template <typename T>
+	T* findSystem(std::string name) {
+		std::vector<std::pair<std::string, System*> >::iterator it =
+				std::find_if(gameSystems.begin(), gameSystems.end(), [&name](std::pair<std::string, System*> o) {
+					return (o.first == name);
+				});
+		if(it != gameSystems.end())
+			return static_cast<T*>(it->second);
+		return nullptr;
+	}
     Entity* findEntity(std::string name);
 
     //Is there a point to this when we could just call addComponent on the entity itself

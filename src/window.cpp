@@ -1,5 +1,6 @@
 #include "window.h"
 
+Window::Window(){};
 Window::Window(const char* inTitle, int inWidth, int inHeight)
 {
     title = inTitle;
