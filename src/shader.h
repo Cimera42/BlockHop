@@ -20,7 +20,7 @@ class Shader
 
         void use();
         bool addLoc(const char* name);
-        GLint getLoc(const char* name);
+        GLint getLoc(const char* name) const;
 };
 
 #endif // SHADER_H_INCLUDED

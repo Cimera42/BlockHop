@@ -34,6 +34,7 @@ void TextSystem::update(double dt)
         TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
         TextComponent* text = entity->getComponent<TextComponent>("textComponent");
 
+        //Default data setting for now, just set to delta time
         text->set(std::to_string(dt));
         renderText(transform, text);
     }
@@ -47,17 +48,20 @@ void TextSystem::renderText(TransformComponent *transform, TextComponent *text)
     textShader->use();
     glUniformMatrix4fv(textShader->getLoc("projMat"), 1, GL_FALSE, &p[0][0]);
 
+    //Bind texture atlas
     glSetActiveTexture(GL_TEXTURE0);
-    glSetBindTexture(GL_TEXTURE_2D_ARRAY, text->font->texture->textureID);
+    glSetBindTexture(GL_TEXTURE_2D_ARRAY, text->getFont()->texture->textureID);
     glUniform1i(textShader->getLoc("textureSampler"), 0);
 
     glUniformMatrix4fv(textShader->getLoc("modelMat"), 1, GL_FALSE, &m[0][0]);
 
     glUniform4f(textShader->getLoc("u_colour"), 0.0f, 0.0f, 0.0f, 1.0f);
+    //Signed Distance Field text rendering config
+    //TODO move this somewhere configurable
     glUniform1f(textShader->getLoc("u_min"), 0.675f);
     glUniform1f(textShader->getLoc("u_max"), 0.775f);
 
-    glSetBindVertexArray(text->VAO);
-    glDrawArrays(GL_TRIANGLES, 0, (GLint) text->vertices.size());
+    glSetBindVertexArray(text->getVAO());
+    glDrawArrays(GL_TRIANGLES, 0, (GLint) text->getVertices().size());
     glSetBindVertexArray(0);
 }

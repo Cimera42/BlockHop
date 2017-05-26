@@ -38,7 +38,7 @@ bool System::unsubscribeEntity(Entity *entToUnSub) {
     return false;
 }
 
-std::vector<Entity*> System::getEntities() {
+std::vector<Entity*> System::getEntities() const {
     return subbedEntities;
 }
 

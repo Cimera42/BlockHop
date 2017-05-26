@@ -28,7 +28,7 @@ public:
     /*
      * Helpers for retrieving components attached to an entity
      */
-    std::vector<std::string> getComponents();
+    std::vector<std::string> getComponents() const;
     template <typename T>
     T* getComponent(std::string compName) {
         std::vector<Component*>::iterator it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {

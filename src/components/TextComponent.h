@@ -35,10 +35,6 @@ struct Vertex2D
 class TextComponent : public Component
 {
     static bool exported;
-public:
-    TextComponent();
-    ~TextComponent();
-    void setValues(json inValues);
 
     Font* font;
     std::vector<Vertex2D> vertices;
@@ -49,6 +45,15 @@ public:
     std::string text;
     int xBuffer;
     int yBuffer;
+
+public:
+    TextComponent();
+    ~TextComponent();
+    void setValues(json inValues);
+
+    Font *getFont() const;
+    const std::vector<Vertex2D> &getVertices() const;
+    GLuint getVAO() const;
 
     void set(std::string inText);
     void add(std::string inText);

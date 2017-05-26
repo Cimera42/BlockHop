@@ -21,7 +21,7 @@ void Entity::removeComponent(std::string compName) {
     subscribeToSystems();
 }
 
-std::vector<std::string> Entity::getComponents() {
+std::vector<std::string> Entity::getComponents() const {
     std::vector<std::string> compNames;
     for(auto &comp : subbedComponents) {
         compNames.push_back(comp->getName());

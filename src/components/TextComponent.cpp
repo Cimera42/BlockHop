@@ -91,8 +91,11 @@ void TextComponent::add(std::string inText)
     text += inText;
     for(unsigned int i = 0; i < inText.size(); i++)
     {
-        json a = font->metrics["chars"][std::string(1, inText.at(i))];
-        std::vector<int> metric = a;
+        //Get metrics from json data
+        //Metrics include width, height, vGap, hGap etc
+        std::vector<int> metric = font->metrics["chars"][std::string(1, inText.at(i))];
+
+        //Generic scale
         float scale = 1.5f;
         int width = metric[0];
         int height = metric[1];
@@ -110,6 +113,7 @@ void TextComponent::add(std::string inText)
             float posX = metric[5] / w;
             float posY = metric[6] / h;
 
+            //Create quad
             vertices.push_back(
                     {glm::vec2(xBuffer + (horiBearingX - font->spacing) * scale, yBuffer - horiBearingY * scale),
                      glm::vec2(posX, posY)});
@@ -136,3 +140,7 @@ void TextComponent::add(std::string inText)
 
     fillBuffers();
 }
+
+Font *TextComponent::getFont() const { return font; }
+const std::vector<Vertex2D> &TextComponent::getVertices() const{ return vertices; }
+GLuint TextComponent::getVAO() const { return VAO; }

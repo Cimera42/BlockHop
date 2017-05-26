@@ -37,7 +37,7 @@ public:
     /*
      * Helpers to retrieved subscribed entities
      */
-    std::vector<Entity*> getEntities();
+    std::vector<Entity*> getEntities() const;
 
     /*
      * Updates are called by the engine to run the system.
