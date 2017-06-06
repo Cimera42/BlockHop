@@ -6,6 +6,7 @@
 #include <chrono>
 #include <string>
 #include <glm/vec3.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 struct Logger
 {
@@ -47,6 +48,13 @@ struct Logger
     {
         //Push input to stringstream
         buffer << val.x << ", " << val.y << ", " << val.z << between;
+        return *this;
+    }
+
+    Logger& operator<<(const glm::quat val)
+    {
+        //Push input to stringstream
+        buffer << val.w << ", " << val.x << ", " << val.y << ", " << val.z << between;
         return *this;
     }
 

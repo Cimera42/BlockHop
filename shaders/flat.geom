@@ -7,11 +7,13 @@ in vec3 vPos[3];
 in vec2 vUV[3];
 in vec3 vNorm[3];
 flat in int vMaterialIndex[3];
+in vec3 vColour[3];
 
 out vec3 gPos;
 out vec2 gUV;
 out vec3 gNorm;
 flat out int gMaterialIndex;
+out vec3 gColour;
 
 void main()
 {
@@ -23,6 +25,7 @@ void main()
     {
         gPos = vPos[i];
         gUV = vUV[i];
+        gColour = vColour[i];
         gNorm = n;
         gMaterialIndex = vMaterialIndex[i];
         gl_Position = gl_in[i].gl_Position;

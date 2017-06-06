@@ -32,7 +32,7 @@
             "name": "animatedModelSystem",
             "compsToSub": [
                 "transformComponent",
-                "boneModelComponent"
+                "animatedModelComponent"
             ]
         },
         {
@@ -154,9 +154,9 @@
                     }
                 },
                 {
-                    "name": "boneModelComponent",
+                    "name": "animatedModelComponent",
                     "values": {
-                        "filename": "models/Org/org3.fbx"
+                        "filename": "models/TestBonePlane/TestBonePlane.fbx"
                     }
                 }
             ]

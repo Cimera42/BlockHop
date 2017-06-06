@@ -3,12 +3,6 @@
 #include "window.h"
 #include "ecs/ecsManager.h"
 #include "ecs/ecsLoader.h"
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
-
-#define TEST_MAIN 0
-
 
 Window* window;
 bool shouldExit = false;
@@ -17,40 +11,6 @@ void windowCloseEvent(GLFWwindow *closingWindow)
 {
     shouldExit = true;
 }
-
-#if TEST_MAIN
-int main() {
-
-    ECSLoader loader = ECSLoader();
-    loader.readStream("testjson.json");
-
-
-    std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
-    start = std::chrono::steady_clock::now();
-    previous = start;
-    bool exitFlag = false;
-    while(!exitFlag) {
-        //Run update on our systems! Woohoo
-        for (auto sysPair : ECSManager::i()->gameSystems) {
-            auto system = sysPair.second;
-            //Get time difference for updating systems
-            current = std::chrono::steady_clock::now();
-            std::chrono::duration<double> dt = (current - previous);
-            previous = current;
-
-            //Call both basic update and one with timestep, implementation dependant
-            system->update(dt.count());
-
-            //Total clock duration
-            std::chrono::duration<double> totalTime = current - start;
-            //Logger()<<dt.count()<<" "<<totalTime.count();
-
-            if(totalTime.count() > 3) //Only run for 3 seconds for now!
-                exitFlag = true;
-        }
-    }
-}
-#else
 
 int main()
 {
@@ -103,5 +63,3 @@ int main()
     delete window;
     glfwTerminate();
 }
-
-#endif

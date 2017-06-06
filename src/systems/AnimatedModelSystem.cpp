@@ -4,11 +4,13 @@
 
 #include "AnimatedModelSystem.h"
 #include "../ecs/ecsManager.h"
-#include "../components/BoneModelComponent.h"
+#include "../components/AnimatedModelComponent.h"
 #include "../openGLFunctions.h"
 #include "../components/TransformComponent.h"
 #include "../components/CameraComponent.h"
 #include <glm/gtx/transform.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/matrix_decompose.hpp>
 
 SYSTEM_EXPORT(AnimatedModelSystem, "animatedModelSystem")
 
@@ -42,25 +44,23 @@ void AnimatedModelSystem::update(double dt)
     for(auto entity : getEntities())
     {
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
-        BoneModelComponent* boneModel = entity->getComponent<BoneModelComponent>("boneModelComponent");
+        AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
 
-		for(unsigned int i = 0; i < boneModel->parts.size(); i++)
+		for(unsigned int i = 0; i < animatedModel->meshParts.size(); i++)
 		{
-			Part part = boneModel->parts[i];
-			glm::mat4 modelMatrix = transform->getMatrix();
-			modelMatrix *= glm::translate(part.position);
-			modelMatrix = glm::scale(modelMatrix, part.scale);
-			modelMatrix = modelMatrix * glm::toMat4(part.rotation);
-
-			if(boneModel->normalMeshes.find((const unsigned int) part.mesh) != boneModel->normalMeshes.end())
+			MeshPart* meshPart = animatedModel->meshParts[i];
+			NodePart* nodePart = meshPart->nodeParent;
+			glm::mat4 modelMatrix = transform->getMatrix() * nodePart->collectiveMatrix;
+					  
+			if(animatedModel->normalMeshes.find((const unsigned int) meshPart->mesh) != animatedModel->normalMeshes.end())
 			{
-				Mesh* mesh = boneModel->normalMeshes[part.mesh];
+				Mesh* mesh = animatedModel->normalMeshes[meshPart->mesh];
 				genericShader->use();
 				glUniformMatrix4fv(genericShader->getLoc("viewMat"), 1, GL_FALSE, &camera->getViewMatrix()[0][0]);
 				glUniformMatrix4fv(genericShader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
 
 				glSetActiveTexture(GL_TEXTURE0);
-				glSetBindTexture(GL_TEXTURE_2D_ARRAY, boneModel->texture.textureID);
+				glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->texture.textureID);
 				glUniform1i(genericShader->getLoc("textureSampler"), 0);
 
 				glUniformMatrix4fv(genericShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
@@ -71,13 +71,24 @@ void AnimatedModelSystem::update(double dt)
 			}
 			else
 			{
-				BoneMesh* boneMesh = boneModel->boneMeshes[part.mesh];
+				BoneMesh* boneMesh = animatedModel->boneMeshes[meshPart->mesh];
 				boneShader->use();
+				std::for_each(boneMesh->boneMats.begin(), boneMesh->boneMats.end(), [](const glm::mat4 mat){
+					glm::vec3 scale;
+					glm::quat rotation;
+					glm::vec3 position;
+					glm::vec3 skew;
+					glm::vec4 perspective;
+					glm::decompose(mat, scale, rotation, position, skew, perspective);
+					Logger(1) << "    Position: " << position;
+					Logger(1) << "    Rotation: " << rotation;
+					Logger(1) << "    Scale: " << scale;
+				});
 				glUniformMatrix4fv(boneShader->getLoc("viewMat"), 1, GL_FALSE, &camera->getViewMatrix()[0][0]);
 				glUniformMatrix4fv(boneShader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
 
 				glSetActiveTexture(GL_TEXTURE0);
-				glSetBindTexture(GL_TEXTURE_2D_ARRAY, boneModel->texture.textureID);
+				glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->texture.textureID);
 				glUniform1i(boneShader->getLoc("textureSampler"), 0);
 
 				glUniformMatrix4fv(boneShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
@@ -85,7 +96,7 @@ void AnimatedModelSystem::update(double dt)
 				unsigned int matsNum = (unsigned int) boneMesh->boneMats.size();
 				if(matsNum)
 				{
-					boneMesh->transformBones((float) glfwGetTime()*24.0f);
+					boneMesh->transformBones(animatedModel->nodeParts);
 					int matsLoc = boneShader->getLoc("boneMats");
 					glUniformMatrix4fv(matsLoc, matsNum,
 									   GL_FALSE, &boneMesh->boneMats.data()[0][0][0]);

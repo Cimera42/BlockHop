@@ -34,7 +34,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/systems/KeyboardInputSystem.cpp src/systems
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TestComponent.cpp src/components/TestComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TransformComponent.cpp src/components/TransformComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TextComponent.cpp src/components/TextComponent.h)
-set(SOURCE_FILES ${SOURCE_FILES} src/components/BoneModelComponent.cpp src/components/BoneModelComponent.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/components/AnimatedModelComponent.cpp src/components/AnimatedModelComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/CameraComponent.cpp src/components/CameraComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/MouseControlComponent.cpp src/components/MouseControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/KeyboardControlComponent.cpp src/components/KeyboardControlComponent.h)

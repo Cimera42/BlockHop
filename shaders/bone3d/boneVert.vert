@@ -11,6 +11,7 @@ out vec3 vPos;
 out vec2 vUV;
 out vec3 vNorm;
 flat out int vMaterialIndex;
+out vec3 vColour;
 
 uniform mat4 modelMat;
 uniform mat4 viewMat;
@@ -24,6 +25,19 @@ void main()
     BoneTransform += boneMats[boneIds[1]] * boneWeights[1];
     BoneTransform += boneMats[boneIds[2]] * boneWeights[2];
     BoneTransform += boneMats[boneIds[3]] * boneWeights[3];
+    
+    float weight = 0;
+    for(int i = 0; i < 4; i++)
+    {
+        if(boneIds[i] == 1)
+        {
+            weight = boneWeights[i];
+            break;
+        }
+    }
+    
+    vColour = mix(vec3(0,0,1), vec3(0,1,0), smoothstep(0.0,0.5,weight));
+    vColour = mix(vColour, vec3(1,0,0), smoothstep(0.5,1.0,weight));
 
     vPos = vec3(modelMat * BoneTransform * vec4(vertPos,1));
 
