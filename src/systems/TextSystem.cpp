@@ -13,7 +13,7 @@ SYSTEM_EXPORT(TextSystem, "textSystem")
 
 TextSystem::TextSystem()
 {
-    textShader = new Shader("shaders/text/textVert.vert", "shaders/text/textFrag.frag");
+    textShader = new Shader("./assets/shaders/text/textVert.vert", "./assets/shaders/text/textFrag.frag");
     textShader->addLoc("modelMat");
     textShader->addLoc("projMat");
     textShader->addLoc("textureSampler");

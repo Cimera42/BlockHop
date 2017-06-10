@@ -39,6 +39,11 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/CameraComponent.cpp src/componen
 set(SOURCE_FILES ${SOURCE_FILES} src/components/MouseControlComponent.cpp src/components/MouseControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/KeyboardControlComponent.cpp src/components/KeyboardControlComponent.h)
 
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/textureLoader.cpp src/loaders/textureLoader.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetManager.cpp src/loaders/assetManager.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetLoader.cpp src/loaders/assetLoader.h )
+
+
 add_executable(BlockHop ${SOURCE_FILES})
 
 find_package(OpenGL REQUIRED)

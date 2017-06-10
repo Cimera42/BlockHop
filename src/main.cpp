@@ -3,6 +3,7 @@
 #include "window.h"
 #include "ecs/ecsManager.h"
 #include "ecs/ecsLoader.h"
+#include "loaders/assetManager.h"
 
 Window* window;
 bool shouldExit = false;
@@ -24,9 +25,12 @@ int main()
 
     glfwSetWindowCloseCallback(window->glfwWindow, windowCloseEvent);
 
+    //Startup engine asset loader
+    AssetManager::i()->start();
+
     //Load scene from file
-    ECSLoader loader = ECSLoader();
-    loader.readStream("testModel.json");
+    ECSLoader ecsLoader = ECSLoader();
+    ecsLoader.readStream("testModel.json");
 
     std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
     start = std::chrono::steady_clock::now();

@@ -156,7 +156,7 @@
                 {
                     "name": "animatedModelComponent",
                     "values": {
-                        "filename": "models/TestBonePlane/TestBonePlane.fbx"
+                        "filename": "assets/models/TestBonePlane/TestBonePlane.fbx"
                     }
                 }
             ]

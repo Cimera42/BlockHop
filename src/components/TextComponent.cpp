@@ -11,9 +11,9 @@ COMPONENT_EXPORT(TextComponent, "textComponent")
 
 Font::Font()
 {
-    std::ifstream i("./textures/OpenSans-Regular.json");
+    std::ifstream i("./assets/textures/OpenSans-Regular.json");
     i >> metrics;
-    texture = new Texture("./textures/text.png");
+    texture = new Texture(".assets/textures/text.png");
 }
 
 Font::~Font()
