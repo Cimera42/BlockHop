@@ -60,7 +60,7 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
      */
     assert(compsToSub.size() == compsData.size());
 
-    Entity* e = new Entity();
+    Entity* e = new Entity(name);
     //Get components and create each of them
     for(int i = 0 ; i < compsToSub.size(); i++) {
         Component* newComp = createComponent(compsToSub[i], compsData[i]);

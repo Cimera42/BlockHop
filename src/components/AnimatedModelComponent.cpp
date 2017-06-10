@@ -141,20 +141,39 @@ NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodeP
 	nodePart->name = assimpNode->mName.C_Str();
 	nodePart->animationNode = new AnimationNode(FindAnimNode(nodePart->name), assimpNode);
 	nodePart->nodeParent = parent;
-	nodePart->defaultTransform = AToGMat(assimpNode->mTransformation);
+    //nodePart->defaultTransform = AToGMat(assimpNode->mTransformation);
 
-	glm::vec3 scale;
-	glm::quat rotation;
-	glm::vec3 position;
-	glm::vec3 skew;
-	glm::vec4 perspective;
-	glm::decompose(nodePart->defaultTransform, scale, rotation, position, skew, perspective);
-	std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="    ";} return c;}();
-	Logger(1) << indentS << nodePart->name;
-	Logger(1) << indentS << "    Position: " << position;
-	Logger(1) << indentS << "    Rotation: " << rotation;
-	Logger(1) << indentS << "    Scale: " << scale;
-	
+//	glm::vec3 skew;
+//	glm::vec4 perspective;
+//	glm::decompose(nodePart->defaultTransform, scale, rotation, position, skew, perspective);
+
+    /*
+     * Extract scale, rotation and position
+     * Then use them to cosntruct a transformation matrix
+     * This could also be done using AToGMat, which directly converts the matrix
+     * The component extarction is done anyway for logging, so why not
+     * do them both at once
+     */
+    aiVector3D p;
+    aiQuaternion r;
+    aiVector3D s;
+    glm::vec3 scale;
+    glm::quat rotation;
+    glm::vec3 position;
+    assimpNode->mTransformation.Decompose(s,r,p);
+    position = glm::vec3(p.x, p.y, p.z);
+    rotation = glm::quat(r.w, r.x, r.y, r.z);
+    //rotation = glm::quat(0,707,0,0,0.707);
+    scale = glm::vec3(s.x, s.y, s.z);
+    nodePart->defaultTransform = glm::mat4() * glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
+
+    std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="    ";} return c;}();
+    Logger(1) << indentS << "Node: \"" << nodePart->name << "\"";
+    Logger(1) << indentS << "    Position: " << position;
+    Logger(1) << indentS << "    Rotation: " << rotation;
+    Logger(1) << indentS << "    RotationA: " << glm::axis(rotation);
+    Logger(1) << indentS << "    Scale: " << scale;
+
 	nodeParts.push_back(nodePart);
 	
 	for(int i = 0; i < assimpNode->mNumMeshes; i++)
@@ -202,13 +221,17 @@ void AnimatedModelComponent::transformNodes()
 //		else
 		if(node->name != "Armature")
 			node->localMatrix = node->defaultTransform;
+		else
+			node->localMatrix = glm::mat4();
 	}
 	recursiveTransform(nodeParts[0]);
 }
 
 void AnimatedModelComponent::recursiveTransform(NodePart *node)
 {
-	node->collectiveMatrix = node->localMatrix * (node->nodeParent ? node->nodeParent->collectiveMatrix : glm::mat4());
+	node->collectiveMatrix = node->localMatrix;
+	if(node->nodeParent)
+		node->collectiveMatrix *= node->nodeParent->collectiveMatrix;
 
 	for(auto nodeChildren : node->nodeChildren)
 		recursiveTransform(nodeChildren);
@@ -318,7 +341,7 @@ AnimationNode::AnimationNode(aiNodeAnim* animNode, aiNode* node)
 		aiVector3D p;
 		aiQuaternion r;
 		aiVector3D s;
-		node->mTransformation.Decompose(p, r, s);
+		node->mTransformation.Decompose(s, r, p);
 
 		VectorKey pKey;
 		pKey.mValue = glm::vec3(p.x, p.y, p.z);

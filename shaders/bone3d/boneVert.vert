@@ -20,16 +20,27 @@ uniform mat4 boneMats[200];
 
 void main()
 {
-    mat4 BoneTransform = mat4(1);
-    BoneTransform = boneMats[boneIds[0]] * boneWeights[0];
-    BoneTransform += boneMats[boneIds[1]] * boneWeights[1];
-    BoneTransform += boneMats[boneIds[2]] * boneWeights[2];
-    BoneTransform += boneMats[boneIds[3]] * boneWeights[3];
+    mat4 BoneTransform = mat4(1.0);
+    //if(gl_VertexID == 2)
+    {
+        //if(boneIds[0] == 0)
+        {
+            //if(boneIds[1] == 1)
+            {
+            if(boneIds[0] == 0)
+                BoneTransform = boneMats[boneIds[0]] * boneWeights[0];
+                //BoneTransform += boneMats[boneIds[1]] * boneWeights[1];
+            }
+        }
+        //BoneTransform += boneMats[boneIds[1]] * boneWeights[1];
+        //BoneTransform += boneMats[boneIds[2]] * boneWeights[2];
+        //BoneTransform += boneMats[boneIds[3]] * boneWeights[3];
+    }
     
     float weight = 0;
     for(int i = 0; i < 4; i++)
     {
-        if(boneIds[i] == 1)
+        if(boneIds[i] == 0)
         {
             weight = boneWeights[i];
             break;

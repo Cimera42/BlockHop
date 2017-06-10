@@ -14,7 +14,7 @@
 
 SYSTEM_EXPORT(AnimatedModelSystem, "animatedModelSystem")
 
-AnimatedModelSystem::AnimatedModelSystem() 
+AnimatedModelSystem::AnimatedModelSystem()
 {
 	genericShader = new Shader("shaders/basic3d/3dvert.vert", "shaders/basic3d/3dfrag.frag");
 	genericShader->addLoc("modelMat");
@@ -73,17 +73,19 @@ void AnimatedModelSystem::update(double dt)
 			{
 				BoneMesh* boneMesh = animatedModel->boneMeshes[meshPart->mesh];
 				boneShader->use();
-				std::for_each(boneMesh->boneMats.begin(), boneMesh->boneMats.end(), [](const glm::mat4 mat){
-					glm::vec3 scale;
-					glm::quat rotation;
-					glm::vec3 position;
-					glm::vec3 skew;
-					glm::vec4 perspective;
-					glm::decompose(mat, scale, rotation, position, skew, perspective);
-					Logger(1) << "    Position: " << position;
-					Logger(1) << "    Rotation: " << rotation;
-					Logger(1) << "    Scale: " << scale;
-				});
+
+//				std::for_each(boneMesh->boneMats.begin(), boneMesh->boneMats.end(), [](const glm::mat4 mat){
+//					glm::vec3 scale;
+//					glm::quat rotation;
+//					glm::vec3 position;
+//					glm::vec3 skew;
+//					glm::vec4 perspective;
+//					glm::decompose(mat, scale, rotation, position, skew, perspective);
+//					Logger(1) << "1    Position: " << position;
+//					Logger(1) << "1    Rotation: " << rotation;
+//					Logger(1) << "1    Scale: " << scale;
+//				});
+
 				glUniformMatrix4fv(boneShader->getLoc("viewMat"), 1, GL_FALSE, &camera->getViewMatrix()[0][0]);
 				glUniformMatrix4fv(boneShader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
 
@@ -94,9 +96,20 @@ void AnimatedModelSystem::update(double dt)
 				glUniformMatrix4fv(boneShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
 
 				unsigned int matsNum = (unsigned int) boneMesh->boneMats.size();
-				if(matsNum)
+				if(matsNum > 0)
 				{
 					boneMesh->transformBones(animatedModel->nodeParts);
+//					std::for_each(boneMesh->boneMats.begin(), boneMesh->boneMats.end(), [](const glm::mat4 mat){
+//						glm::vec3 scale;
+//						glm::quat rotation;
+//						glm::vec3 position;
+//						glm::vec3 skew;
+//						glm::vec4 perspective;
+//						glm::decompose(mat, scale, rotation, position, skew, perspective);
+//						Logger(1) << "2    Position: " << position;
+//						Logger(1) << "2    Rotation: " << rotation;
+//						Logger(1) << "2    Scale: " << scale;
+//					});
 					int matsLoc = boneShader->getLoc("boneMats");
 					glUniformMatrix4fv(matsLoc, matsNum,
 									   GL_FALSE, &boneMesh->boneMats.data()[0][0][0]);

@@ -1,7 +1,10 @@
 #include "entity.h"
 #include "ecsManager.h"
 
-Entity::Entity() {}
+Entity::Entity(std::string inName)
+{
+    name = inName;
+}
 Entity::~Entity(){}
 
 void Entity::addComponent(Component* comp) {
@@ -41,7 +44,12 @@ void Entity::subscribeToSystems() {
         //or doesn't meet the requirements. However we can assume since we just
         //unsubbed that its the latter
         if(sysPtr->subscribeEntity(this)) {
-            Logger(1) << "Entity successfully subscribed to "<<sys.first;
+            Logger(1) << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
         }
     }
+}
+
+std::string Entity::getName() const
+{
+    return name;
 }
