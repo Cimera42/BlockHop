@@ -76,6 +76,16 @@ struct Material
     std::string texturePath;
 };
 
+struct Animation
+{
+	std::string name;
+	unsigned int channels;
+	double tickRate;
+	double duration;
+	
+	std::vector<aiNodeAnim*> animNodes;
+};
+
 class BoneMesh;
 class AnimatedModelComponent : public Component
 {
@@ -95,9 +105,10 @@ public:
 	std::vector<NodePart*> nodeParts;
 
 	std::vector<aiNode*> assimpNodes;
-	std::vector<aiNodeAnim*> animNodes;
+	std::vector<Animation*> animations;
 	
-	int tickRate;
+	double time = 0;
+	int currentAnimation = 1;
 
 	void load();
 	NodePart* nodeLoop(aiNode *assimpNode, int indent, NodePart *parent);
@@ -109,7 +120,7 @@ public:
         return os;
     }
 
-	void transformNodes(float time);
+	void transformNodes(float dt);
 	void recursiveTransform(NodePart *node);
 };
 

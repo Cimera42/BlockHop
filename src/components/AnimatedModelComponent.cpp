@@ -61,18 +61,23 @@ void AnimatedModelComponent::load()
 	}
 
 	Logger(1) << "Animations: " << scene->mNumAnimations;
-	for(unsigned int i = 1; i < scene->mNumAnimations; i++)
+	for(unsigned int i = 0; i < scene->mNumAnimations; i++)
 	{
 		aiAnimation* assimpAnimation = scene->mAnimations[i];
-		Logger(1) << "TPS: " << assimpAnimation->mTicksPerSecond;
-		tickRate = assimpAnimation->mTicksPerSecond;
-
 		Logger(1) << "Animation name: " << assimpAnimation->mName.C_Str();
 		Logger(1) << "Animation channels: " << assimpAnimation->mNumChannels;
+		Logger(1) << "TPS: " << assimpAnimation->mTicksPerSecond;
+		
+		Animation* anim = new Animation();
+		anim->name = assimpAnimation->mName.C_Str();
+		anim->channels = assimpAnimation->mNumChannels;
+		anim->tickRate = assimpAnimation->mTicksPerSecond;
+		anim->duration = assimpAnimation->mDuration;
 		for(unsigned int j = 0; j < assimpAnimation->mNumChannels; j++)
 		{
-			animNodes.push_back(assimpAnimation->mChannels[j]);
+			anim->animNodes.push_back(assimpAnimation->mChannels[j]);
 		}
+		animations.push_back(anim);
 	}
 
 	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
@@ -195,17 +200,19 @@ NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodeP
 
 aiNodeAnim* AnimatedModelComponent::FindAnimNode(std::string findThis)
 {
-	for(unsigned int i = 0; i < animNodes.size(); i++)
+	for(unsigned int i = 0; i < animations[currentAnimation]->animNodes.size(); i++)
 	{
-		if(animNodes[i]->mNodeName.C_Str() == findThis)
-			return animNodes[i];
+		if(animations[currentAnimation]->animNodes[i]->mNodeName.C_Str() == findThis)
+			return animations[currentAnimation]->animNodes[i];
 	}
 	return nullptr;
 }
 
-void AnimatedModelComponent::transformNodes(float time)
+void AnimatedModelComponent::transformNodes(float dt)
 {
-	time = time*tickRate;
+	if(time > animations[currentAnimation]->duration)
+		time = 0;
+	time += dt*animations[currentAnimation]->tickRate;
 	for(unsigned int i = 1; i < nodeParts.size(); i++)
 	{
 		NodePart* node = nodeParts[i];

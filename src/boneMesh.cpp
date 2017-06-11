@@ -120,13 +120,13 @@ void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
         bone->offsetMatrix = AToGMat(assimpBone->mOffsetMatrix);
         bones.push_back(bone);
 
-		Logger(1) << "Bone " << bone->id << ": \"" << assimpBone->mName.C_Str() << "\"";
+		//Logger(1) << "Bone " << bone->id << ": \"" << assimpBone->mName.C_Str() << "\"";
         for(unsigned int j = 0; j < assimpBone->mNumWeights; j++)
         {
             aiVertexWeight assimpWeight = assimpBone->mWeights[j];
 
             BoneVertex vert = collatedVertices[assimpWeight.mVertexId];
-			Logger(1) << "    Vertex: " << assimpWeight.mVertexId << ", Weight: " << assimpWeight.mWeight;
+			//Logger(1) << "    Vertex: " << assimpWeight.mVertexId << ", Weight: " << assimpWeight.mWeight;
             for(unsigned int k = 0; k < 4; k++)
             {
                 if(vert.BoneWeights[k] <= 0.0f)
@@ -140,7 +140,7 @@ void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
         }
     }
 
-	int k = 0;
+	/*int k = 0;
 	std::for_each(collatedVertices.begin(), collatedVertices.end(), [&k](const BoneVertex vert) {
 		
 		Logger(1) << "Vertex " << k++ << ": ";
@@ -150,7 +150,7 @@ void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
 		Logger(1) << "    Material: " << vert.materialIndex;
 		Logger(1) << "    BoneIds: " << vert.BoneIds[0] << "," << vert.BoneIds[1] << "," << vert.BoneIds[2] << "," << vert.BoneIds[3];
 		Logger(1) << "    BoneWeights: " << vert.BoneWeights[0] << "," << vert.BoneWeights[1] << "," << vert.BoneWeights[2] << "," << vert.BoneWeights[3];
-	});
+	});*/
     
     genBuffers();
 }

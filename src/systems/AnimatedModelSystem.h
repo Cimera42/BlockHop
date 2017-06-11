@@ -14,8 +14,6 @@ class AnimatedModelSystem : public System
 public:
     AnimatedModelSystem();
     ~AnimatedModelSystem();
-	
-	float time = 0;
 
 	Shader *genericShader;
 	Shader *boneShader;
