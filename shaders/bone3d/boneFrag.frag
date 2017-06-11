@@ -14,11 +14,11 @@ uniform sampler2DArray textureSampler;
 
 void main()
 {
-    float intensity = dot(normalize(vec3(0,0,1)), gNorm);
+    float intensity = dot(normalize(vec3(1,1,1)), gNorm);
     vec3 colour = texture(textureSampler, vec3(gUV, gMaterialIndex)).rgb;
     colour *= intensity;
 
-    outColour = vec4(gColour,1);
+    outColour = vec4(colour,1);
     outNormal = vec4(gNorm,1);
     outPosition = vec4(gPos,1);
 }

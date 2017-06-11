@@ -96,6 +96,8 @@ public:
 
 	std::vector<aiNode*> assimpNodes;
 	std::vector<aiNodeAnim*> animNodes;
+	
+	int tickRate;
 
 	void load();
 	NodePart* nodeLoop(aiNode *assimpNode, int indent, NodePart *parent);
@@ -107,7 +109,7 @@ public:
         return os;
     }
 
-	void transformNodes();
+	void transformNodes(float time);
 	void recursiveTransform(NodePart *node);
 };
 

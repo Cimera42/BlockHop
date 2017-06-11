@@ -21,17 +21,12 @@ uniform mat4 boneMats[200];
 void main()
 {
     mat4 BoneTransform = mat4(1.0);
-//	BoneTransform  = boneMats[boneIds[0]] * boneWeights[0];
-//	BoneTransform += boneMats[boneIds[1]] * boneWeights[1];
-//	BoneTransform += boneMats[boneIds[2]] * boneWeights[2];
-//	BoneTransform += boneMats[boneIds[3]] * boneWeights[3];
-	if(boneIds[0] == 0)
-	{
-		BoneTransform  = boneMats[0] * 1;
-	
-	}
+	BoneTransform  = boneMats[boneIds[0]] * boneWeights[0];
+	BoneTransform += boneMats[boneIds[1]] * boneWeights[1];
+	BoneTransform += boneMats[boneIds[2]] * boneWeights[2];
+	BoneTransform += boneMats[boneIds[3]] * boneWeights[3];
     
-    float weight = 0;
+    /*float weight = 0;
     for(int i = 0; i < 4; i++)
     {
         if(boneIds[i] == 0)
@@ -42,7 +37,7 @@ void main()
     }
     
     vColour = mix(vec3(0,0,1), vec3(0,1,0), smoothstep(0.0,0.5,weight));
-    vColour = mix(vColour, vec3(1,0,0), smoothstep(0.5,1.0,weight));
+    vColour = mix(vColour, vec3(1,0,0), smoothstep(0.5,1.0,weight));*/
 
     vPos = vec3(modelMat * BoneTransform * vec4(vertPos,1));
 

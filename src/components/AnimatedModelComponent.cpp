@@ -65,6 +65,7 @@ void AnimatedModelComponent::load()
 	{
 		aiAnimation* assimpAnimation = scene->mAnimations[i];
 		Logger(1) << "TPS: " << assimpAnimation->mTicksPerSecond;
+		tickRate = assimpAnimation->mTicksPerSecond;
 
 		Logger(1) << "Animation name: " << assimpAnimation->mName.C_Str();
 		Logger(1) << "Animation channels: " << assimpAnimation->mNumChannels;
@@ -114,7 +115,7 @@ void AnimatedModelComponent::load()
 	}
 
 	nodeLoop(scene->mRootNode, 0, nullptr);
-	transformNodes();
+	transformNodes(0);
 
 	for(unsigned int i = 0; i < scene->mNumMeshes; i++)
 	{
@@ -122,7 +123,7 @@ void AnimatedModelComponent::load()
 		if(assimpMesh->mNumBones > 0)
 		{
 			boneMeshes[i] = new BoneMesh(assimpMesh, assimpNodes);
-			boneMeshes[i]->transformBones(nodeParts);
+			boneMeshes[i]->transformBones(nodeParts); 
 		}
 		else
 		{
@@ -151,7 +152,7 @@ NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodeP
      * Extract scale, rotation and position
      * Then use them to cosntruct a transformation matrix
      * This could also be done using AToGMat, which directly converts the matrix
-     * The component extarction is done anyway for logging, so why not
+     * The component extraction is done anyway for logging, so why not
      * do them both at once
      */
     aiVector3D p;
@@ -202,9 +203,9 @@ aiNodeAnim* AnimatedModelComponent::FindAnimNode(std::string findThis)
 	return nullptr;
 }
 
-void AnimatedModelComponent::transformNodes()
+void AnimatedModelComponent::transformNodes(float time)
 {
-	float time = 0;
+	time = time*tickRate;
 	for(unsigned int i = 1; i < nodeParts.size(); i++)
 	{
 		NodePart* node = nodeParts[i];
@@ -219,19 +220,24 @@ void AnimatedModelComponent::transformNodes()
 //		if(!node->nodeParent)
 //			node->localMatrix = glm::inverse(node->defaultTransform);
 //		else
-		if(node->name != "Armature")
-			node->localMatrix = node->defaultTransform;
-		else
+		if(node->name == "Armature")
 			node->localMatrix = glm::mat4();
+		else
+			node->localMatrix = transform;
 	}
 	recursiveTransform(nodeParts[0]);
+
+	for(unsigned int i = 0; i < boneMeshes.size(); i++)
+	{
+		boneMeshes[i]->transformBones(nodeParts);
+	}
 }
 
 void AnimatedModelComponent::recursiveTransform(NodePart *node)
 {
-	node->collectiveMatrix = node->localMatrix;
 	if(node->nodeParent)
-		node->collectiveMatrix *= node->nodeParent->collectiveMatrix;
+		node->collectiveMatrix = node->nodeParent->collectiveMatrix;
+	node->collectiveMatrix *= node->localMatrix;
 
 	for(auto nodeChildren : node->nodeChildren)
 		recursiveTransform(nodeChildren);
