@@ -38,6 +38,7 @@ AnimatedModelSystem::~AnimatedModelSystem()
 
 void AnimatedModelSystem::update(double dt) 
 {
+	time += dt;
 	Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
 	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>("cameraComponent");
 	
@@ -46,6 +47,8 @@ void AnimatedModelSystem::update(double dt)
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
         AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
 
+		animatedModel->transformNodes(time);
+		
 		for(unsigned int i = 0; i < animatedModel->meshParts.size(); i++)
 		{
 			MeshPart* meshPart = animatedModel->meshParts[i];
