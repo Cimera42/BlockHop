@@ -4,6 +4,7 @@
 
 #include "logger.h"
 #include <string>
+#include <ctime>
 
 Logger::Logger()
 {
@@ -45,6 +46,13 @@ Logger::~Logger()
 		std::cout << std::endl;
 }
 
+Logger& Logger::operator<<(const glm::vec2 val)
+{
+	//Push input to stringstream
+	buffer << val.x << ", " << val.y << between;
+	return *this;
+}
+
 Logger& Logger::operator<<(const glm::vec3 val)
 {
 	//Push input to stringstream
@@ -68,7 +76,10 @@ Logger& Logger::operator<<(const glm::quat val)
 Logger& Logger::operator<<(const glm::mat4 val)
 {
 	//Push input to stringstream
-	(*this) << val[0] << val[1] << val[2] << val[3];
+	(*this) << val[0][0] << "," << val[1][0] << "," << val[2][0] << "," << val[3][0] << " | ";
+	(*this) << val[0][1] << "," << val[1][1] << "," << val[2][1] << "," << val[3][1] << " | ";
+	(*this) << val[0][2] << "," << val[1][2] << "," << val[2][2] << "," << val[3][2] << " | ";
+	(*this) << val[0][3] << "," << val[1][3] << "," << val[2][3] << "," << val[3][3] << " | ";
 	return *this;
 }
 

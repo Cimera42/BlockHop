@@ -32,6 +32,7 @@ public:
         buffer << val << between;
         return *this;
     }
+	Logger& operator<<(const glm::vec2 val);
 	Logger& operator<<(const glm::vec3 val);
 	Logger& operator<<(const glm::vec4 val);
 	Logger& operator<<(const glm::quat val);

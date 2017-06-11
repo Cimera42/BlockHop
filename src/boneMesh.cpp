@@ -140,6 +140,18 @@ void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
         }
     }
 
+	int k = 0;
+	std::for_each(collatedVertices.begin(), collatedVertices.end(), [&k](const BoneVertex vert) {
+		
+		Logger(1) << "Vertex " << k++ << ": ";
+		Logger(1) << "    Position: " << vert.pos;
+		Logger(1) << "    UV: " << vert.uv;
+		Logger(1) << "    Normal: " << vert.normal;
+		Logger(1) << "    Material: " << vert.materialIndex;
+		Logger(1) << "    BoneIds: " << vert.BoneIds[0] << "," << vert.BoneIds[1] << "," << vert.BoneIds[2] << "," << vert.BoneIds[3];
+		Logger(1) << "    BoneWeights: " << vert.BoneWeights[0] << "," << vert.BoneWeights[1] << "," << vert.BoneWeights[2] << "," << vert.BoneWeights[3];
+	});
+    
     genBuffers();
 }
 

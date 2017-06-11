@@ -99,17 +99,18 @@ void AnimatedModelSystem::update(double dt)
 				if(matsNum > 0)
 				{
 					boneMesh->transformBones(animatedModel->nodeParts);
-//					std::for_each(boneMesh->boneMats.begin(), boneMesh->boneMats.end(), [](const glm::mat4 mat){
-//						glm::vec3 scale;
-//						glm::quat rotation;
-//						glm::vec3 position;
-//						glm::vec3 skew;
-//						glm::vec4 perspective;
-//						glm::decompose(mat, scale, rotation, position, skew, perspective);
-//						Logger(1) << "2    Position: " << position;
-//						Logger(1) << "2    Rotation: " << rotation;
-//						Logger(1) << "2    Scale: " << scale;
-//					});
+					/*std::for_each(boneMesh->boneMats.begin(), boneMesh->boneMats.end(), [](const glm::mat4 mat){
+						glm::vec3 scale;
+						glm::quat rotation;
+						glm::vec3 position;
+						glm::vec3 skew;
+						glm::vec4 perspective;
+						glm::decompose(mat, scale, rotation, position, skew, perspective);
+						Logger(1) << "2    Matrix: " << mat;
+						Logger(1) << "2    Position: " << position;
+						Logger(1) << "2    Rotation: " << rotation;
+						Logger(1) << "2    Scale: " << scale;
+					});*/
 					int matsLoc = boneShader->getLoc("boneMats");
 					glUniformMatrix4fv(matsLoc, matsNum,
 									   GL_FALSE, &boneMesh->boneMats.data()[0][0][0]);
