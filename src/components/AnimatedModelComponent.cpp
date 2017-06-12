@@ -32,9 +32,9 @@ AnimatedModelComponent::~AnimatedModelComponent()
 		bM.second->destruct();
 }
 
-void AnimatedModelComponent::setValues(json inValues) {
+void AnimatedModelComponent::setValues(json inValues) 
+{
     //Will throw if incorrect/should automatically be caught by ECSManager
-
 	filename = inValues["filename"].get<std::string>();
 	load();
 }
@@ -75,7 +75,8 @@ void AnimatedModelComponent::load()
 		anim->duration = assimpAnimation->mDuration;
 		for(unsigned int j = 0; j < assimpAnimation->mNumChannels; j++)
 		{
-			anim->animNodes.push_back(assimpAnimation->mChannels[j]);
+			aiNodeAnim* an = assimpAnimation->mChannels[j];
+			anim->animNodes[an->mNodeName.C_Str()] = an;
 		}
 		animations.push_back(anim);
 	}
@@ -145,8 +146,12 @@ NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodeP
 	
 	NodePart* nodePart = new NodePart();
 	nodePart->name = assimpNode->mName.C_Str();
-	nodePart->animationNode = new AnimationNode(FindAnimNode(nodePart->name), assimpNode);
 	nodePart->nodeParent = parent;
+	for(Animation* anim : animations)
+	{
+		aiNodeAnim* a = FindAnimNode(nodePart->name, anim);
+		anim->animationNodes[nodePart->name] = new AnimationNode(a, assimpNode);
+	}
     //nodePart->defaultTransform = AToGMat(assimpNode->mTransformation);
 
 //	glm::vec3 skew;
@@ -169,16 +174,15 @@ NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodeP
     assimpNode->mTransformation.Decompose(s,r,p);
     position = glm::vec3(p.x, p.y, p.z);
     rotation = glm::quat(r.w, r.x, r.y, r.z);
-    //rotation = glm::quat(0,707,0,0,0.707);
     scale = glm::vec3(s.x, s.y, s.z);
     nodePart->defaultTransform = glm::mat4() * glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
 
-    std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="    ";} return c;}();
+    /*std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="    ";} return c;}();
     Logger(1) << indentS << "Node: \"" << nodePart->name << "\"";
     Logger(1) << indentS << "    Position: " << position;
     Logger(1) << indentS << "    Rotation: " << rotation;
     Logger(1) << indentS << "    RotationA: " << glm::axis(rotation);
-    Logger(1) << indentS << "    Scale: " << scale;
+    Logger(1) << indentS << "    Scale: " << scale;*/
 
 	nodeParts.push_back(nodePart);
 	
@@ -198,13 +202,21 @@ NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodeP
 	return nodePart;
 }
 
-aiNodeAnim* AnimatedModelComponent::FindAnimNode(std::string findThis)
+int AnimatedModelComponent::FindAnim(std::string findThis)
 {
-	for(unsigned int i = 0; i < animations[currentAnimation]->animNodes.size(); i++)
+	for(unsigned int i = 0; i < animations.size(); i++)
 	{
-		if(animations[currentAnimation]->animNodes[i]->mNodeName.C_Str() == findThis)
-			return animations[currentAnimation]->animNodes[i];
+		if(animations[i]->name == findThis)
+			return i;
 	}
+	return -1;
+}
+
+aiNodeAnim* AnimatedModelComponent::FindAnimNode(std::string findThis, Animation* anim)
+{
+	std::map<std::string, aiNodeAnim*>::iterator t = anim->animNodes.find(findThis);
+	if(t != anim->animNodes.end())
+		return t->second;
 	return nullptr;
 }
 
@@ -218,15 +230,12 @@ void AnimatedModelComponent::transformNodes(float dt)
 		NodePart* node = nodeParts[i];
 
 		glm::mat4 transform;
-		glm::vec3 position = node->InterpolatePosition(time);
-		glm::quat rotation = node->InterpolateRotation(time);
-		glm::vec3 scale = node->InterpolateScaling(time);
+		glm::vec3 position = node->InterpolatePosition(time, animations[currentAnimation]);
+		glm::quat rotation = node->InterpolateRotation(time, animations[currentAnimation]);
+		glm::vec3 scale = node->InterpolateScaling(time, animations[currentAnimation]);
 		transform *= glm::translate(position);
 		transform *= glm::mat4_cast(rotation);
 		transform *= glm::scale(scale);
-//		if(!node->nodeParent)
-//			node->localMatrix = glm::inverse(node->defaultTransform);
-//		else
 		if(node->name == "Armature")
 			node->localMatrix = glm::mat4();
 		else
@@ -250,8 +259,28 @@ void AnimatedModelComponent::recursiveTransform(NodePart *node)
 		recursiveTransform(nodeChildren);
 }
 
-unsigned int NodePart::PositionIndex(float time)
+bool AnimatedModelComponent::playAnimation(std::string name)
 {
+	int animIndex = FindAnim(name);
+	if(animIndex == -1)
+		return false;
+	
+	time = 0;
+	currentAnimation = animIndex;
+}
+
+bool AnimatedModelComponent::playAnimation(int index)
+{
+	if(index >= animations.size())
+		return false;
+
+	time = 0;
+	currentAnimation = index;
+}
+
+unsigned int NodePart::PositionIndex(float time, Animation* animation)
+{
+	AnimationNode* animationNode = animation->animationNodes[name];
 	for(unsigned int i = 0; i < animationNode->mNumPositionKeys-1; i++)
 	{
 		if(time > animationNode->mPositionKeys[i].mTime)
@@ -260,14 +289,15 @@ unsigned int NodePart::PositionIndex(float time)
 	}
 	return 0;
 }
-glm::vec3 NodePart::InterpolatePosition(float time)
+glm::vec3 NodePart::InterpolatePosition(float time, Animation* animation)
 {
+	AnimationNode* animationNode = animation->animationNodes[name];
 	if(animationNode->mNumPositionKeys < 1)
 		return glm::vec3(0,0,0);
 	if(animationNode->mNumPositionKeys == 1)
 		return animationNode->mPositionKeys[0].mValue;
 
-	unsigned int nodeIndex = PositionIndex(time);
+	unsigned int nodeIndex = PositionIndex(time,animation);
 	unsigned int nextNodeIndex = nodeIndex+1;
 
 	glm::vec3 nodePosition = animationNode->mPositionKeys[nodeIndex].mValue;
@@ -279,8 +309,9 @@ glm::vec3 NodePart::InterpolatePosition(float time)
 
 	return glm::mix(nodePosition, nextNodePosition, between);
 }
-unsigned int NodePart::RotationIndex(float time)
+unsigned int NodePart::RotationIndex(float time, Animation* animation)
 {
+	AnimationNode* animationNode = animation->animationNodes[name];
 	for(unsigned int i = 0; i < animationNode->mNumRotationKeys-1; i++)
 	{
 		if(time > animationNode->mRotationKeys[i].mTime)
@@ -289,14 +320,15 @@ unsigned int NodePart::RotationIndex(float time)
 	}
 	return 0;
 }
-glm::quat NodePart::InterpolateRotation(float time)
+glm::quat NodePart::InterpolateRotation(float time, Animation* animation)
 {
+	AnimationNode* animationNode = animation->animationNodes[name];
 	if(animationNode->mNumRotationKeys < 1)
 		return glm::quat(1,0,0,0);
 	if(animationNode->mNumRotationKeys == 1)
 		return animationNode->mRotationKeys[0].mValue;
 
-	unsigned int nodeIndex = RotationIndex(time);
+	unsigned int nodeIndex = RotationIndex(time,animation);
 	unsigned int nextNodeIndex = nodeIndex+1;
 
 	glm::quat nodeRotation = animationNode->mRotationKeys[nodeIndex].mValue;
@@ -308,8 +340,9 @@ glm::quat NodePart::InterpolateRotation(float time)
 
 	return glm::mix(nodeRotation, nextNodeRotation, between);
 }
-unsigned int NodePart::ScalingIndex(float time)
+unsigned int NodePart::ScalingIndex(float time, Animation* animation)
 {
+	AnimationNode* animationNode = animation->animationNodes[name];
 	for(unsigned int i = 0; i < animationNode->mNumScalingKeys-1; i++)
 	{
 		if(time > animationNode->mScalingKeys[i].mTime)
@@ -318,14 +351,15 @@ unsigned int NodePart::ScalingIndex(float time)
 	}
 	return 0;
 }
-glm::vec3 NodePart::InterpolateScaling(float time)
+glm::vec3 NodePart::InterpolateScaling(float time, Animation* animation)
 {
+	AnimationNode* animationNode = animation->animationNodes[name];
 	if(animationNode->mNumScalingKeys < 1)
 		return glm::vec3(1,1,1);
 	if(animationNode->mNumScalingKeys == 1)
 		return animationNode->mScalingKeys[0].mValue;
 
-	unsigned int nodeIndex = ScalingIndex(time);
+	unsigned int nodeIndex = ScalingIndex(time,animation);
 	unsigned int nextNodeIndex = nodeIndex+1;
 
 	glm::vec3 nodeScaling = animationNode->mScalingKeys[nodeIndex].mValue;

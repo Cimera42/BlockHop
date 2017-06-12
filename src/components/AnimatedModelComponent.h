@@ -43,21 +43,31 @@ struct AnimationNode
 	std::vector<VectorKey> mScalingKeys;
 };
 
+struct Animation
+{
+	std::string name;
+	unsigned int channels;
+	double tickRate;
+	double duration;
+
+	std::map<std::string, AnimationNode*> animationNodes;
+	std::map<std::string, aiNodeAnim*> animNodes;
+};
+
 struct NodePart
 {
 	glm::mat4 defaultTransform;
 	glm::mat4 localMatrix;
 	glm::mat4 collectiveMatrix;
-	AnimationNode* animationNode;
 	
-	unsigned int PositionIndex(float time);
-	glm::vec3 InterpolatePosition(float time);
+	unsigned int PositionIndex(float time, Animation* animation);
+	glm::vec3 InterpolatePosition(float time, Animation* animation);
 
-	unsigned int RotationIndex(float time);
-	glm::quat InterpolateRotation(float time);
+	unsigned int RotationIndex(float time, Animation* animation);
+	glm::quat InterpolateRotation(float time, Animation* animation);
 
-	unsigned int ScalingIndex(float time);
-	glm::vec3 InterpolateScaling(float time);
+	unsigned int ScalingIndex(float time, Animation* animation);
+	glm::vec3 InterpolateScaling(float time, Animation* animation);
 	
 	std::string name;
 	NodePart* nodeParent;
@@ -74,16 +84,6 @@ struct MeshPart
 struct Material
 {
     std::string texturePath;
-};
-
-struct Animation
-{
-	std::string name;
-	unsigned int channels;
-	double tickRate;
-	double duration;
-	
-	std::vector<aiNodeAnim*> animNodes;
 };
 
 class BoneMesh;
@@ -108,20 +108,24 @@ public:
 	std::vector<Animation*> animations;
 	
 	double time = 0;
-	int currentAnimation = 1;
+	int currentAnimation = 0;
 
 	void load();
 	NodePart* nodeLoop(aiNode *assimpNode, int indent, NodePart *parent);
-	aiNodeAnim* FindAnimNode(std::string findThis);
+	int FindAnim(std::string findThis);
+	aiNodeAnim* FindAnimNode(std::string findThis, Animation* anim);
 	
     friend std::ostream &operator<< (std::ostream &os, AnimatedModelComponent const &c) {
         os << "AnimatedModelComponent: ";
         os << c.filename;
         return os;
     }
-
+	
 	void transformNodes(float dt);
 	void recursiveTransform(NodePart *node);
+
+	bool playAnimation(std::string name);
+	bool playAnimation(int index);
 };
 
 #endif //BLOCKHOP_BONEMODELCOMPONENT_H
