@@ -26,7 +26,7 @@ int main()
     glfwSetWindowCloseCallback(window->glfwWindow, windowCloseEvent);
 
     //Startup engine asset loader
-    AssetManager::i()->start();
+    AssetManager::i()->loadSync("textures/tex.png");
 
     //Load scene from file
     ECSLoader ecsLoader = ECSLoader();

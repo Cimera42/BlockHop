@@ -13,7 +13,7 @@ Font::Font()
 {
     std::ifstream i("./assets/textures/OpenSans-Regular.json");
     i >> metrics;
-    texture = new Texture(".assets/textures/text.png");
+    texture = new ImageAsset(".assets/textures/text.png");
 }
 
 Font::~Font()

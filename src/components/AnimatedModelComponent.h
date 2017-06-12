@@ -6,7 +6,7 @@
 #define BLOCKHOP_BONEMODELCOMPONENT_H
 
 #include "../ecs/component.h"
-#include "../texture.h"
+#include "../loaders/imageAsset.h"
 #include "../mesh.h"
 #include "../boneMesh.h"
 #include <glm/glm.hpp>
@@ -87,7 +87,7 @@ public:
 
 	std::string filename;
 	std::vector<Material> materials;
-	Texture texture;
+	ImageAsset texture;
 
 	std::map<unsigned int, Mesh*> normalMeshes;
 	std::map<unsigned int, BoneMesh*> boneMeshes;

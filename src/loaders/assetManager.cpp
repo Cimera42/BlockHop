@@ -11,7 +11,7 @@ AssetManager *AssetManager::c_instance = 0;
 AssetManager::AssetManager() {
 
     //TODO possibly replace this with non-hard? Is it worth it?
-    exportedLoaders.insert(std::pair<std::string, AssetLoader*>("texture", new TextureLoader()));
+    exportedLoaders.insert(std::pair<std::string, AssetLoader*>("texture", new ImageLoader()));
 
     std::string config = "./conf/assetLoader.conf";
     std::ifstream i(config);
@@ -36,7 +36,7 @@ AssetManager::AssetManager() {
                               << "' doesn't exist. Assets of this type will not work correctly"<<std::endl;
                 }
                 else {
-                    extLoaders.push_back(std::pair<std::string, AssetLoader*>(ext, it->second));
+                    extLoaders.insert(std::pair<std::string, AssetLoader*>(ext, it->second));
                     //TODO load the default item synchronously
                 }
             }
@@ -51,4 +51,33 @@ AssetManager::AssetManager() {
     }
 
     i.close();
+}
+
+void AssetManager::loadSync(std::string filename) {
+    //Determine file extension
+    auto dotPos = filename.find_last_of(".");
+    std::string ext = filename.substr(dotPos+1);
+
+    //Attempt to find file extension in map to get specific loader
+    auto extLoader = extLoaders.find(ext);
+
+    //Load using loader
+    if(extLoader != extLoaders.end()) {
+        extLoader->second->loadAsset(filename);
+    } else {
+        Logger(1)<<"Could not find a loader for the file '"<<filename<<"'."<<std::endl;
+    }
+}
+
+AssetLoader* AssetManager::getLoader(std::string loaderName) {
+    //Find within exportedLoaders
+    auto it = exportedLoaders.find(loaderName);
+
+    if(it != exportedLoaders.end()) {
+        return it->second;
+    } else {
+        Logger(1)<<"Cannot find loader with given name '"<<loaderName<<"', ensure loader exists"
+                "inside asset configuration file."<<std::endl;
+    }
+    return nullptr;
 }

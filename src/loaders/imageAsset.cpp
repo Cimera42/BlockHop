@@ -1,47 +1,47 @@
-#include "texture.h"
-#include "openGLFunctions.h"
-#include "logger.h"
+#include "imageAsset.h"
+#include "../openGLFunctions.h"
+#include "../logger.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-Texture::Texture()
+/*ImageAsset::ImageAsset()
 {
     loaded = false;
     glGenTextures(1, &textureID);
 }
-Texture::Texture(std::string inFilename, bool loadNow)
+ImageAsset::ImageAsset(std::string inFilename, bool loadNow)
 {
     filenames.push_back(inFilename);
     glGenTextures(1, &textureID);
     if(loadNow)
         load();
 }
-Texture::Texture(std::string inFilename) : Texture(inFilename, true) {}
+ImageAsset::ImageAsset(std::string inFilename) : ImageAsset(inFilename, true) {}
 
-Texture::Texture(std::vector<std::string> inFilenames, bool loadNow)
+ImageAsset::ImageAsset(std::vector<std::string> inFilenames, bool loadNow)
 {
     filenames.swap(inFilenames);
     glGenTextures(1, &textureID);
     if(loadNow)
         load();
 }
-Texture::Texture(std::vector<std::string> inFilenames) : Texture(inFilenames, true) {}
+ImageAsset::ImageAsset(std::vector<std::string> inFilenames) : ImageAsset(inFilenames, true) {}*/
 
-Texture::~Texture()
+ImageAsset::~ImageAsset()
 {
     for(auto singleImageData : imageData)
         stbi_image_free(singleImageData);
-    glDeleteTextures(1, &textureID);
+    //glDeleteTextures(1, &textureID);
 }
 
-bool Texture::load(std::vector<std::string> inFilenames)
+/*bool ImageAsset::load(std::vector<std::string> inFilenames)
 {
     filenames.swap(inFilenames);
     return load();
-}
+}*/
 
-bool Texture::load()
+void ImageAsset::load()
 {
     stbi_set_flip_vertically_on_load(true);
     int maxW = 0;
@@ -62,12 +62,11 @@ bool Texture::load()
 
         if(!imageData[i])
         {
-            loaded = false;
-            Logger(1) << "Texture not loaded: " << filenames[i] << " - " << stbi_failure_reason();
-            return false;
+            //loaded = false;
+            Logger(1) << "Image not loaded: " << filenames[i] << " - " << stbi_failure_reason();
         }
     }
-
+/*
     glSetBindTexture(GL_TEXTURE_2D_ARRAY, textureID);
     glTexStorage3D(GL_TEXTURE_2D_ARRAY, imageData.size(), GL_RGBA8, maxW,maxH, imageData.size());
 
@@ -96,5 +95,5 @@ bool Texture::load()
             }
         }
     }
-    return true;
+    return true;*/
 }

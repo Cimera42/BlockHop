@@ -3,3 +3,5 @@
 //
 
 #include "assetLoader.h"
+
+BaseAsset* AssetLoader::loadAsset(std::string filename) {}

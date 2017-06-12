@@ -9,7 +9,7 @@
 #include <string>
 #include <json.hpp>
 #include "assetLoader.h"
-#include "textureLoader.h"
+#include "imageLoader.h"
 #include "../logger.h"
 using json = nlohmann::json;
 
@@ -28,20 +28,14 @@ class AssetManager {
      *  - The specific loader each extension uses (eg. textureLoader)
      *  - A default for each loader to be used during asynchronous loading
      */
-    std::vector<std::pair<std::string, AssetLoader*> > extLoaders; //Loader for each extension
-    std::map<std::string, AssetLoader*> exportedLoaders;
+    std::map<std::string, AssetLoader*> extLoaders; //Loader for each extension
+
+    std::map<std::string, AssetLoader*> exportedLoaders; //Loader with name
 
     static AssetManager *c_instance;
 public:
     AssetManager();
     ~AssetManager();
-
-    void start() {
-        //TODO This is just a test in order to start the loader whilst
-        // we don't have loading inside the ECS Manager implementet!
-        Logger() << "yes" <<std::endl;
-        exit(9);
-    }
 
     /*
      * Singleton pattern. Must use i()-> to access any class methods.
@@ -54,9 +48,20 @@ public:
         return c_instance;
     }
 
-    //loadSynch();
-    //loadAsynch();
+    /*
+     * Load a raw asset from file. Will automatically determine the loader to use for the
+     * filename/extension given.
+     * Will load synchronously.
+     */
+    void loadSync(std::string filename); //Loads from file
+    //loadAsync();
 
+    /*
+     * Used to retrieve a specific loader (eg. ImageLoader) in order to provide
+     * access to higher level functions within specific loaders (eg. converting to
+     * GLuint textures from raw images)
+     */
+    AssetLoader* getLoader(std::string loaderName);
 };
 
 
