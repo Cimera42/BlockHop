@@ -3,8 +3,6 @@
 //
 
 #include "logger.h"
-#include <string>
-#include <ctime>
 
 Logger::Logger()
 {

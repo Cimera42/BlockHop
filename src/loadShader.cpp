@@ -2,7 +2,6 @@
 #include "logger.h"
 #include <fstream>
 #include <vector>
-#include <glm/glm.hpp>
 #include <map>
 
 /*void loadBinaryShaderPart(GLuint partID, const char * path)
@@ -45,7 +44,7 @@ void loadShaderPart(GLuint partID, const char * path)
     }
 
     GLint compileResult = GL_FALSE;
-    int compileLogLength;
+    GLint compileLogLength;
 
     const char * codePointer = shaderCode.c_str();
     glShaderSource(partID, 1, &codePointer, nullptr);
@@ -53,7 +52,7 @@ void loadShaderPart(GLuint partID, const char * path)
 
     glGetShaderiv(partID, GL_COMPILE_STATUS, &compileResult);
     glGetShaderiv(partID, GL_INFO_LOG_LENGTH, &compileLogLength);
-    std::vector<char> compileLog(compileLogLength);
+    std::vector<char> compileLog((unsigned long long int) compileLogLength);
     glGetShaderInfoLog(partID, compileLogLength, nullptr, &compileLog[0]);
     if (compileLog.size() > 1)
         Logger(1) << compileLog.data();
@@ -67,16 +66,16 @@ void createProgram(GLuint progID)
     {
         glLinkProgram(progID);
         GLint compileResult = 0;
-        int compileLogLength = 0;
+        GLint compileLogLength = 0;
 
-            glGetProgramiv(progID, GL_LINK_STATUS, &compileResult);
-            glGetProgramiv(progID, GL_INFO_LOG_LENGTH, &compileLogLength);
-            std::vector<char> compileLog(compileLogLength);
-            glGetProgramInfoLog(progID, compileLogLength, nullptr, &compileLog[0]);
-            if (compileLog.size() > 1)
-                Logger(1) << compileLog.data();
+        glGetProgramiv(progID, GL_LINK_STATUS, &compileResult);
+        glGetProgramiv(progID, GL_INFO_LOG_LENGTH, &compileLogLength);
+        std::vector<char> compileLog((unsigned long long int) compileLogLength);
+        glGetProgramInfoLog(progID, compileLogLength, nullptr, &compileLog[0]);
+        if (compileLog.size() > 1)
+            Logger(1) << compileLog.data();
 
-            std::vector<char>().swap(compileLog);
+        std::vector<char>().swap(compileLog);
     }
     catch (std::bad_alloc bad)
     {

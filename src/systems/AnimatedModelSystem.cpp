@@ -52,16 +52,16 @@ void AnimatedModelSystem::update(double dt)
 		if(keyInput)
 		{
 			if(keyInput->isKeyPressed(GLFW_KEY_1))
-				animatedModel->playAnimation(0);
+				animatedModel->playAnimation("Armature|Grip");
 
 			else if(keyInput->isKeyPressed(GLFW_KEY_2))
-				animatedModel->playAnimation(1);
+				animatedModel->playAnimation("Armature|GunFingers");
 		}
-		animatedModel->transformNodes(dt);
+		animatedModel->transformNodes((float) dt);
 		
-		for(unsigned int i = 0; i < animatedModel->meshParts.size(); i++)
+		for(auto pair : animatedModel->meshParts)
 		{
-			MeshPart* meshPart = animatedModel->meshParts[i];
+			MeshPart* meshPart = pair.second;
 			NodePart* nodePart = meshPart->nodeParent;
 			glm::mat4 modelMatrix = transform->getMatrix() * nodePart->collectiveMatrix;
 

@@ -4,7 +4,6 @@
 #include "ecs/ecsManager.h"
 #include "ecs/ecsLoader.h"
 #define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/matrix_decompose.hpp>
 
 Window* window;
 bool shouldExit = false;

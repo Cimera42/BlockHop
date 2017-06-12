@@ -32,10 +32,8 @@ class BoneMesh : public Mesh
 {
     public:
         BoneMesh();
-        BoneMesh(aiMesh* assimpMesh, std::vector<aiNode*> nodes);
+        BoneMesh(aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes);
         ~BoneMesh();
-
-        std::vector<aiNode*> assimpNodes;
 
         std::vector<Bone*> bones;
 
@@ -44,14 +42,14 @@ class BoneMesh : public Mesh
 
         void createVAO();
         void genBuffers();
-        void load(aiMesh* assimpMesh, std::vector<aiNode*> nodes);
+        void load(aiMesh *assimpMesh);
         void loadWithVectors(std::vector<glm::vec3> inVertices,
                              std::vector<glm::vec2> inUvs,
                              std::vector<glm::vec3> inNormals,
                              std::vector<unsigned int> inIndices);
 
-        NodePart* FindNode(std::vector<NodePart*> nodes, std::string findThis);
-        void transformBones(std::vector<NodePart*> nodes);
+        NodePart* FindNode(std::map<std::string, NodePart *> nodes, std::string findThis);
+        void transformBones(std::map<std::string, NodePart *> nodes);
 };
 
 #endif // BONEMESH_H_INCLUDED

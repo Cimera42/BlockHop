@@ -101,18 +101,18 @@ public:
 
 	std::map<unsigned int, Mesh*> normalMeshes;
 	std::map<unsigned int, BoneMesh*> boneMeshes;
-	std::vector<MeshPart*> meshParts;
-	std::vector<NodePart*> nodeParts;
+	std::map<std::string, MeshPart*> meshParts;
+	std::map<std::string, NodePart*> nodeParts;
 
-	std::vector<aiNode*> assimpNodes;
-	std::vector<Animation*> animations;
+	std::map<std::string, aiNode*> assimpNodes;
+	std::map<std::string, Animation*> animations;
 	
-	double time = 0;
-	int currentAnimation = 0;
+	float time = 0;
+	std::string currentAnimation;
 
 	void load();
 	NodePart* nodeLoop(aiNode *assimpNode, int indent, NodePart *parent);
-	int FindAnim(std::string findThis);
+	Animation* FindAnim(std::string findThis);
 	aiNodeAnim* FindAnimNode(std::string findThis, Animation* anim);
 	
     friend std::ostream &operator<< (std::ostream &os, AnimatedModelComponent const &c) {
@@ -125,7 +125,6 @@ public:
 	void recursiveTransform(NodePart *node);
 
 	bool playAnimation(std::string name);
-	bool playAnimation(int index);
 };
 
 #endif //BLOCKHOP_BONEMODELCOMPONENT_H

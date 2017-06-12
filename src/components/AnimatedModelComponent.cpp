@@ -6,7 +6,7 @@
 #include <assimp/postprocess.h>
 #include "AnimatedModelComponent.h"
 #include "../ecs/ecsManager.h"
-#include "../openGLFunctions.h"
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -70,6 +70,8 @@ void AnimatedModelComponent::load()
 		
 		Animation* anim = new Animation();
 		anim->name = assimpAnimation->mName.C_Str();
+		if(currentAnimation.empty())
+			currentAnimation = anim->name;
 		anim->channels = assimpAnimation->mNumChannels;
 		anim->tickRate = assimpAnimation->mTicksPerSecond;
 		anim->duration = assimpAnimation->mDuration;
@@ -78,7 +80,7 @@ void AnimatedModelComponent::load()
 			aiNodeAnim* an = assimpAnimation->mChannels[j];
 			anim->animNodes[an->mNodeName.C_Str()] = an;
 		}
-		animations.push_back(anim);
+		animations[anim->name] = anim;
 	}
 
 	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
@@ -140,15 +142,15 @@ void AnimatedModelComponent::load()
 
 NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
 {
-	assimpNodes.push_back(assimpNode);
-
 	glm::mat4 nodeMatrix = AToGMat(assimpNode->mTransformation);
 	
 	NodePart* nodePart = new NodePart();
 	nodePart->name = assimpNode->mName.C_Str();
+	assimpNodes[nodePart->name] = assimpNode;
 	nodePart->nodeParent = parent;
-	for(Animation* anim : animations)
+	for(std::pair<const std::string, Animation*> pair : animations)
 	{
+		Animation* anim = pair.second;
 		aiNodeAnim* a = FindAnimNode(nodePart->name, anim);
 		anim->animationNodes[nodePart->name] = new AnimationNode(a, assimpNode);
 	}
@@ -184,14 +186,14 @@ NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodeP
     Logger(1) << indentS << "    RotationA: " << glm::axis(rotation);
     Logger(1) << indentS << "    Scale: " << scale;*/
 
-	nodeParts.push_back(nodePart);
+	nodeParts[nodePart->name] = nodePart;
 	
 	for(int i = 0; i < assimpNode->mNumMeshes; i++)
 	{
 		MeshPart* meshPart = new MeshPart();
 		meshPart->mesh = assimpNode->mMeshes[i];
 		meshPart->nodeParent = nodePart;
-		meshParts.push_back(meshPart);
+		meshParts[meshPart->nodeParent->name] = meshPart;
 	}
 
 	for(unsigned int i = 0; i < assimpNode->mNumChildren; i++)
@@ -202,14 +204,12 @@ NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodeP
 	return nodePart;
 }
 
-int AnimatedModelComponent::FindAnim(std::string findThis)
+Animation* AnimatedModelComponent::FindAnim(std::string findThis)
 {
-	for(unsigned int i = 0; i < animations.size(); i++)
-	{
-		if(animations[i]->name == findThis)
-			return i;
-	}
-	return -1;
+	std::map<std::string, Animation*>::iterator t = animations.find(findThis);
+	if(t != animations.end())
+		return t->second;
+	return nullptr;
 }
 
 aiNodeAnim* AnimatedModelComponent::FindAnimNode(std::string findThis, Animation* anim)
@@ -225,9 +225,9 @@ void AnimatedModelComponent::transformNodes(float dt)
 	if(time > animations[currentAnimation]->duration)
 		time = 0;
 	time += dt*animations[currentAnimation]->tickRate;
-	for(unsigned int i = 1; i < nodeParts.size(); i++)
+	for(std::pair<const std::string, NodePart*> pair : nodeParts)
 	{
-		NodePart* node = nodeParts[i];
+		NodePart* node = pair.second;
 
 		glm::mat4 transform;
 		glm::vec3 position = node->InterpolatePosition(time, animations[currentAnimation]);
@@ -241,7 +241,7 @@ void AnimatedModelComponent::transformNodes(float dt)
 		else
 			node->localMatrix = transform;
 	}
-	recursiveTransform(nodeParts[0]);
+	recursiveTransform(nodeParts["RootNode"]);
 
 	for(unsigned int i = 0; i < boneMeshes.size(); i++)
 	{
@@ -261,21 +261,13 @@ void AnimatedModelComponent::recursiveTransform(NodePart *node)
 
 bool AnimatedModelComponent::playAnimation(std::string name)
 {
-	int animIndex = FindAnim(name);
-	if(animIndex == -1)
+	Animation* anim = FindAnim(name);
+	if(anim == nullptr)
 		return false;
 	
 	time = 0;
-	currentAnimation = animIndex;
-}
-
-bool AnimatedModelComponent::playAnimation(int index)
-{
-	if(index >= animations.size())
-		return false;
-
-	time = 0;
-	currentAnimation = index;
+	currentAnimation = name;
+	return true;
 }
 
 unsigned int NodePart::PositionIndex(float time, Animation* animation)
@@ -417,7 +409,7 @@ AnimationNode::AnimationNode(aiNodeAnim* animNode, aiNode* node)
 		aiVector3D p = animNode->mPositionKeys[i].mValue;
 		VectorKey key;
 		key.mValue = glm::vec3(p.x,p.y,p.z);
-		key.mTime = animNode->mPositionKeys[i].mTime;
+		key.mTime = (float) animNode->mPositionKeys[i].mTime;
 		mPositionKeys.push_back(key);
 	}
 
@@ -426,7 +418,7 @@ AnimationNode::AnimationNode(aiNodeAnim* animNode, aiNode* node)
 		aiQuaternion p = animNode->mRotationKeys[i].mValue;
 		QuatKey key;
 		key.mValue = glm::quat(p.w,p.x,p.y,p.z);
-		key.mTime = animNode->mRotationKeys[i].mTime;
+		key.mTime = (float) animNode->mRotationKeys[i].mTime;
 		mRotationKeys.push_back(key);
 	}
 
@@ -435,7 +427,7 @@ AnimationNode::AnimationNode(aiNodeAnim* animNode, aiNode* node)
 		aiVector3D p = animNode->mScalingKeys[i].mValue;
 		VectorKey key;
 		key.mValue = glm::vec3(p.x,p.y,p.z);
-		key.mTime = animNode->mScalingKeys[i].mTime;
+		key.mTime = (float) animNode->mScalingKeys[i].mTime;
 		mScalingKeys.push_back(key);
 	}
 }

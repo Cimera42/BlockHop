@@ -69,7 +69,7 @@ bool Texture::load()
     }
 
     glSetBindTexture(GL_TEXTURE_2D_ARRAY, textureID);
-    glTexStorage3D(GL_TEXTURE_2D_ARRAY, imageData.size(), GL_RGBA8, maxW,maxH, imageData.size());
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, (GLsizei) imageData.size(), GL_RGBA8, maxW,maxH, (GLsizei) imageData.size());
 
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);

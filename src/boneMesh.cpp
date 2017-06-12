@@ -1,15 +1,15 @@
 #include "boneMesh.h"
 #include "openGLFunctions.h"
 #include "logger.h"
-#include "components/AnimatedModelComponent.h"
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
 BoneMesh::BoneMesh(){}
-BoneMesh::BoneMesh(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
+BoneMesh::BoneMesh(aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes)
 {
-    load(assimpMesh, nodes);
+	load(assimpMesh);
 }
 BoneMesh::~BoneMesh()
 {
@@ -54,7 +54,7 @@ void BoneMesh::createVAO()
         GLuint boneWeightLoc = 5;
         glEnableVertexAttribArray(boneWeightLoc);
         glVertexAttribPointer(boneWeightLoc, 4, GL_FLOAT, GL_FALSE, sizeof(BoneVertex), (void*) (intptr_t) inc);
-        inc += sizeof(int[4]);
+        //inc += sizeof(int[4]);
     glSetBindVertexArray(0);
 }
 
@@ -73,10 +73,8 @@ void BoneMesh::genBuffers()
     createVAO();
 }
 
-void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
+void BoneMesh::load(aiMesh *assimpMesh)
 {
-    assimpNodes = nodes;
-
     for(unsigned int j = 0; j < assimpMesh->mNumFaces; j++)
     {
         aiFace& assimpFace = assimpMesh->mFaces[j];
@@ -155,13 +153,15 @@ void BoneMesh::load(aiMesh* assimpMesh, std::vector<aiNode*> nodes)
     genBuffers();
 }
 
-NodePart* BoneMesh::FindNode(std::vector<NodePart*> nodes, std::string findThis)
+NodePart* BoneMesh::FindNode(std::map<std::string, NodePart *> nodes, std::string findThis)
 {
-	std::vector<NodePart*>::iterator t = std::find_if(nodes.begin(), nodes.end(), [findThis](const NodePart *nodePart){return nodePart->name == findThis;});
-	return *t;
+	std::map<std::string, NodePart*>::iterator t = nodes.find(findThis);
+    if(t == nodes.end())
+        return nullptr;
+	return t->second;
 }
 
-void BoneMesh::transformBones(std::vector<NodePart*> nodes)
+void BoneMesh::transformBones(std::map<std::string, NodePart *> nodes)
 {
     boneMats.clear();
 	//Update matrices of all bones
