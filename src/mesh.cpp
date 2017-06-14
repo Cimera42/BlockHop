@@ -2,8 +2,12 @@
 #include "openGLFunctions.h"
 #include "logger.h"
 
-Mesh::Mesh(){}
-Mesh::Mesh(aiMesh* assimpMesh)
+Mesh::Mesh(std::string inName)
+{
+	name = inName;	
+}
+Mesh::Mesh(std::string inName, aiMesh *assimpMesh) 
+		: Mesh(inName)
 {
     load(assimpMesh);
 }

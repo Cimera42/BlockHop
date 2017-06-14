@@ -46,6 +46,7 @@ void KeyboardInputSystem::update(double dt)
 			displaced -= glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
 		
 		transform->setPosition(displaced);
+		Logger(1) << displaced;
     }
 }
 

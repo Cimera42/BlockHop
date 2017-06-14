@@ -6,8 +6,8 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
-BoneMesh::BoneMesh(){}
-BoneMesh::BoneMesh(aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes)
+BoneMesh::BoneMesh(std::string inName, aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes) 
+		: Mesh(inName)
 {
 	load(assimpMesh);
 }
@@ -116,9 +116,19 @@ void BoneMesh::load(aiMesh *assimpMesh)
         bone->id = i;
         bone->name = assimpBone->mName.C_Str();
         bone->offsetMatrix = AToGMat(assimpBone->mOffsetMatrix);
+        glm::vec3 scaleb;
+        glm::quat rotationb;
+        glm::vec3 positionb;
+        glm::vec3 skewb;
+        glm::vec4 perspectiveb;
+        glm::decompose(bone->offsetMatrix, scaleb, rotationb, positionb, skewb, perspectiveb);
+        Logger(1) << "Bone: " << bone->name << " - Mesh: " << this->name;
+        Logger(1) << "    Position: " << positionb;
+        Logger(1) << "    Rotation: " << rotationb;
+        Logger(1) << "    Scale: " << scaleb;
         bones.push_back(bone);
 
-		//Logger(1) << "Bone " << bone->id << ": \"" << assimpBone->mName.C_Str() << "\"";
+		Logger(1) << "Bone " << bone->id << ": \"" << assimpBone->mName.C_Str() << "\"";
         for(unsigned int j = 0; j < assimpBone->mNumWeights; j++)
         {
             aiVertexWeight assimpWeight = assimpBone->mWeights[j];
@@ -158,33 +168,7 @@ NodePart* BoneMesh::FindNode(std::map<std::string, NodePart *> nodes, std::strin
 	std::map<std::string, NodePart*>::iterator t = nodes.find(findThis);
     if(t == nodes.end())
         return nullptr;
-	return t->second;
-}
-
-void BoneMesh::transformBones(std::map<std::string, NodePart *> nodes)
-{
-    boneMats.clear();
-	//Update matrices of all bones
-    for(unsigned int i = 0; i < bones.size(); i++)
-    {
-        Bone* bone = bones[i];
-
-		NodePart* node = FindNode(nodes, bone->name);
-
-//		glm::vec3 scale;
-//		glm::quat rotation;
-//		glm::vec3 position;
-//		glm::vec3 skew;
-//		glm::vec4 perspective;
-//		glm::decompose(node->collectiveMatrix * bone->offsetMatrix, scale, rotation, position, skew, perspective);
-//		Logger(1) << "Bones " << i << ": " << node->name;
-//		Logger(1) << "    Position: " << position;
-//		Logger(1) << "    Rotation: " << rotation;
-//		Logger(1) << "    RotationA: " << glm::eulerAngles(rotation);
-//		Logger(1) << "    Scale: " << scale;
-        
-		boneMats.push_back(node->collectiveMatrix * bone->offsetMatrix);
-    }
+    return t->second;
 }
 
 void BoneMesh::loadWithVectors(std::vector<glm::vec3> inVertices, std::vector<glm::vec2> inUvs, std::vector<glm::vec3> inNormals, std::vector<unsigned int> inIndices)

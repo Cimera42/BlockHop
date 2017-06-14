@@ -38,6 +38,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/AnimatedModelComponent.cpp src/c
 set(SOURCE_FILES ${SOURCE_FILES} src/components/CameraComponent.cpp src/components/CameraComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/MouseControlComponent.cpp src/components/MouseControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/KeyboardControlComponent.cpp src/components/KeyboardControlComponent.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/assetClasses/modelAsset.cpp src/assetClasses/modelAsset.h)
 
 add_executable(BlockHop ${SOURCE_FILES})
 

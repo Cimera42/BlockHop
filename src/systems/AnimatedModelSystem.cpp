@@ -56,26 +56,53 @@ void AnimatedModelSystem::update(double dt)
 
 			else if(keyInput->isKeyPressed(GLFW_KEY_2))
 				animatedModel->playAnimation("Armature|GunFingers");
+
+			else if(keyInput->isKeyPressed(GLFW_KEY_3))
+				animatedModel->playAnimation("Armature|Chop");
 		}
-		animatedModel->transformNodes((float) dt);
+		//animatedModel->transformNodes((float) dt);
 		
-		for(auto pair : animatedModel->meshParts)
+		for(auto pair : animatedModel->modelAsset->meshParts)
 		{
 			MeshPart* meshPart = pair.second;
 			NodePart* nodePart = meshPart->nodeParent;
-			glm::mat4 modelMatrix = transform->getMatrix() * nodePart->collectiveMatrix;
+			NodeChanging* chNode = animatedModel->FindChangingNode(nodePart->name);
+			glm::mat4 modelMatrix = transform->getMatrix() * chNode->collectiveMatrix;
 
-			bool isBoned = animatedModel->normalMeshes.find((const unsigned int) meshPart->mesh) == animatedModel->normalMeshes.end();
+			glm::vec3 scale;
+			glm::quat rotation;
+			glm::vec3 position;
+			glm::vec3 skew;
+			glm::vec4 perspective;
+			glm::decompose(chNode->collectiveMatrix, scale, rotation, position, skew, perspective);
+			Logger(1) << "Mesh: " << nodePart->name;
+			Logger(1) << "    Position: " << position;
+			Logger(1) << "    Rotation: " << rotation;
+			Logger(1) << "    Scale: " << scale;
+
+
+			glm::vec3 scale2;
+			glm::quat rotation2;
+			glm::vec3 position2;
+			glm::vec3 skew2;
+			glm::vec4 perspective2;
+			glm::decompose(modelMatrix, scale2, rotation2, position2, skew2, perspective2);
+			Logger(1) << "    Position2: " << position2;
+			Logger(1) << "    Rotation2: " << rotation2;
+			Logger(1) << "    Scale2: " << scale2;
+
+
+			bool isBoned = animatedModel->modelAsset->normalMeshes.find(meshPart->mesh) == animatedModel->modelAsset->normalMeshes.end();
 			Mesh* mesh;
 			Shader* shader;
 			if(isBoned)
 			{
-				mesh = animatedModel->boneMeshes[meshPart->mesh];
+				mesh = animatedModel->modelAsset->boneMeshes[meshPart->mesh];
 				shader = boneShader;
 			}
 			else
 			{
-				mesh = animatedModel->normalMeshes[meshPart->mesh];
+				mesh = animatedModel->modelAsset->normalMeshes[meshPart->mesh];
 				shader = genericShader;
 			}
 			
@@ -85,19 +112,20 @@ void AnimatedModelSystem::update(double dt)
 			glUniformMatrix4fv(shader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
 
 			glSetActiveTexture(GL_TEXTURE0);
-			glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->texture.textureID);
+			glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->modelAsset->texture->textureID);
 			glUniform1i(shader->getLoc("textureSampler"), 0);
 
 			if(isBoned)
 			{
-				BoneMesh* boneMesh = static_cast<BoneMesh*>(mesh);
-				unsigned int matsNum = (unsigned int) boneMesh->boneMats.size();
+				BoneMeshChanging* chBoneMesh = animatedModel->FindChangingBoneMesh(nodePart->name);
+				BoneMesh* boneMesh = chBoneMesh->boneMesh;
+				unsigned int matsNum = (unsigned int) chBoneMesh->boneMats.size();
 				if(matsNum > 0)
 				{
-					boneMesh->transformBones(animatedModel->nodeParts);
+					chBoneMesh->transformBones(animatedModel->changingNodes);
 					int matsLoc = shader->getLoc("boneMats");
 					glUniformMatrix4fv(matsLoc, matsNum,
-									   GL_FALSE, &boneMesh->boneMats.data()[0][0][0]);
+									   GL_FALSE, &chBoneMesh->boneMats.data()[0][0][0]);
 				}
 			}
 

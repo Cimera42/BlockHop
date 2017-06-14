@@ -6,6 +6,7 @@
 #include <assimp/postprocess.h>
 #include "AnimatedModelComponent.h"
 #include "../ecs/ecsManager.h"
+#include "../assetClasses/modelAsset.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
@@ -26,242 +27,112 @@ glm::mat4 AToGMat(aiMatrix4x4 aiMat)
 AnimatedModelComponent::AnimatedModelComponent() {}
 AnimatedModelComponent::~AnimatedModelComponent() 
 {
-	for(auto nM : normalMeshes)
-		nM.second->destruct();
-	for(auto bM : boneMeshes)
-		bM.second->destruct();
 }
 
 void AnimatedModelComponent::setValues(json inValues) 
 {
     //Will throw if incorrect/should automatically be caught by ECSManager
-	filename = inValues["filename"].get<std::string>();
+	modelAsset = new ModelAsset(inValues["filename"].get<std::string>());
 	load();
 }
 
 void AnimatedModelComponent::load()
 {
-	Assimp::Importer importer;
-	Logger(1) << "Loading model: " << filename;
-	const aiScene* scene = importer.ReadFile(filename,
-											 aiProcess_CalcTangentSpace |
-											 aiProcess_Triangulate |
-											 aiProcess_JoinIdenticalVertices |
-											 aiProcess_SortByPType |
-											 aiProcess_LimitBoneWeights |
-											 aiProcess_ValidateDataStructure// |
-                                             //aiProcess_PreTransformVertices
-	);
-
-	if(!scene)
+	modelAsset->load();
+	currentAnimation = modelAsset->animations.begin()->first;
+	for(std::pair<const std::string, NodePart*> pair : modelAsset->nodeParts)
 	{
-		Logger(1) << importer.GetErrorString();
-		Logger(1) << "Could not load Mesh. Error importing";
-		return;
+		NodePart* node = pair.second;
+		changingNodes[node->name] = new NodeChanging();
+		changingNodes[node->name]->node = node;
 	}
-
-	Logger(1) << "Animations: " << scene->mNumAnimations;
-	for(unsigned int i = 0; i < scene->mNumAnimations; i++)
+	for(std::pair<const unsigned int, BoneMesh*> pair : modelAsset->boneMeshes)
 	{
-		aiAnimation* assimpAnimation = scene->mAnimations[i];
-		Logger(1) << "Animation name: " << assimpAnimation->mName.C_Str();
-		Logger(1) << "Animation channels: " << assimpAnimation->mNumChannels;
-		Logger(1) << "TPS: " << assimpAnimation->mTicksPerSecond;
-		
-		Animation* anim = new Animation();
-		anim->name = assimpAnimation->mName.C_Str();
-		if(currentAnimation.empty())
-			currentAnimation = anim->name;
-		anim->channels = assimpAnimation->mNumChannels;
-		anim->tickRate = assimpAnimation->mTicksPerSecond;
-		anim->duration = assimpAnimation->mDuration;
-		for(unsigned int j = 0; j < assimpAnimation->mNumChannels; j++)
-		{
-			aiNodeAnim* an = assimpAnimation->mChannels[j];
-			anim->animNodes[an->mNodeName.C_Str()] = an;
-		}
-		animations[anim->name] = anim;
-	}
-
-	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
-	{
-		aiMaterial* assimpMaterial = scene->mMaterials[i];
-
-		aiString nnn;
-		assimpMaterial->Get(AI_MATKEY_NAME, nnn);
-		if(strcmp(nnn.C_Str(), AI_DEFAULT_MATERIAL_NAME) == 0)
-			continue;
-
-		Material material = Material();
-
-		aiString texPath;
-		if(assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
-		{
-			material.texturePath = std::string(texPath.C_Str());
-		}
-
-		materials.push_back(material);
-	}
-
-	std::vector<std::string> texPaths;
-	for(unsigned int i = 0; i < materials.size(); i++)
-	{
-		if(materials[i].texturePath.find_first_not_of(' ') != std::string::npos)
-		{
-			std::string backslashFixed = materials[i].texturePath;
-			std::replace(backslashFixed.begin(), backslashFixed.end(), '\\', '/');
-
-			std::string baseFolder = std::string(filename);
-			baseFolder = baseFolder.substr(0, baseFolder.find_last_of("/"));
-
-			texPaths.push_back((baseFolder +"/"+ backslashFixed).c_str());
-		}
-	}
-	if(texPaths.size() > 0)
-	{
-		texture.load(texPaths);
-	}
-
-	nodeLoop(scene->mRootNode, 0, nullptr);
+		BoneMesh* boneMesh = pair.second;
+		changingBoneMeshes[boneMesh->name] = new BoneMeshChanging();
+		changingBoneMeshes[boneMesh->name]->boneMesh = boneMesh;
+	}	
+	nodeFamilySetup();
 	transformNodes(0);
+}
 
-	for(unsigned int i = 0; i < scene->mNumMeshes; i++)
+void AnimatedModelComponent::nodeFamilySetup()
+{
+	for(std::pair<const std::string, NodeChanging*> pair : changingNodes)
 	{
-		aiMesh* assimpMesh = scene->mMeshes[i];
-		if(assimpMesh->mNumBones > 0)
+		NodeChanging *chNode = pair.second;
+
+		if(chNode->node->nodeParent != nullptr)
+			chNode->nodeChParent = FindChangingNode(chNode->node->nodeParent->name);
+		for(NodePart *node : chNode->node->nodeChildren)
 		{
-			boneMeshes[i] = new BoneMesh(assimpMesh, assimpNodes);
-			boneMeshes[i]->transformBones(nodeParts); 
-		}
-		else
-		{
-			normalMeshes[i] = new Mesh(assimpMesh);
+			chNode->nodeChChildren.push_back(FindChangingNode(node->name));
 		}
 	}
-}
-
-NodePart* AnimatedModelComponent::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
-{
-	glm::mat4 nodeMatrix = AToGMat(assimpNode->mTransformation);
-	
-	NodePart* nodePart = new NodePart();
-	nodePart->name = assimpNode->mName.C_Str();
-	assimpNodes[nodePart->name] = assimpNode;
-	nodePart->nodeParent = parent;
-	for(std::pair<const std::string, Animation*> pair : animations)
-	{
-		Animation* anim = pair.second;
-		aiNodeAnim* a = FindAnimNode(nodePart->name, anim);
-		anim->animationNodes[nodePart->name] = new AnimationNode(a, assimpNode);
-	}
-    //nodePart->defaultTransform = AToGMat(assimpNode->mTransformation);
-
-//	glm::vec3 skew;
-//	glm::vec4 perspective;
-//	glm::decompose(nodePart->defaultTransform, scale, rotation, position, skew, perspective);
-
-    /*
-     * Extract scale, rotation and position
-     * Then use them to cosntruct a transformation matrix
-     * This could also be done using AToGMat, which directly converts the matrix
-     * The component extraction is done anyway for logging, so why not
-     * do them both at once
-     */
-    aiVector3D p;
-    aiQuaternion r;
-    aiVector3D s;
-    glm::vec3 scale;
-    glm::quat rotation;
-    glm::vec3 position;
-    assimpNode->mTransformation.Decompose(s,r,p);
-    position = glm::vec3(p.x, p.y, p.z);
-    rotation = glm::quat(r.w, r.x, r.y, r.z);
-    scale = glm::vec3(s.x, s.y, s.z);
-    nodePart->defaultTransform = glm::mat4() * glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
-
-    /*std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="    ";} return c;}();
-    Logger(1) << indentS << "Node: \"" << nodePart->name << "\"";
-    Logger(1) << indentS << "    Position: " << position;
-    Logger(1) << indentS << "    Rotation: " << rotation;
-    Logger(1) << indentS << "    RotationA: " << glm::axis(rotation);
-    Logger(1) << indentS << "    Scale: " << scale;*/
-
-	nodeParts[nodePart->name] = nodePart;
-	
-	for(int i = 0; i < assimpNode->mNumMeshes; i++)
-	{
-		MeshPart* meshPart = new MeshPart();
-		meshPart->mesh = assimpNode->mMeshes[i];
-		meshPart->nodeParent = nodePart;
-		meshParts[meshPart->nodeParent->name] = meshPart;
-	}
-
-	for(unsigned int i = 0; i < assimpNode->mNumChildren; i++)
-	{
-		aiNode* childNode = assimpNode->mChildren[i];
-		nodePart->nodeChildren.push_back(nodeLoop(childNode, indent + 1, nodePart));
-	}
-	return nodePart;
-}
-
-Animation* AnimatedModelComponent::FindAnim(std::string findThis)
-{
-	std::map<std::string, Animation*>::iterator t = animations.find(findThis);
-	if(t != animations.end())
-		return t->second;
-	return nullptr;
-}
-
-aiNodeAnim* AnimatedModelComponent::FindAnimNode(std::string findThis, Animation* anim)
-{
-	std::map<std::string, aiNodeAnim*>::iterator t = anim->animNodes.find(findThis);
-	if(t != anim->animNodes.end())
-		return t->second;
-	return nullptr;
 }
 
 void AnimatedModelComponent::transformNodes(float dt)
 {
-	if(time > animations[currentAnimation]->duration)
+	if(time > modelAsset->animations[currentAnimation]->duration)
 		time = 0;
-	time += dt*animations[currentAnimation]->tickRate;
-	for(std::pair<const std::string, NodePart*> pair : nodeParts)
+	time += dt*modelAsset->animations[currentAnimation]->tickRate;
+	for(std::pair<const std::string, NodeChanging*> pair : changingNodes)
 	{
-		NodePart* node = pair.second;
+		NodeChanging* chNode = pair.second;
+		NodePart* node = chNode->node;
 
 		glm::mat4 transform;
-		glm::vec3 position = node->InterpolatePosition(time, animations[currentAnimation]);
-		glm::quat rotation = node->InterpolateRotation(time, animations[currentAnimation]);
-		glm::vec3 scale = node->InterpolateScaling(time, animations[currentAnimation]);
+		glm::vec3 position = node->InterpolatePosition(time, modelAsset->animations[currentAnimation]);
+		glm::quat rotation = node->InterpolateRotation(time, modelAsset->animations[currentAnimation]);
+		glm::vec3 scale = node->InterpolateScaling(time, modelAsset->animations[currentAnimation]);
 		transform *= glm::translate(position);
 		transform *= glm::mat4_cast(rotation);
 		transform *= glm::scale(scale);
 		if(node->name == "Armature")
-			node->localMatrix = glm::mat4();
+			chNode->localMatrix = glm::mat4();
 		else
-			node->localMatrix = transform;
+			chNode->localMatrix = transform;
 	}
-	recursiveTransform(nodeParts["RootNode"]);
+	recursiveTransform(changingNodes["RootNode"]);
 
-	for(unsigned int i = 0; i < boneMeshes.size(); i++)
+	for(std::pair<const std::string, BoneMeshChanging*> pair : changingBoneMeshes)
 	{
-		boneMeshes[i]->transformBones(nodeParts);
+		BoneMeshChanging* chBone = pair.second;
+		chBone->transformBones(changingNodes);
 	}
 }
 
-void AnimatedModelComponent::recursiveTransform(NodePart *node)
+NodeChanging* AnimatedModelComponent::FindChangingNode(std::string findThis)
 {
-	if(node->nodeParent)
-		node->collectiveMatrix = node->nodeParent->collectiveMatrix;
-	node->collectiveMatrix *= node->localMatrix;
+	std::map<std::string, NodeChanging*>::iterator t = changingNodes.find(findThis);
+	if(t != changingNodes.end())
+		return t->second;
+	return nullptr;
+}
 
-	for(auto nodeChildren : node->nodeChildren)
+BoneMeshChanging* AnimatedModelComponent::FindChangingBoneMesh(std::string findThis)
+{
+	std::map<std::string, BoneMeshChanging*>::iterator t = changingBoneMeshes.find(findThis);
+	if(t != changingBoneMeshes.end())
+		return t->second;
+	return nullptr;
+}
+
+void AnimatedModelComponent::recursiveTransform(NodeChanging *chNode)
+{
+	if(chNode->nodeChParent)
+	{
+		chNode->collectiveMatrix = chNode->nodeChParent->collectiveMatrix;
+	}
+	chNode->collectiveMatrix *= chNode->localMatrix;
+
+	for(auto nodeChildren : chNode->nodeChChildren)
 		recursiveTransform(nodeChildren);
 }
 
 bool AnimatedModelComponent::playAnimation(std::string name)
 {
-	Animation* anim = FindAnim(name);
+	Animation* anim = modelAsset->FindAnim(name);
 	if(anim == nullptr)
 		return false;
 	
@@ -270,164 +141,37 @@ bool AnimatedModelComponent::playAnimation(std::string name)
 	return true;
 }
 
-unsigned int NodePart::PositionIndex(float time, Animation* animation)
+void BoneMeshChanging::transformBones(std::map<std::string, NodeChanging*> chNodes)
 {
-	AnimationNode* animationNode = animation->animationNodes[name];
-	for(unsigned int i = 0; i < animationNode->mNumPositionKeys-1; i++)
+	boneMats.clear();
+	//Update matrices of all bones
+	for(unsigned int i = 0; i < boneMesh->bones.size(); i++)
 	{
-		if(time > animationNode->mPositionKeys[i].mTime)
-			if(time < animationNode->mPositionKeys[i+1].mTime)
-				return i;
+		Bone* bone = boneMesh->bones[i];
+
+		NodeChanging* chNode = FindChangingNode(chNodes, bone->name);
+		boneMats.push_back(chNode->collectiveMatrix * bone->offsetMatrix);
+
+		if(bone->name == "Bone.005")
+		{
+			glm::vec3 scaleb;
+			glm::quat rotationb;
+			glm::vec3 positionb;
+			glm::vec3 skewb;
+			glm::vec4 perspectiveb;
+			glm::decompose(chNode->collectiveMatrix * bone->offsetMatrix, scaleb, rotationb, positionb, skewb, perspectiveb);
+			Logger(1) << "Bone: " << bone->name << " - Mesh: " << this->boneMesh->name;
+			Logger(1) << "    Position: " << positionb;
+			Logger(1) << "    Rotation: " << rotationb;
+			Logger(1) << "    Scale: " << scaleb;
+		}
 	}
-	return 0;
-}
-glm::vec3 NodePart::InterpolatePosition(float time, Animation* animation)
-{
-	AnimationNode* animationNode = animation->animationNodes[name];
-	if(animationNode->mNumPositionKeys < 1)
-		return glm::vec3(0,0,0);
-	if(animationNode->mNumPositionKeys == 1)
-		return animationNode->mPositionKeys[0].mValue;
-
-	unsigned int nodeIndex = PositionIndex(time,animation);
-	unsigned int nextNodeIndex = nodeIndex+1;
-
-	glm::vec3 nodePosition = animationNode->mPositionKeys[nodeIndex].mValue;
-	float nodeTime = animationNode->mPositionKeys[nodeIndex].mTime;
-	glm::vec3 nextNodePosition = animationNode->mPositionKeys[nextNodeIndex].mValue;
-	float nextNodeTime = animationNode->mPositionKeys[nextNodeIndex].mTime;
-
-	float between = glm::clamp((time - nodeTime)/(nextNodeTime - nodeTime),0.0f,1.0f);
-
-	return glm::mix(nodePosition, nextNodePosition, between);
-}
-unsigned int NodePart::RotationIndex(float time, Animation* animation)
-{
-	AnimationNode* animationNode = animation->animationNodes[name];
-	for(unsigned int i = 0; i < animationNode->mNumRotationKeys-1; i++)
-	{
-		if(time > animationNode->mRotationKeys[i].mTime)
-			if(time < animationNode->mRotationKeys[i+1].mTime)
-				return i;
-	}
-	return 0;
-}
-glm::quat NodePart::InterpolateRotation(float time, Animation* animation)
-{
-	AnimationNode* animationNode = animation->animationNodes[name];
-	if(animationNode->mNumRotationKeys < 1)
-		return glm::quat(1,0,0,0);
-	if(animationNode->mNumRotationKeys == 1)
-		return animationNode->mRotationKeys[0].mValue;
-
-	unsigned int nodeIndex = RotationIndex(time,animation);
-	unsigned int nextNodeIndex = nodeIndex+1;
-
-	glm::quat nodeRotation = animationNode->mRotationKeys[nodeIndex].mValue;
-	float nodeTime = animationNode->mRotationKeys[nodeIndex].mTime;
-	glm::quat nextNodeRotation = animationNode->mRotationKeys[nextNodeIndex].mValue;
-	float nextNodeTime = animationNode->mRotationKeys[nextNodeIndex].mTime;
-
-	float between = glm::clamp((time - nodeTime)/(nextNodeTime - nodeTime),0.0f,1.0f);
-
-	return glm::mix(nodeRotation, nextNodeRotation, between);
-}
-unsigned int NodePart::ScalingIndex(float time, Animation* animation)
-{
-	AnimationNode* animationNode = animation->animationNodes[name];
-	for(unsigned int i = 0; i < animationNode->mNumScalingKeys-1; i++)
-	{
-		if(time > animationNode->mScalingKeys[i].mTime)
-			if(time < animationNode->mScalingKeys[i+1].mTime)
-				return i;
-	}
-	return 0;
-}
-glm::vec3 NodePart::InterpolateScaling(float time, Animation* animation)
-{
-	AnimationNode* animationNode = animation->animationNodes[name];
-	if(animationNode->mNumScalingKeys < 1)
-		return glm::vec3(1,1,1);
-	if(animationNode->mNumScalingKeys == 1)
-		return animationNode->mScalingKeys[0].mValue;
-
-	unsigned int nodeIndex = ScalingIndex(time,animation);
-	unsigned int nextNodeIndex = nodeIndex+1;
-
-	glm::vec3 nodeScaling = animationNode->mScalingKeys[nodeIndex].mValue;
-	float nodeTime = animationNode->mScalingKeys[nodeIndex].mTime;
-	glm::vec3 nextNodeScaling = animationNode->mScalingKeys[nextNodeIndex].mValue;
-	float nextNodeTime = animationNode->mScalingKeys[nextNodeIndex].mTime;
-
-	float between = glm::clamp((time - nodeTime)/(nextNodeTime - nodeTime),0.0f,1.0f);
-
-	return glm::mix(nodeScaling, nextNodeScaling, between);
 }
 
-AnimationNode::AnimationNode()
+NodeChanging *BoneMeshChanging::FindChangingNode(std::map<std::string, NodeChanging*> chNodes, std::string findThis)
 {
-	mName = nullptr;
-}
-AnimationNode::AnimationNode(aiNodeAnim* animNode, aiNode* node)
-{
-	if(animNode == nullptr)
-	{
-		mName = node->mName.C_Str();
-		mNumPositionKeys = 1;
-		mNumRotationKeys = 1;
-		mNumScalingKeys = 1;
-		
-		aiVector3D p;
-		aiQuaternion r;
-		aiVector3D s;
-		node->mTransformation.Decompose(s, r, p);
-
-		VectorKey pKey;
-		pKey.mValue = glm::vec3(p.x, p.y, p.z);
-		pKey.mTime = 0;
-		mPositionKeys.push_back(pKey);
-
-		QuatKey rKey;
-		rKey.mValue = glm::quat(r.w, r.x, r.y, r.z);
-		rKey.mTime = 0;
-		mRotationKeys.push_back(rKey);
-
-		VectorKey sKey;
-		sKey.mValue = glm::vec3(s.x, s.y, s.z);
-		sKey.mTime = 0;
-		mScalingKeys.push_back(sKey);
-		return;
-	}
-
-	mName = animNode->mNodeName.C_Str();
-	mNumPositionKeys = animNode->mNumPositionKeys;
-	mNumRotationKeys = animNode->mNumRotationKeys;
-	mNumScalingKeys = animNode->mNumScalingKeys;
-
-	for(int i = 0; i < mNumPositionKeys; i++)
-	{
-		aiVector3D p = animNode->mPositionKeys[i].mValue;
-		VectorKey key;
-		key.mValue = glm::vec3(p.x,p.y,p.z);
-		key.mTime = (float) animNode->mPositionKeys[i].mTime;
-		mPositionKeys.push_back(key);
-	}
-
-	for(int i = 0; i < mNumRotationKeys; i++)
-	{
-		aiQuaternion p = animNode->mRotationKeys[i].mValue;
-		QuatKey key;
-		key.mValue = glm::quat(p.w,p.x,p.y,p.z);
-		key.mTime = (float) animNode->mRotationKeys[i].mTime;
-		mRotationKeys.push_back(key);
-	}
-
-	for(int i = 0; i < mNumScalingKeys; i++)
-	{
-		aiVector3D p = animNode->mScalingKeys[i].mValue;
-		VectorKey key;
-		key.mValue = glm::vec3(p.x,p.y,p.z);
-		key.mTime = (float) animNode->mScalingKeys[i].mTime;
-		mScalingKeys.push_back(key);
-	}
+	std::map<std::string, NodeChanging*>::iterator t = chNodes.find(findThis);
+	if(t != chNodes.end())
+		return t->second;
+	return nullptr;
 }

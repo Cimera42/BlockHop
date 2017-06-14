@@ -18,10 +18,12 @@ struct Vertex
 class Mesh
 {
     public:
-        Mesh();
-        Mesh(aiMesh* assimpMesh);
+        Mesh(std::string inName);
+        Mesh(std::string inName, aiMesh *assimpMesh);
         void destruct();
 
+		std::string name;
+	
         std::vector<glm::vec3> vertices;
         std::vector<glm::vec2> uvs;
         std::vector<glm::vec3> normals;

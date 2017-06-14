@@ -31,13 +31,10 @@ class NodePart;
 class BoneMesh : public Mesh
 {
     public:
-        BoneMesh();
-        BoneMesh(aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes);
+        BoneMesh(std::string inName, aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes);
         ~BoneMesh();
 
         std::vector<Bone*> bones;
-
-        std::vector<glm::mat4> boneMats;
         std::vector<BoneVertex> collatedVertices;
 
         void createVAO();
@@ -49,7 +46,6 @@ class BoneMesh : public Mesh
                              std::vector<unsigned int> inIndices);
 
         NodePart* FindNode(std::map<std::string, NodePart *> nodes, std::string findThis);
-        void transformBones(std::map<std::string, NodePart *> nodes);
 };
 
 #endif // BONEMESH_H_INCLUDED
