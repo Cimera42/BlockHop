@@ -39,7 +39,11 @@ void AnimatedModelComponent::setValues(json inValues)
 void AnimatedModelComponent::load()
 {
 	modelAsset->load();
-	currentAnimation = modelAsset->animations.begin()->first;
+	if(modelAsset->animations.size() > 0)
+	{
+		animated = true;
+		currentAnimation = modelAsset->animations.begin()->first;
+	}
 	for(std::pair<const std::string, NodePart*> pair : modelAsset->nodeParts)
 	{
 		NodePart* node = pair.second;
@@ -73,32 +77,40 @@ void AnimatedModelComponent::nodeFamilySetup()
 
 void AnimatedModelComponent::transformNodes(float dt)
 {
-	if(time > modelAsset->animations[currentAnimation]->duration)
-		time = 0;
-	time += dt*modelAsset->animations[currentAnimation]->tickRate;
-	for(std::pair<const std::string, NodeChanging*> pair : changingNodes)
+	if(animated)
 	{
-		NodeChanging* chNode = pair.second;
-		NodePart* node = chNode->node;
+		if(time > modelAsset->animations[currentAnimation]->duration)
+			time = 0;
+		time += dt * modelAsset->animations[currentAnimation]->tickRate;
+	}
+	for(std::pair<const std::string, NodeChanging *> pair : changingNodes)
+	{
+		NodeChanging *chNode = pair.second;
+		NodePart *node = chNode->node;
 
 		glm::mat4 transform;
-		glm::vec3 position = node->InterpolatePosition(time, modelAsset->animations[currentAnimation]);
-		glm::quat rotation = node->InterpolateRotation(time, modelAsset->animations[currentAnimation]);
-		glm::vec3 scale = node->InterpolateScaling(time, modelAsset->animations[currentAnimation]);
-		transform *= glm::translate(position);
-		transform *= glm::mat4_cast(rotation);
-		transform *= glm::scale(scale);
-		if(node->name == "Armature")
-			chNode->localMatrix = glm::mat4();
-		else
+		if(animated) 
+		{
+			glm::vec3 position = node->InterpolatePosition(time, modelAsset->animations[currentAnimation]);
+			glm::quat rotation = node->InterpolateRotation(time, modelAsset->animations[currentAnimation]);
+			glm::vec3 scale = node->InterpolateScaling(time, modelAsset->animations[currentAnimation]);
+	
+			transform *= glm::translate(position);
+			transform *= glm::mat4_cast(rotation);
+			transform *= glm::scale(scale);
+	
 			chNode->localMatrix = transform;
+		}
+		else
+			chNode->localMatrix = chNode->node->defaultTransform;			
 	}
 	recursiveTransform(changingNodes["RootNode"]);
 
-	for(std::pair<const std::string, BoneMeshChanging*> pair : changingBoneMeshes)
+	for(std::pair<const std::string, BoneMeshChanging *> pair : changingBoneMeshes)
 	{
-		BoneMeshChanging* chBone = pair.second;
-		chBone->transformBones(changingNodes);
+		BoneMeshChanging *chBone = pair.second;
+		glm::mat4 inv = glm::inverse(FindChangingNode(chBone->boneMesh->name)->collectiveMatrix);
+		chBone->transformBones(inv, changingNodes);
 	}
 }
 
@@ -141,7 +153,7 @@ bool AnimatedModelComponent::playAnimation(std::string name)
 	return true;
 }
 
-void BoneMeshChanging::transformBones(std::map<std::string, NodeChanging*> chNodes)
+void BoneMeshChanging::transformBones(glm::mat4 inverseMesh, std::map<std::string, NodeChanging *> chNodes)
 {
 	boneMats.clear();
 	//Update matrices of all bones
@@ -150,21 +162,7 @@ void BoneMeshChanging::transformBones(std::map<std::string, NodeChanging*> chNod
 		Bone* bone = boneMesh->bones[i];
 
 		NodeChanging* chNode = FindChangingNode(chNodes, bone->name);
-		boneMats.push_back(chNode->collectiveMatrix * bone->offsetMatrix);
-
-		if(bone->name == "Bone.005")
-		{
-			glm::vec3 scaleb;
-			glm::quat rotationb;
-			glm::vec3 positionb;
-			glm::vec3 skewb;
-			glm::vec4 perspectiveb;
-			glm::decompose(chNode->collectiveMatrix * bone->offsetMatrix, scaleb, rotationb, positionb, skewb, perspectiveb);
-			Logger(1) << "Bone: " << bone->name << " - Mesh: " << this->boneMesh->name;
-			Logger(1) << "    Position: " << positionb;
-			Logger(1) << "    Rotation: " << rotationb;
-			Logger(1) << "    Scale: " << scaleb;
-		}
+		boneMats.push_back(inverseMesh * chNode->collectiveMatrix * bone->offsetMatrix);
 	}
 }
 

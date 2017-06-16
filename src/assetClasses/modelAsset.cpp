@@ -328,7 +328,7 @@ NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
 	position = glm::vec3(p.x, p.y, p.z);
 	rotation = glm::quat(r.w, r.x, r.y, r.z);
 	scale = glm::vec3(s.x, s.y, s.z);
-	nodePart->defaultTransform = glm::mat4() * glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
+	nodePart->defaultTransform = glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
 
 	std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="    ";} return c;}();
 	Logger(1) << indentS << "Node: \"" << nodePart->name << "\"";

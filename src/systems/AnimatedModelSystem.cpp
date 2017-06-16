@@ -60,37 +60,19 @@ void AnimatedModelSystem::update(double dt)
 			else if(keyInput->isKeyPressed(GLFW_KEY_3))
 				animatedModel->playAnimation("Armature|Chop");
 		}
-		//animatedModel->transformNodes((float) dt);
+		animatedModel->transformNodes((float) dt);
 		
 		for(auto pair : animatedModel->modelAsset->meshParts)
 		{
 			MeshPart* meshPart = pair.second;
 			NodePart* nodePart = meshPart->nodeParent;
+			glm::mat4 modelMatrix = transform->getMatrix();
+			
 			NodeChanging* chNode = animatedModel->FindChangingNode(nodePart->name);
-			glm::mat4 modelMatrix = transform->getMatrix() * chNode->collectiveMatrix;
-
-			glm::vec3 scale;
-			glm::quat rotation;
-			glm::vec3 position;
-			glm::vec3 skew;
-			glm::vec4 perspective;
-			glm::decompose(chNode->collectiveMatrix, scale, rotation, position, skew, perspective);
-			Logger(1) << "Mesh: " << nodePart->name;
-			Logger(1) << "    Position: " << position;
-			Logger(1) << "    Rotation: " << rotation;
-			Logger(1) << "    Scale: " << scale;
-
-
-			glm::vec3 scale2;
-			glm::quat rotation2;
-			glm::vec3 position2;
-			glm::vec3 skew2;
-			glm::vec4 perspective2;
-			glm::decompose(modelMatrix, scale2, rotation2, position2, skew2, perspective2);
-			Logger(1) << "    Position2: " << position2;
-			Logger(1) << "    Rotation2: " << rotation2;
-			Logger(1) << "    Scale2: " << scale2;
-
+			if(chNode)
+			{
+				modelMatrix *= chNode->collectiveMatrix;
+			}
 
 			bool isBoned = animatedModel->modelAsset->normalMeshes.find(meshPart->mesh) == animatedModel->modelAsset->normalMeshes.end();
 			Mesh* mesh;
@@ -116,13 +98,11 @@ void AnimatedModelSystem::update(double dt)
 			glUniform1i(shader->getLoc("textureSampler"), 0);
 
 			if(isBoned)
-			{
+			{				
 				BoneMeshChanging* chBoneMesh = animatedModel->FindChangingBoneMesh(nodePart->name);
-				BoneMesh* boneMesh = chBoneMesh->boneMesh;
 				unsigned int matsNum = (unsigned int) chBoneMesh->boneMats.size();
 				if(matsNum > 0)
 				{
-					chBoneMesh->transformBones(animatedModel->changingNodes);
 					int matsLoc = shader->getLoc("boneMats");
 					glUniformMatrix4fv(matsLoc, matsNum,
 									   GL_FALSE, &chBoneMesh->boneMats.data()[0][0][0]);

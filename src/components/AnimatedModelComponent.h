@@ -34,7 +34,7 @@ struct BoneMeshChanging
 	std::vector<glm::mat4> boneMats;
 
 	NodeChanging* FindChangingNode(std::map<std::string, NodeChanging*> chNodes, std::string findThis);
-	void transformBones(std::map<std::string, NodeChanging*> nodes);
+	void transformBones(glm::mat4 inverseMesh, std::map<std::string, NodeChanging *> nodes);
 };
 
 class ModelAsset;
@@ -46,6 +46,7 @@ public:
 	~AnimatedModelComponent();
 	void setValues(json inValues);
 
+	bool animated = false;
 	ModelAsset* modelAsset;
 	std::map<std::string, NodeChanging*> changingNodes;
 	std::map<std::string, BoneMeshChanging*> changingBoneMeshes;
