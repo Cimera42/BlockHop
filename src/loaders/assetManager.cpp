@@ -53,7 +53,7 @@ AssetManager::AssetManager() {
     i.close();
 }
 
-void AssetManager::loadSync(std::string filename) {
+BaseAsset* AssetManager::loadSync(std::string filename) {
     //Determine file extension
     auto dotPos = filename.find_last_of(".");
     std::string ext = filename.substr(dotPos+1);
@@ -63,10 +63,15 @@ void AssetManager::loadSync(std::string filename) {
 
     //Load using loader
     if(extLoader != extLoaders.end()) {
-        extLoader->second->loadAsset(filename);
+        if(!extLoader->second->assetExists(filename)) {
+            return extLoader->second->loadAsset(filename);
+        } else {
+            return nullptr;//TODO: get an asset
+        }
     } else {
         Logger(1)<<"Could not find a loader for the file '"<<filename<<"'."<<std::endl;
     }
+    return nullptr;
 }
 
 AssetLoader* AssetManager::getLoader(std::string loaderName) {

@@ -15,8 +15,8 @@ using json = nlohmann::json;
 
 class AssetManager {
     /*
-     * Base asset loading class - singleton pattern
-     * Maintains a list of all assets that have been loaded into the engine
+     * Base asset loading class - singleton & factory pattern
+     * Maintains a map of loaders which contain all assets that have been loaded into the engine
      *
      * Two flavours of loading:
      * - Synchronous - (pre-loading)
@@ -50,10 +50,10 @@ public:
 
     /*
      * Load a raw asset from file. Will automatically determine the loader to use for the
-     * filename/extension given.
-     * Will load synchronously.
+     * filename/extension given and will then check if the asset is already loaded. If not
+     * it will conduct a load synchronously.
      */
-    void loadSync(std::string filename); //Loads from file
+    BaseAsset* loadSync(std::string filename); //Loads from file
     //loadAsync();
 
     /*

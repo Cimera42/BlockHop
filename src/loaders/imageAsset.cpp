@@ -27,11 +27,14 @@ ImageAsset::ImageAsset(std::vector<std::string> inFilenames, bool loadNow)
         load();
 }
 ImageAsset::ImageAsset(std::vector<std::string> inFilenames) : ImageAsset(inFilenames, true) {}*/
+ImageAsset::ImageAsset(std::string filename): BaseAsset(filename)
+{
+
+}
 
 ImageAsset::~ImageAsset()
 {
-    for(auto singleImageData : imageData)
-        stbi_image_free(singleImageData);
+    stbi_image_free(imageData);
     //glDeleteTextures(1, &textureID);
 }
 
@@ -44,27 +47,17 @@ ImageAsset::~ImageAsset()
 void ImageAsset::load()
 {
     stbi_set_flip_vertically_on_load(true);
-    int maxW = 0;
-    int maxH = 0;
-    for(unsigned int i = 0; i < filenames.size(); i++)
+    int tempWidth, tempHeight, tempComp;
+    imageData = stbi_load(filename.c_str(), &tempWidth, &tempHeight, &tempComp, STBI_rgb_alpha));
+
+    width = tempWidth;
+    height = tempHeight;
+    comp = tempComp;
+
+    if(!imageData)
     {
-        int tempWidth, tempHeight, tempComp;
-        imageData.push_back(stbi_load(filenames[i].c_str(), &tempWidth, &tempHeight, &tempComp, STBI_rgb_alpha));
-
-        if(tempWidth > maxW)
-            maxW = tempWidth;
-        if(tempHeight > maxH)
-            maxH = tempHeight;
-
-        widths.push_back(tempWidth);
-        heights.push_back(tempHeight);
-        comps.push_back(tempComp);
-
-        if(!imageData[i])
-        {
-            //loaded = false;
-            Logger(1) << "Image not loaded: " << filenames[i] << " - " << stbi_failure_reason();
-        }
+        Logger(1) << "Could not load image: " << filename << " - " << stbi_failure_reason();
+        //TODO Destroy this asset? or at least invalidate somehow
     }
 /*
     glSetBindTexture(GL_TEXTURE_2D_ARRAY, textureID);

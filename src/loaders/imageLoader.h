@@ -7,15 +7,17 @@
 
 #include "assetLoader.h"
 #include "imageAsset.h"
+#include <vector>
 #include <set>
 
 class ImageLoader : public AssetLoader {
-    //Array of all textures that are currently loaded
+    //Buffer of images that are currently loading
+    std::vector<std::string> inLoad;
+    //Array of all textures that are loaded
     std::map<std::string, ImageAsset*> fileList; //Raw image data
     //typedef std::vector<std::pair<std::vector<std::string>, GLuint> > TextureFileMap;
     //TextureFileMap textureList; //OpenGL textures
     std::map<std::set<std::string>, GLuint> textureList;
-
 
     GLuint generateTexture(std::vector<ImageAsset*> images);
 
@@ -31,6 +33,12 @@ public:
      * textures using loadTexture below.
      */
     BaseAsset* loadAsset(std::string filename);
+
+    /*
+     * Determines if an image already exists - aka is either loading or already
+     * loaded.
+     */
+    bool assetExists(std::string filename);
 
     /*
      * Retrieves a GLuint for the texture with all the given filenames.

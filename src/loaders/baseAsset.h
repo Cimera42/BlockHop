@@ -5,10 +5,16 @@
 #ifndef BLOCKHOP_BASEASSET_H
 #define BLOCKHOP_BASEASSET_H
 
+#include <string>
 
 class BaseAsset {
+protected:
+    std::string filename = "";
 public:
-    virtual void load();
+    BaseAsset(std::string filename);
+    virtual ~BaseAsset();
+    virtual void load(std::string filename);
+    std::string getName();
 };
 
 
