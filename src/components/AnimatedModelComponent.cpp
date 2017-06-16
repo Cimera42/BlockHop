@@ -104,7 +104,7 @@ void AnimatedModelComponent::transformNodes(float dt)
 		else
 			chNode->localMatrix = chNode->node->defaultTransform;			
 	}
-	recursiveTransform(changingNodes["RootNode"]);
+	recursiveTransform(changingNodes[modelAsset->rootNodeName]);
 
 	for(std::pair<const std::string, BoneMeshChanging *> pair : changingBoneMeshes)
 	{

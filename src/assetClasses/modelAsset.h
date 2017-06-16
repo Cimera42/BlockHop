@@ -100,6 +100,7 @@ public:
 	Animation* FindAnim(std::string findThis);
 
 	std::string filename;
+	std::string rootNodeName;
 	std::vector<Material> materials;
 	Texture* texture;
 

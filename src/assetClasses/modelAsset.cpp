@@ -236,7 +236,7 @@ void ModelAsset::load()
 		}
 		animations[anim->name] = anim;
 	}
-
+	
 	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
 	{
 		aiMaterial* assimpMaterial = scene->mMaterials[i];
@@ -276,6 +276,7 @@ void ModelAsset::load()
 		texture = new Texture(texPaths, true);
 	}
 
+	rootNodeName = scene->mRootNode->mName.C_Str();
 	nodeLoop(scene->mRootNode, 0, nullptr);
 
 	for(unsigned int i = 0; i < scene->mNumMeshes; i++)
