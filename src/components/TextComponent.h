@@ -21,7 +21,8 @@ public:
     Font();
     ~Font();
 
-    ImageAsset* texture;
+    ImageAsset* image;
+    GLuint texture;
     int spacing = 3;
     json metrics;
 };

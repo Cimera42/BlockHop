@@ -50,7 +50,7 @@ void TextSystem::renderText(TransformComponent *transform, TextComponent *text)
 
     //Bind texture atlas
     glSetActiveTexture(GL_TEXTURE0);
-    glSetBindTexture(GL_TEXTURE_2D_ARRAY, text->getFont()->texture->textureID);
+    glSetBindTexture(GL_TEXTURE_2D_ARRAY, text->getFont()->texture);
     glUniform1i(textShader->getLoc("textureSampler"), 0);
 
     glUniformMatrix4fv(textShader->getLoc("modelMat"), 1, GL_FALSE, &m[0][0]);

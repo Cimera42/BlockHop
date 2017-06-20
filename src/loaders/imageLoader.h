@@ -23,10 +23,15 @@ class ImageLoader : public AssetLoader {
 
 public:
     ImageLoader() {
-        loaderType = "texture";
+        loaderType = "image";
     }
+    ~ImageLoader();
 
     /*TODO default image for asynch loading*/
+
+    /*TODO, push everything back to assetLoader instead of here since everything will have
+     * the same functionality and ensure we make everything private and just have the assetManager
+     * as a friend class!*/
 
     /*
      * Loads raw image data from file. This can then be used to create OpenGL
@@ -41,12 +46,18 @@ public:
     bool assetExists(std::string filename);
 
     /*
+     * Finds an asset and returns it. Will wait if its in loading
+     */
+    BaseAsset* findAsset(std::string filename);
+
+    /*
      * Retrieves a GLuint for the texture with all the given filenames.
      * First checks for existing texture ID's and returns if so.
      * If none are found, checks fileList for each image in supplied vector.
      * Will load images that don't exist and then create a new GLuint
      */
     GLuint loadTexture(std::vector<std::string> names);
+    GLuint loadTexture(std::string name);
 };
 
 

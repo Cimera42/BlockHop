@@ -87,7 +87,8 @@ public:
 
 	std::string filename;
 	std::vector<Material> materials;
-	ImageAsset texture;
+	ImageAsset* image;
+	GLuint texture;
 
 	std::map<unsigned int, Mesh*> normalMeshes;
 	std::map<unsigned int, BoneMesh*> boneMeshes;

@@ -60,7 +60,7 @@ void AnimatedModelSystem::update(double dt)
 				glUniformMatrix4fv(genericShader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
 
 				glSetActiveTexture(GL_TEXTURE0);
-				glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->texture.textureID);
+				glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->texture);
 				glUniform1i(genericShader->getLoc("textureSampler"), 0);
 
 				glUniformMatrix4fv(genericShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
@@ -88,7 +88,7 @@ void AnimatedModelSystem::update(double dt)
 				glUniformMatrix4fv(boneShader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
 
 				glSetActiveTexture(GL_TEXTURE0);
-				glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->texture.textureID);
+				glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->texture);
 				glUniform1i(boneShader->getLoc("textureSampler"), 0);
 
 				glUniformMatrix4fv(boneShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);

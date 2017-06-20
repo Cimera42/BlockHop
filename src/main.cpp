@@ -3,7 +3,6 @@
 #include "window.h"
 #include "ecs/ecsManager.h"
 #include "ecs/ecsLoader.h"
-#include "loaders/assetManager.h"
 
 Window* window;
 bool shouldExit = false;
@@ -24,9 +23,6 @@ int main()
     initGLEW();
 
     glfwSetWindowCloseCallback(window->glfwWindow, windowCloseEvent);
-
-    //Startup engine asset loader
-    AssetManager::i()->loadSync("textures/tex.png"); //Test
 
     //Load scene from file
     ECSLoader ecsLoader = ECSLoader();

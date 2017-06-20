@@ -11,7 +11,7 @@ BaseAsset::BaseAsset(std::string filename) {
 
 BaseAsset::~BaseAsset() {}
 
-void BaseAsset::load(std::string filename) {
+void BaseAsset::load() {
     Logger(1)<<"Default load implementation being used to load '"<<filename<<"'. "
             "Please implement an asset class for this extension correctly."<<std::endl;
 }

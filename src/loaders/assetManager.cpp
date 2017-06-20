@@ -3,7 +3,6 @@
 //
 
 #include "assetManager.h"
-#include "../logger.h"
 #include <fstream>
 
 AssetManager *AssetManager::c_instance = 0;
@@ -11,7 +10,7 @@ AssetManager *AssetManager::c_instance = 0;
 AssetManager::AssetManager() {
 
     //TODO possibly replace this with non-hard? Is it worth it?
-    exportedLoaders.insert(std::pair<std::string, AssetLoader*>("texture", new ImageLoader()));
+    exportedLoaders.insert(std::pair<std::string, AssetLoader*>("image", new ImageLoader()));
 
     std::string config = "./conf/assetLoader.conf";
     std::ifstream i(config);
@@ -66,7 +65,8 @@ BaseAsset* AssetManager::loadSync(std::string filename) {
         if(!extLoader->second->assetExists(filename)) {
             return extLoader->second->loadAsset(filename);
         } else {
-            return nullptr;//TODO: get an asset
+            //Else we wait for it to be loaded and then return
+            return extLoader->second->findAsset(filename);
         }
     } else {
         Logger(1)<<"Could not find a loader for the file '"<<filename<<"'."<<std::endl;

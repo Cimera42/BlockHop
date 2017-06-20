@@ -6,7 +6,7 @@
 #include <assimp/postprocess.h>
 #include "AnimatedModelComponent.h"
 #include "../ecs/ecsManager.h"
-#include "../openGLFunctions.h"
+#include "../loaders/assetManager.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -110,7 +110,9 @@ void AnimatedModelComponent::load()
 	}
 	if(texPaths.size() > 0)
 	{
-		texture.load(texPaths);
+		image = static_cast<ImageAsset*>(AssetManager::i()->loadSync("./assets/textures/text.png"));//TODO remove when we rebase
+		ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
+		texture = imgLoader->loadTexture(image->getName());
 	}
 
 	nodeLoop(scene->mRootNode, 0, nullptr);

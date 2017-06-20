@@ -13,7 +13,7 @@ protected:
 public:
     BaseAsset(std::string filename);
     virtual ~BaseAsset();
-    virtual void load(std::string filename);
+    virtual void load();
     std::string getName();
 };
 

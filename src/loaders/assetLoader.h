@@ -19,12 +19,20 @@ public:
      * this is done synchronously in here.
      */
     virtual BaseAsset* loadAsset(std::string filename);
+
     //virtual BaseAsset* getDefaultAsset();
+
     /*
      * An asset is deemed to exist if it is either loaded
      * or in the process of loading.
      */
     virtual bool assetExists(std::string filename);
+
+    /*
+     * Finds an asset that is loaded, or wait until it is
+     * loaded if it is in the process of loading.
+     */
+    virtual BaseAsset* findAsset(std::string filename);
 };
 
 
