@@ -1,0 +1,229 @@
+{
+    "systems": [
+        {
+            "name": "testSystem",
+            "compsToSub": [
+                "transformComponent",
+                "textComponent"
+            ]
+        },
+		{
+			"name": "mouseInputSystem",
+			"compsToSub": [
+				"transformComponent",
+				"mouseControlComponent"
+			]
+		},
+		{
+			"name": "keyboardInputSystem",
+			"compsToSub": [
+				"transformComponent",
+				"keyboardControlComponent"
+			]
+		},
+		{
+			"name": "cameraSystem",
+			"compsToSub": [
+				"transformComponent",
+				"cameraComponent"
+			]
+		},
+        {
+            "name": "animatedModelSystem",
+            "compsToSub": [
+                "transformComponent",
+                "animatedModelComponent"
+            ]
+        },
+        {
+            "name": "textSystem",
+            "compsToSub": [
+                "transformComponent",
+                "textComponent"
+            ]
+        }
+    ],
+    "entities": [
+        {
+			"name": "Camera",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "cameraComponent",
+					"values": {
+						"fov": 90,
+						"aspectRatio": 1.3333,
+						"nearDist": 0.001,
+						"farDist": 100
+					}
+				},
+				{
+					"name": "mouseControlComponent",
+					"values": {
+						"xSensitivity": 50, 
+						"ySensitivity": 50 
+					}
+				},
+				{
+					"name": "keyboardControlComponent",
+					"values": {
+						"forward":"W",
+						"back":"S",
+						"left":"A",
+						"right":"D",
+						"up":" ",
+						"down":"340"
+					}
+				}
+			]
+        },
+        {
+            "name": "TextEntity",
+            "components": [
+                {
+                    "name": "transformComponent",
+                    "values": {
+                        "position": {
+                            "x": -310,
+                            "y": 100,
+                            "z": 0
+                        },
+                        "rotation": {
+                            "w": 0.924,
+                            "x": 0,
+                            "y": 0,
+                            "z": 0.383
+                        },
+                        "scale": {
+                            "x": 1,
+                            "y": 1,
+                            "z": 1
+                        }
+                    }
+                },
+                {
+                    "name": "textComponent",
+                    "values": {
+                        "text": "${dt}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "ModelEntity",
+            "components": [
+                {
+                    "name": "transformComponent",
+                    "values": {
+                        "position": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 5
+                        },
+                        "rotation": {
+                            "w": 1,
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "scale": {
+                            "x": 1,
+                            "y": 1,
+                            "z": 1
+                        }
+                    }
+                },
+                {
+                    "name": "animatedModelComponent",
+                    "values": {
+                        "filename": "models/Org/org3.fbx"
+                    }
+                }
+            ]
+        },
+		{
+			"name": "BarrelEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 10,
+							"y": 0,
+							"z": 5
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "models/Barrel/barrel.fbx"
+					}
+				}
+			]
+		},
+		{
+			"name": "MushroomEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 5,
+							"y": 0,
+							"z": 5
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "models/Mushroom/mushroom.fbx"
+					}
+				}
+			]
+		}
+    ]
+}

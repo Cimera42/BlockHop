@@ -1,2 +1,7 @@
 cmake-build-debug/
-.idea/
+.idea/workspace.xml
+.idea/codeStyleSettings.xml
+.idea/markdown-navigator.xml
+.idea/markdown-navigator/profiles_settings.xml
+.idea/markdown-exported-files.xml
+RenderDocSettings.cap

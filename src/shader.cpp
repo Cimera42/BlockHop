@@ -1,7 +1,6 @@
 #include "shader.h"
 #include "openGLFunctions.h"
 #include "loadShader.h"
-#include "logger.h"
 
 Shader::Shader(const char* vertName, const char* fragName)
 {
@@ -33,7 +32,7 @@ bool Shader::addLoc(const char* name)
     return false;
 }
 
-GLint Shader::getLoc(const char* name)
+GLint Shader::getLoc(const char* name) const
 {
     auto iter = locations.find(name);
     if(iter != locations.end())

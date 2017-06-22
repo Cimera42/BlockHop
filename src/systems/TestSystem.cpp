@@ -2,13 +2,19 @@
 // Created by Jono on 14/03/2017.
 //
 
-#include "testSystem.h"
+#include "TestSystem.h"
 
-bool System::exported = ECSManager::i()->exportSystem<TestSystem>("testSystem");
+SYSTEM_EXPORT(TestSystem, "testSystem")
 
-TestSystem::TestSystem() {}
+TestSystem::TestSystem() {
+
+}
 TestSystem::~TestSystem() {}
 
 void TestSystem::update(double dt) {
     //Logger(1)<<"Virtual inheritance test works!";
+    for(auto entity : getEntities())
+    {
+
+    }
 }

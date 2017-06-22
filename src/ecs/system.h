@@ -37,12 +37,12 @@ public:
     /*
      * Helpers to retrieved subscribed entities
      */
-    std::vector<Entity*> getEntities();
+    std::vector<Entity*> getEntities() const;
 
     /*
      * Updates are called by the engine to run the system.
      */
-    virtual void update(double dt);
+    virtual void update(double dt) = 0;
 
 private:
     /*
@@ -60,7 +60,7 @@ private:
      * Usage inside systems's cpp file:
      *      bool System::exported = ECSManager::exportSystem<SystemClass>("systemName");
      */
-    static bool exported;
+    //static bool exported;
 };
 
 #endif // SYSTEM_H_INCLUDED

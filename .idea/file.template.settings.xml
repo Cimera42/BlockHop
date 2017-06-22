@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExportableFileTemplateSettings">
+    <default_templates>
+      <template name="Component Class File.cpp" reformat="false" live-template-enabled="false" />
+      <template name="Component Header File.h" reformat="false" live-template-enabled="false" />
+      <template name="System Class File.cpp" reformat="false" live-template-enabled="false" />
+      <template name="System Header File.h" reformat="false" live-template-enabled="false" />
+    </default_templates>
+  </component>
+</project>

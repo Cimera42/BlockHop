@@ -14,7 +14,7 @@ public:
      * An entity does not need to exported as there are no derived
      * types, instead they are created through the ECSManager.
      */
-    Entity();
+    Entity(std::string inName);
     ~Entity();
 
     /*
@@ -26,9 +26,14 @@ public:
     void removeComponent(std::string compName);
 
     /*
+     * Simple getter for entity name
+     */
+    std::string getName() const;
+
+    /*
      * Helpers for retrieving components attached to an entity
      */
-    std::vector<std::string> getComponents();
+    std::vector<std::string> getComponents() const;
     template <typename T>
     T* getComponent(std::string compName) {
         std::vector<Component*>::iterator it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
@@ -42,6 +47,8 @@ public:
 private:
     void subscribeToSystems();
     std::vector<Component*> subbedComponents;
+
+    std::string name;
 };
 
 #endif // ENTITY_H_INCLUDED

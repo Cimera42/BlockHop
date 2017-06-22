@@ -29,7 +29,7 @@ public:
      */
     template<typename T>
         static Component* create() {return new T; };
-    virtual void setValues(json inValues);
+    virtual void setValues(json inValues) = 0;
     void setName(std::string inName) {name = inName; };
     std::string getName() {return name; };
 
@@ -39,7 +39,7 @@ private:
      * Usage inside components's cpp file:
      *      bool Component::exported = ECSManager::exportComponent<ComponentClass>("componentName");
      */
-    static bool exported;
+    //static bool exported;
 
     std::string name;
 };

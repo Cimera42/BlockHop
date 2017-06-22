@@ -5,34 +5,25 @@
 #include <sstream>
 #include <chrono>
 #include <string>
+#include <glm/vec3.hpp>
+#include <glm/gtc/quaternion.hpp>
 
-struct Logger
+class Logger
 {
     bool endLine;
     std::string between;
+	std::stringstream buffer;
 
-    Logger()
-    {
-        endLine = false;
-        between = "";
-    }
-    Logger(bool doEndLine)
-    {
-        endLine = doEndLine;
-        between = "";
-    }
-    Logger(std::string inBetween)
-    {
-        endLine = false;
-        between = inBetween;
-    }
-    Logger(bool doEndLine, std::string inBetween)
-    {
-        endLine = doEndLine;
-        between = inBetween;
-    }
+public:
+	Logger();
+	Logger(bool doEndLine);
+	Logger(std::string inBetween);
+	Logger(bool doEndLine, std::string inBetween);
 
-    std::stringstream buffer;
+	//Print entire string buffer at end of << chain
+	//when logger object is destroyed
+	~Logger();
+
     //Function for general types
     template <typename T>
     Logger& operator<<(const T& val)
@@ -41,34 +32,12 @@ struct Logger
         buffer << val << between;
         return *this;
     }
-
-    //Function for special stream types, eg endl
-    Logger& operator<<(std::ostream& (*val)(std::ostream &))
-    {
-        buffer << val << between;
-        return *this;
-    }
-
-    //Print entire string buffer at end of << chain
-    //when logger object is destroyed
-    ~Logger()
-    {
-        if(endLine)
-        {
-            time_t current_time;
-            struct tm * time_info;
-            std::time(&current_time);
-            char timeString[9];  // space for "HH:MM:SS\0"
-            time_info = localtime(&current_time);
-            strftime(timeString, sizeof(timeString), "%H:%M:%S", time_info);
-            std::cout << "[" << timeString << "] ";
-
-        }
-
-        std::cout << buffer.str();
-        if(endLine)
-            std::cout << std::endl;
-    }
+	Logger& operator<<(const glm::vec2 val);
+	Logger& operator<<(const glm::vec3 val);
+	Logger& operator<<(const glm::vec4 val);
+	Logger& operator<<(const glm::quat val);
+	Logger& operator<<(const glm::mat4 val);
+	Logger& operator<<(std::ostream& (*val)(std::ostream &));
 };
 
 #endif // LOGGER_H_INCLUDED

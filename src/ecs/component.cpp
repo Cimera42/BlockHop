@@ -2,4 +2,3 @@
 
 Component::Component() {}
 Component::~Component() {}
-void Component::setValues(json inValues) {}

@@ -15,7 +15,7 @@ void main()
 {
     float intensity = dot(normalize(vec3(1,1,1)), vNorm);
     vec3 colour = texture(textureSampler, vec3(vUV, vMaterialIndex)).rgb;
-    //colour *= intensity;
+    colour *= intensity;
 
     outColour = vec4(colour,1);
     outNormal = vec4(vNorm,1);

@@ -4,6 +4,7 @@ in vec3 gPos;
 in vec2 gUV;
 in vec3 gNorm;
 flat in int gMaterialIndex;
+in vec3 gColour;
 
 out vec4 outColour;
 out vec4 outNormal;

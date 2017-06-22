@@ -2,10 +2,12 @@
 #include "openGLFunctions.h"
 #include "logger.h"
 
-#include <assimp/scene.h>
-
-Mesh::Mesh(){}
-Mesh::Mesh(aiMesh* assimpMesh)
+Mesh::Mesh(std::string inName)
+{
+	name = inName;	
+}
+Mesh::Mesh(std::string inName, aiMesh *assimpMesh) 
+		: Mesh(inName)
 {
     load(assimpMesh);
 }
@@ -44,7 +46,7 @@ void Mesh::createVAO()
         GLuint matLoc = 3;
         glEnableVertexAttribArray(matLoc);
         glVertexAttribIPointer(matLoc, 1, GL_INT, sizeof(Vertex), (void*) (intptr_t) inc);
-        inc += sizeof(int);
+        //inc += sizeof(int);
     glSetBindVertexArray(0);
 }
 

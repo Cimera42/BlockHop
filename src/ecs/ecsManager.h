@@ -2,8 +2,8 @@
 // Created by Jono on 03/03/2017.
 //
 
-#ifndef BLOCKHOP_CLION_ECSMANAGER_H
-#define BLOCKHOP_CLION_ECSMANAGER_H
+#ifndef BLOCKHOP_ECSMANAGER_H
+#define BLOCKHOP_ECSMANAGER_H
 
 #include "entity.h"
 #include "component.h"
@@ -16,6 +16,9 @@
 typedef Component* (*ComponentFactoryPtr)();
 typedef System* (*SystemFactoryPtr)();
 
+#define COMPONENT_EXPORT(type, name) bool type::exported = ECSManager::i()->exportComponent<type>(name);//#type to use <X>Component as a string literal
+#define SYSTEM_EXPORT(type, name) bool type::exported = ECSManager::i()->exportSystem<type>(name);
+
 class ECSManager {
 public:
     ECSManager();
@@ -25,7 +28,16 @@ public:
      * Helper functions
      * Will return nullptr if a match cannot be found
      */
-    System* findSystem(std::string name);
+	template <typename T>
+	T* findSystem(std::string name) {
+		std::vector<std::pair<std::string, System*> >::iterator it =
+				std::find_if(gameSystems.begin(), gameSystems.end(), [&name](std::pair<std::string, System*> o) {
+					return (o.first == name);
+				});
+		if(it != gameSystems.end())
+			return static_cast<T*>(it->second);
+		return nullptr;
+	}
     Entity* findEntity(std::string name);
 
     //Is there a point to this when we could just call addComponent on the entity itself
@@ -82,4 +94,4 @@ private:
     std::map<std::string, ComponentFactoryPtr> gameComponentExports;
 };
 
-#endif //BLOCKHOP_CLION_ECSMANAGER_H
+#endif //BLOCKHOP_ECSMANAGER_H
