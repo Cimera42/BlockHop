@@ -9,6 +9,7 @@
 #include "../loaders/imageAsset.h"
 #include "../mesh.h"
 #include "../boneMesh.h"
+#include "../assetClasses/modelAsset.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <assimp/scene.h>
@@ -16,100 +17,57 @@
 
 glm::mat4 AToGMat(aiMatrix4x4 aiMat);
 
-struct VectorKey
+struct NodePart;
+struct NodeChanging
 {
-	glm::vec3 mValue;
-	float mTime;
-};
-
-struct QuatKey
-{
-	glm::quat mValue;
-	float mTime;
-};
-
-struct AnimationNode
-{
-	AnimationNode();
-	AnimationNode(aiNodeAnim* animNode, aiNode* node);
-
-	const char* mName;
-	unsigned int mNumPositionKeys;
-	unsigned int mNumRotationKeys;
-	unsigned int mNumScalingKeys;
-
-	std::vector<VectorKey> mPositionKeys;
-	std::vector<QuatKey> mRotationKeys;
-	std::vector<VectorKey> mScalingKeys;
-};
-
-struct NodePart
-{
-	glm::mat4 defaultTransform;
+	NodePart* node;
 	glm::mat4 localMatrix;
 	glm::mat4 collectiveMatrix;
-	AnimationNode* animationNode;
-	
-	unsigned int PositionIndex(float time);
-	glm::vec3 InterpolatePosition(float time);
 
-	unsigned int RotationIndex(float time);
-	glm::quat InterpolateRotation(float time);
-
-	unsigned int ScalingIndex(float time);
-	glm::vec3 InterpolateScaling(float time);
-	
-	std::string name;
-	NodePart* nodeParent;
-	std::vector<NodePart*> nodeChildren;
+	NodeChanging* nodeChParent;
+	std::vector<NodeChanging*> nodeChChildren;
 };
-
-struct MeshPart
+struct BoneMesh;
+struct BoneMeshChanging
 {
-	int mesh;
+	BoneMesh* boneMesh;
+	std::vector<glm::mat4> boneMats;
 
-	NodePart* nodeParent;
+	NodeChanging* FindChangingNode(std::map<std::string, NodeChanging*> chNodes, std::string findThis);
+	void transformBones(glm::mat4 inverseMesh, std::map<std::string, NodeChanging *> nodes);
 };
 
-struct Material
-{
-    std::string texturePath;
-};
-
-class BoneMesh;
+class ModelAsset;
 class AnimatedModelComponent : public Component
 {
-    static bool exported;
+	static bool exported;
 public:
-    AnimatedModelComponent();
-    ~AnimatedModelComponent();
-    void setValues(json inValues);
+	AnimatedModelComponent();
+	~AnimatedModelComponent();
+	void setValues(json inValues);
 
-	std::string filename;
-	std::vector<Material> materials;
-	ImageAsset* image;
-	GLuint texture;
+	bool animated = false;
+	ModelAsset* modelAsset;
+	std::map<std::string, NodeChanging*> changingNodes;
+	std::map<std::string, BoneMeshChanging*> changingBoneMeshes;
 
-	std::map<unsigned int, Mesh*> normalMeshes;
-	std::map<unsigned int, BoneMesh*> boneMeshes;
-	std::vector<MeshPart*> meshParts;
-	std::vector<NodePart*> nodeParts;
-
-	std::vector<aiNode*> assimpNodes;
-	std::vector<aiNodeAnim*> animNodes;
+	float time = 0;
+	std::string currentAnimation;
 
 	void load();
-	NodePart* nodeLoop(aiNode *assimpNode, int indent, NodePart *parent);
-	aiNodeAnim* FindAnimNode(std::string findThis);
-	
-    friend std::ostream &operator<< (std::ostream &os, AnimatedModelComponent const &c) {
-        os << "AnimatedModelComponent: ";
-        os << c.filename;
-        return os;
-    }
 
-	void transformNodes();
-	void recursiveTransform(NodePart *node);
+	friend std::ostream &operator<< (std::ostream &os, AnimatedModelComponent const &c) {
+		os << "AnimatedModelComponent: ";
+		return os;
+	}
+
+	void transformNodes(float dt);
+	void recursiveTransform(NodeChanging *node);
+	NodeChanging* FindChangingNode(std::string findThis);
+	BoneMeshChanging* FindChangingBoneMesh(std::string findThis);
+	bool playAnimation(std::string name);
+	
+	void nodeFamilySetup();
 };
 
 #endif //BLOCKHOP_BONEMODELCOMPONENT_H

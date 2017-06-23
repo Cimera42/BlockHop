@@ -156,10 +156,74 @@
                 {
                     "name": "animatedModelComponent",
                     "values": {
-                        "filename": "assets/models/TestBonePlane/TestBonePlane.fbx"
+                        "filename": "models/Org/org3.fbx"
                     }
                 }
             ]
-        }
+        },
+		{
+			"name": "BarrelEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 10,
+							"y": 0,
+							"z": 5
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "models/Barrel/barrel.fbx"
+					}
+				}
+			]
+		},
+		{
+			"name": "MushroomEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 5,
+							"y": 0,
+							"z": 5
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "models/Mushroom/mushroom.fbx"
+					}
+				}
+			]
+		}
     ]
 }

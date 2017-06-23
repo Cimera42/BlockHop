@@ -41,5 +41,3 @@ bool System::unsubscribeEntity(Entity *entToUnSub) {
 std::vector<Entity*> System::getEntities() const {
     return subbedEntities;
 }
-
-void System::update(double dt) {}

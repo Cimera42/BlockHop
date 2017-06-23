@@ -5,9 +5,9 @@
 #ifndef BLOCKHOP_CAMERACOMPONENT_H
 #define BLOCKHOP_CAMERACOMPONENT_H
 
-#include <glm/glm.hpp>
 #include "../ecs/component.h"
-#include "../angle.h"
+#include <json.hpp>
+using json = nlohmann::json;
 
 class CameraComponent : public Component
 {

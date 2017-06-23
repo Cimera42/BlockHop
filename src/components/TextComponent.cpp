@@ -8,7 +8,6 @@
 #include "../loaders/assetManager.h"
 #include <fstream>
 
-
 COMPONENT_EXPORT(TextComponent, "textComponent")
 
 Font::Font()
@@ -71,7 +70,7 @@ void TextComponent::createVAO()
     GLuint uvLoc = 1;
     glEnableVertexAttribArray(uvLoc);
     glVertexAttribPointer(uvLoc, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void *) (intptr_t) inc);
-    inc += sizeof(glm::vec2);
+    //inc += sizeof(glm::vec2);
     glSetBindVertexArray(0);
 }
 

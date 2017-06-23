@@ -39,27 +39,28 @@ int main()
 		current = std::chrono::steady_clock::now();
 		std::chrono::duration<double> dt = (current - previous);
 		previous = current;
-		
-        //Run update on our systems
-        for(auto sysPair : ECSManager::i()->gameSystems)
-        {
-            auto system = sysPair.second;
-            //Get time difference for updating systems
 
-            //Call both basic update and one with timestep, implementation dependant
-            system->update(dt.count());
+		//Run update on our systems
+		for(auto sysPair : ECSManager::i()->gameSystems)
+		{
+			auto system = sysPair.second;
+			//Get time difference for updating systems
 
-            //Total clock duration
-            std::chrono::duration<double> totalTime = current - start;
-            //Logger()<<dt.count()<<" "<<totalTime.count();
-        }
+			//Call both basic update and one with timestep, implementation dependant
+			system->update(dt.count());
 
-        if(glfwGetKey(window->glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            shouldExit = true;
-        glfwPollEvents();
-        glfwSwapBuffers(window->glfwWindow);
-    }
-	
-    delete window;
-    glfwTerminate();
+			//Total clock duration
+			std::chrono::duration<double> totalTime = current - start;
+			//Logger()<<dt.count()<<" "<<totalTime.count();
+		}
+
+		if(glfwGetKey(window->glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			shouldExit = true;
+		glfwPollEvents();
+		glfwSwapBuffers(window->glfwWindow);
+	}
+
+	delete window;
+	glfwTerminate();
+	return 0;
 }

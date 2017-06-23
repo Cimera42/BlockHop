@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/BlockHop_CLion.iml" filepath="$PROJECT_DIR$/.idea/BlockHop_CLion.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/BlockHop.iml" filepath="$PROJECT_DIR$/.idea/BlockHop.iml" />
     </modules>
   </component>
 </project>

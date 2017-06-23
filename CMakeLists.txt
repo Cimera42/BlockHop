@@ -7,11 +7,9 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(libraries/include)
 
 set(SOURCE_FILES src/main.cpp)
-set(SOURCE_FILES ${SOURCE_FILES} src/logger.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/logger.cpp src/logger.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/mesh.cpp src/mesh.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/window.cpp src/window.h)
-set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageAsset.cpp src/loaders/imageAsset.h)
-set(SOURCE_FILES ${SOURCE_FILES} src/shader.cpp src/shader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/shader.cpp src/shader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/openGLFunctions.cpp src/openGLFunctions.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loadShader.cpp src/loadShader.h)
@@ -43,7 +41,8 @@ set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageLoader.cpp src/loaders/imageLo
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetManager.cpp src/loaders/assetManager.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetLoader.cpp src/loaders/assetLoader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/baseAsset.cpp src/loaders/baseAsset.h)
-
+set(SOURCE_FILES ${SOURCE_FILES} src/assetClasses/modelAsset.cpp src/assetClasses/modelAsset.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageAsset.cpp src/loaders/imageAsset.h)
 
 add_executable(BlockHop ${SOURCE_FILES})
 
