@@ -1,12 +1,5 @@
 {
-    "systems": [
-        {
-            "name": "testSystem",
-            "compsToSub": [
-                "transformComponent",
-                "textComponent"
-            ]
-        },
+	"systems": [
 		{
 			"name": "mouseInputSystem",
 			"compsToSub": [
@@ -22,29 +15,36 @@
 			]
 		},
 		{
+			"name": "physicsSystem",
+			"compsToSub": [
+				"transformComponent",
+				"physicsComponent"
+			]
+		},
+		{
 			"name": "cameraSystem",
 			"compsToSub": [
 				"transformComponent",
 				"cameraComponent"
 			]
 		},
-        {
-            "name": "animatedModelSystem",
-            "compsToSub": [
-                "transformComponent",
-                "animatedModelComponent"
-            ]
-        },
-        {
-            "name": "textSystem",
-            "compsToSub": [
-                "transformComponent",
-                "textComponent"
-            ]
-        }
-    ],
-    "entities": [
-        {
+		{
+			"name": "animatedModelSystem",
+			"compsToSub": [
+				"transformComponent",
+				"animatedModelComponent"
+			]
+		},
+		{
+			"name": "textSystem",
+			"compsToSub": [
+				"transformComponent",
+				"textComponent"
+			]
+		}
+	],
+	"entities": [
+		{
 			"name": "Camera",
 			"components": [
 				{
@@ -80,89 +80,89 @@
 				{
 					"name": "mouseControlComponent",
 					"values": {
-						"xSensitivity": 50, 
-						"ySensitivity": 50 
+						"xSensitivity": 50,
+						"ySensitivity": 50
 					}
 				},
 				{
 					"name": "keyboardControlComponent",
 					"values": {
-						"forward":"W",
-						"back":"S",
-						"left":"A",
-						"right":"D",
-						"up":" ",
-						"down":"340"
+						"forward": "W",
+						"back": "S",
+						"left": "A",
+						"right": "D",
+						"up": " ",
+						"down": "340"
 					}
 				}
 			]
-        },
-        {
-            "name": "TextEntity",
-            "components": [
-                {
-                    "name": "transformComponent",
-                    "values": {
-                        "position": {
-                            "x": -310,
-                            "y": 100,
-                            "z": 0
-                        },
-                        "rotation": {
-                            "w": 0.924,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0.383
-                        },
-                        "scale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                        }
-                    }
-                },
-                {
-                    "name": "textComponent",
-                    "values": {
-                        "text": "${dt}"
-                    }
-                }
-            ]
-        },
-        {
-            "name": "ModelEntity",
-            "components": [
-                {
-                    "name": "transformComponent",
-                    "values": {
-                        "position": {
-                            "x": 0,
-                            "y": 0,
-                            "z": 5
-                        },
-                        "rotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                        },
-                        "scale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                        }
-                    }
-                },
-                {
-                    "name": "animatedModelComponent",
-                    "values": {
-                        "filename": "models/Org/org3.fbx"
-                    }
-                }
-            ]
-        },
+		},
 		{
-			"name": "BarrelEntity",
+			"name": "TextEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": -310,
+							"y": 100,
+							"z": 0
+						},
+						"rotation": {
+							"w": 0.924,
+							"x": 0,
+							"y": 0,
+							"z": 0.383
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "textComponent",
+					"values": {
+						"text": "${dt}"
+					}
+				}
+			]
+		},
+		{
+			"name": "ModelEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 0,
+							"z": 5
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "models/Org/org3.fbx"
+					}
+				}
+			]
+		},
+		{
+			"name": "PhysicsEntity",
 			"components": [
 				{
 					"name": "transformComponent",
@@ -188,21 +188,31 @@
 				{
 					"name": "animatedModelComponent",
 					"values": {
-						"filename": "models/Barrel/barrel.fbx"
+						"filename": "models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mode": "dynamic",
+						"colliderShape": "cube",
+						"halfWidth": 1,
+						"halfHeight": 1,
+						"halfDepth": 1
 					}
 				}
 			]
 		},
 		{
-			"name": "MushroomEntity",
+			"name": "PhysicsPlane",
 			"components": [
 				{
 					"name": "transformComponent",
 					"values": {
 						"position": {
-							"x": 5,
-							"y": 0,
-							"z": 5
+							"x": 0,
+							"y": -2,
+							"z": 0
 						},
 						"rotation": {
 							"w": 1,
@@ -211,19 +221,29 @@
 							"z": 0
 						},
 						"scale": {
-							"x": 1,
-							"y": 1,
-							"z": 1
+							"x": 20,
+							"y": 0.5,
+							"z": 20
 						}
 					}
 				},
 				{
 					"name": "animatedModelComponent",
 					"values": {
-						"filename": "models/Mushroom/mushroom.fbx"
+						"filename": "models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mode": "static",
+						"colliderShape": "cube",
+						"halfWidth": 20,
+						"halfHeight": 0.5,
+						"halfDepth": 20
 					}
 				}
 			]
 		}
-    ]
+	]
 }

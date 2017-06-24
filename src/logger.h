@@ -8,6 +8,8 @@
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include <reactphysics3d.h>
+
 class Logger
 {
     bool endLine;
@@ -38,6 +40,8 @@ public:
 	Logger& operator<<(const glm::quat val);
 	Logger& operator<<(const glm::mat4 val);
 	Logger& operator<<(std::ostream& (*val)(std::ostream &));
+	
+	Logger& operator<<(const rp3d::Vector3 val);
 };
 
 #endif // LOGGER_H_INCLUDED
