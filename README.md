@@ -12,10 +12,10 @@ Was initially intended as a playground to get features I haven't done properly b
 
 | Feature            | Backend            | ECS Interface |
 |--------------------|--------------------|---------------|
-| Skeletal animation | Completed          | Not started   |
-| SDF text rendering | Completed          | Not Started   |
+| Skeletal animation | Completed          | Working   |
+| SDF text rendering | Completed          | Working   |
 | Sound              | Started            | Not Started   |
-| Physics engine     | Looking at engines | Not Started   |
+| Physics engine     | [ReactPhysics3d](http://www.reactphysics3d.com/) | Started   |
 
 ### Models
 Models made using Blender and exported as [`.fbx`](https://en.wikipedia.org/wiki/FBX).

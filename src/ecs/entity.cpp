@@ -37,13 +37,13 @@ void Entity::subscribeToSystems() {
     for(auto &sys : ECSManager::i()->gameSystems) {
         //First unsubscribe from the system
         auto sysPtr = sys.second;
-        sysPtr->unsubscribeEntity(this);
 
         //Then attempt to subscribe.
         //A false return type means that either the entity is already subbed
         //or doesn't meet the requirements. However we can assume since we just
         //unsubbed that its the latter
         if(sysPtr->subscribeEntity(this)) {
+            sysPtr->subscribeCallback(this);
             Logger(1) << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
         }
     }

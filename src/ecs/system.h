@@ -33,6 +33,12 @@ public:
      */
     bool subscribeEntity(Entity* entToSub);
     bool unsubscribeEntity(Entity* entToUnSub);
+    
+    /*
+     * Virtual functions called when entity added to the system.
+     */
+    virtual void subscribeCallback(Entity *entSubbed);
+    virtual void unsubscribeCallback(Entity *entUnsubbed);
 
     /*
      * Helpers to retrieved subscribed entities
