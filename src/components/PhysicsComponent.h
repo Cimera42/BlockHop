@@ -11,6 +11,7 @@
 class PhysicsComponent : public Component
 {
 	rp3d::CollisionShape* collisionShape;
+	rp3d::ProxyShape* collisionShapeInstance;
 	rp3d::BodyType collisionMode;
 
 	static bool exported;
@@ -20,6 +21,8 @@ public:
     void setValues(json inValues);
 	
 	rp3d::CollisionShape *getCollisionShape() const;
+	void setCollisionShapeInstance(rp3d::ProxyShape *collisionShapeInstance);
+	rp3d::ProxyShape *getCollisionShapeInstance() const;
 	rp3d::BodyType getMode() const;
 
 	friend std::ostream &operator<< (std::ostream &os, PhysicsComponent const &c) {

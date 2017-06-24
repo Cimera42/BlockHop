@@ -52,12 +52,22 @@ void PhysicsComponent::setValues(json inValues)
 	}
 }
 
-reactphysics3d::CollisionShape *PhysicsComponent::getCollisionShape() const
+rp3d::CollisionShape *PhysicsComponent::getCollisionShape() const
 {
 	return collisionShape;
 }
 
-reactphysics3d::BodyType PhysicsComponent::getMode() const
+rp3d::ProxyShape *PhysicsComponent::getCollisionShapeInstance() const
+{
+	return collisionShapeInstance;
+}
+
+rp3d::BodyType PhysicsComponent::getMode() const
 {
 	return collisionMode;
+}
+
+void PhysicsComponent::setCollisionShapeInstance(rp3d::ProxyShape *collisionShapeInstance)
+{
+	PhysicsComponent::collisionShapeInstance = collisionShapeInstance;
 }

@@ -12,16 +12,16 @@
 
 class ${NAME} : public Component
 {
-    static bool exported;
+	static bool exported;
 public:
-    ${NAME}();
-    ~${NAME}();
-    void setValues(json inValues);
+	${NAME}();
+	~${NAME}();
+	void setValues(json inValues);
 
-    friend std::ostream &operator<< (std::ostream &os, ${NAME} const &c) {
-        os << "${NAME}";
-        return os;
-    }
+	friend std::ostream &operator<< (std::ostream &os, ${NAME} const &c) {
+		os << "${NAME}";
+		return os;
+	}
 };
 
 #[[#endif]]# //${INCLUDE_GUARD}

@@ -46,12 +46,32 @@ void KeyboardInputSystem::update(double dt)
 			displaced -= glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
 		
 		transform->setPosition(displaced);
+		
+		
+		if(isKeyPressed(GLFW_KEY_R))
+		{
+			std::vector<std::string> comps = {"transformComponent",
+											  "physicsComponent",
+											  "animatedModelComponent"};
+
+			json tj = {{"position",{{"x",2.5},{"y",10},{"z",0}}},
+					   {"rotation",{{"w",1},{"x",0},{"y",0},{"z",0}}},
+					   {"scale",{{"x",1},{"y",1},{"z",1}}}};
+			json pj = {{"mode","dynamic"},
+					   {"colliderShape","cube"},
+					   {"halfWidth",1},
+					   {"halfHeight",1},
+					   {"halfDepth",1}};;
+			json aj = {{"filename","models/ColourfulCube/framedCube.fbx"}};
+			std::vector<json> compData = {tj,pj,aj};
+			ECSManager::i()->createEntity("projectile", comps, compData);			
+		}
     }
 }
 
 bool KeyboardInputSystem::isKeyPressed(int keyCode)
 {
-	std::map<int, int>::iterator fi = keyList.find(keyCode);
+	auto fi = keyList.find(keyCode);
 	if(fi != keyList.end())
 	{
 		if(fi->second == GLFW_PRESS || fi->second == GLFW_REPEAT)

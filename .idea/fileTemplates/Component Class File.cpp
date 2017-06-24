@@ -13,6 +13,6 @@ ${NAME}::~${NAME}() {}
 
 void ${NAME}::setValues(json inValues) 
 {
-    //Will throw if incorrect/should automatically be caught by ECSManager
+	//Will throw if incorrect/should automatically be caught by ECSManager
 
 }

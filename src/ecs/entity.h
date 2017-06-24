@@ -36,7 +36,7 @@ public:
     std::vector<std::string> getComponents() const;
     template <typename T>
     T* getComponent(std::string compName) {
-        std::vector<Component*>::iterator it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
+        auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
             return (o->getName() == compName);
         });
 

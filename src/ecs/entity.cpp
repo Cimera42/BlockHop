@@ -14,7 +14,7 @@ void Entity::addComponent(Component* comp) {
 }
 
 void Entity::removeComponent(std::string compName) {
-    std::vector<Component*>::iterator it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
+    auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
         return (o->getName() == compName);
     });
 

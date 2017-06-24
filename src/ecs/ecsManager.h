@@ -30,7 +30,7 @@ public:
      */
 	template <typename T>
 	T* findSystem(std::string name) {
-		std::vector<std::pair<std::string, System*> >::iterator it =
+		auto it =
 				std::find_if(gameSystems.begin(), gameSystems.end(), [&name](std::pair<std::string, System*> o) {
 					return (o.first == name);
 				});

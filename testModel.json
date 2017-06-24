@@ -15,6 +15,11 @@
 			]
 		},
 		{
+			"name": "mouseButtonSystem",
+			"compsToSub": [
+			]
+		},
+		{
 			"name": "physicsSystem",
 			"compsToSub": [
 				"transformComponent",
@@ -230,13 +235,13 @@
 				{
 					"name": "animatedModelComponent",
 					"values": {
-						"filename": "models/ColourfulCube/colourfulCube.fbx"
+						"filename": "models/ColourfulCube/framedCube.fbx"
 					}
 				},
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "static",
+						"mode": "kinematic",
 						"colliderShape": "cube",
 						"halfWidth": 20,
 						"halfHeight": 0.5,
