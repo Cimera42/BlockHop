@@ -10,6 +10,7 @@
 #include <json.hpp>
 #include "assetLoader.h"
 #include "imageLoader.h"
+#include "modelLoader.h"
 #include "../logger.h"
 using json = nlohmann::json;
 

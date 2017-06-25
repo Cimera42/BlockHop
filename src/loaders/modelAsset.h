@@ -12,7 +12,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <assimp/scene.h>
 #include <assimp/anim.h>
-#include "../loaders/imageAsset.h"
+#include "imageAsset.h"
 
 class Mesh;
 class BoneMesh;
@@ -88,7 +88,7 @@ struct Material
 };
 
 struct BoneMesh;
-class ModelAsset
+class ModelAsset : public BaseAsset
 {
 
 public:
@@ -99,7 +99,6 @@ public:
 	NodePart* nodeLoop(aiNode *assimpNode, int indent, NodePart *parent);
 	Animation* FindAnim(std::string findThis);
 
-	std::string filename;
 	std::string rootNodeName;
 	std::vector<Material> materials;
 	GLuint texture;

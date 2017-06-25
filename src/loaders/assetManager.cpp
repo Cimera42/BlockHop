@@ -11,6 +11,7 @@ AssetManager::AssetManager() {
 
     //TODO possibly replace this with non-hard? Is it worth it?
     exportedLoaders.insert(std::pair<std::string, AssetLoader*>("image", new ImageLoader()));
+    exportedLoaders.insert(std::pair<std::string, AssetLoader*>("model", new ModelLoader()));
 
     std::string config = "./conf/assetLoader.conf";
     std::ifstream i(config);
@@ -51,6 +52,8 @@ AssetManager::AssetManager() {
 
     i.close();
 }
+
+AssetManager::~AssetManager() {}
 
 BaseAsset* AssetManager::loadSync(std::string filename) {
     //Determine file extension

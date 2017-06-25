@@ -6,7 +6,7 @@
 #include <assimp/postprocess.h>
 #include "AnimatedModelComponent.h"
 #include "../ecs/ecsManager.h"
-#include "../assetClasses/modelAsset.h"
+#include "../loaders/modelAsset.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>

@@ -9,7 +9,7 @@
 #include "../loaders/imageAsset.h"
 #include "../mesh.h"
 #include "../boneMesh.h"
-#include "../assetClasses/modelAsset.h"
+#include "../loaders/modelAsset.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <assimp/scene.h>
