@@ -82,7 +82,7 @@ AnimationNode::AnimationNode(aiNodeAnim* animNode, aiNode* node)
 
 aiNodeAnim* Animation::FindAnimNode(std::string findThis)
 {
-	std::map<std::string, aiNodeAnim*>::iterator t = animNodes.find(findThis);
+	auto t = animNodes.find(findThis);
 	if(t != animNodes.end())
 		return t->second;
 	return nullptr;
@@ -331,13 +331,13 @@ NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
 	scale = glm::vec3(s.x, s.y, s.z);
 	nodePart->defaultTransform = glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
 
-	std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="    ";} return c;}();
+	/*std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="    ";} return c;}();
 	Logger(1) << indentS << "Node: \"" << nodePart->name << "\"";
 	Logger(1) << indentS << "    Position: " << position;
 	Logger(1) << indentS << "    Rotation: " << rotation;
 	Logger(1) << indentS << "    RotationA: " << glm::axis(rotation);
 	Logger(1) << indentS << "    RotationE: " << glm::eulerAngles(rotation);
-	Logger(1) << indentS << "    Scale: " << scale;
+	Logger(1) << indentS << "    Scale: " << scale;*/
 
 	nodeParts[nodePart->name] = nodePart;
 
@@ -359,7 +359,7 @@ NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
 
 Animation* ModelAsset::FindAnim(std::string findThis)
 {
-	std::map<std::string, Animation*>::iterator t = animations.find(findThis);
+	auto t = animations.find(findThis);
 	if(t != animations.end())
 		return t->second;
 	return nullptr;

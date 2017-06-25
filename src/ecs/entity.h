@@ -46,6 +46,7 @@ public:
     }
 private:
     void subscribeToSystems();
+    void unsubscribeFromSystems();
     std::vector<Component*> subbedComponents;
 
     std::string name;

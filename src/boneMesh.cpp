@@ -116,7 +116,7 @@ void BoneMesh::load(aiMesh *assimpMesh)
         bone->id = i;
         bone->name = assimpBone->mName.C_Str();
         bone->offsetMatrix = AToGMat(assimpBone->mOffsetMatrix);
-        glm::vec3 scaleb;
+        /*glm::vec3 scaleb;
         glm::quat rotationb;
         glm::vec3 positionb;
         glm::vec3 skewb;
@@ -125,10 +125,10 @@ void BoneMesh::load(aiMesh *assimpMesh)
         Logger(1) << "Bone: " << bone->name << " - Mesh: " << this->name;
         Logger(1) << "    Position: " << positionb;
         Logger(1) << "    Rotation: " << rotationb;
-        Logger(1) << "    Scale: " << scaleb;
+        Logger(1) << "    Scale: " << scaleb;*/
         bones.push_back(bone);
 
-		Logger(1) << "Bone " << bone->id << ": \"" << assimpBone->mName.C_Str() << "\"";
+		//Logger(1) << "Bone " << bone->id << ": \"" << assimpBone->mName.C_Str() << "\"";
         for(unsigned int j = 0; j < assimpBone->mNumWeights; j++)
         {
             aiVertexWeight assimpWeight = assimpBone->mWeights[j];

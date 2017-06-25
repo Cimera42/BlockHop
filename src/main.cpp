@@ -15,42 +15,6 @@ void windowCloseEvent(GLFWwindow *closingWindow)
 
 int main()
 {
-	/*glm::mat4 a = glm::mat4(0.0f,0.0f,-1.0f,0.0f,
-							0.0f,1.0f,0.0f,0.0f,
-							1.0f,0.0f,0.0f,0.0f,
-							0.0f,0.0f,0.0f,1.0f);
-
-	glm::vec3 scale;
-	glm::quat rotation;
-	glm::vec3 position;
-	glm::vec3 skew;
-	glm::vec4 perspective;
-	glm::decompose(a, scale, rotation, position, skew, perspective);
-	Logger(1) << "Bone 1: ";
-	Logger(1) << "  Matrix: " << a;
-	Logger(1) << "  Position: " << position;
-	Logger(1) << "  Rotation: " << rotation;
-	Logger(1) << "  Scale: " << scale;
-
-	glm::vec3 scale2;
-	glm::quat rotation2;
-	glm::vec3 position2;
-	glm::vec3 skew2;
-	glm::vec4 perspective2;
-
-	glm::mat4 b = glm::mat4(0.0f,1.0f,0.0f,0.0f,
-							0.0f,0.0f,1.0f,0.0f,
-							1.0f,0.0f,0.0f,0.0f,
-							-1.0f,1.0f,0.0f,1.0f);
-	
-	glm::decompose(b, scale2, rotation2, position2, skew2, perspective2);
-	Logger(1) << "Bone 2: ";
-	Logger(1) << "  Matrix: " << b;
-	Logger(1) << "  Position: " << position2;
-	Logger(1) << "  Rotation: " << rotation2;
-	Logger(1) << "  Scale: " << scale2;
-
-	return 0;*/
 	Logger(1) << "First Line of Program";
 	initGLFW();
 
@@ -59,7 +23,7 @@ int main()
 
 	initGLEW();
 
-	glfwSetWindowCloseCallback(window->glfwWindow, windowCloseEvent);
+	glfwSetWindowCloseCallback(window->glfwWindow, windowCloseEvent);	
 
 	//Load scene from file
 	ECSLoader loader = ECSLoader();
