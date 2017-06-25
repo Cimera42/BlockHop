@@ -23,7 +23,7 @@ AnimatedModelSystem::AnimatedModelSystem()
 	genericShader->addLoc("projMat");
 	genericShader->addLoc("textureSampler");
 
-	boneShader = new Shader("shaders/bone3d/boneVert.vert", "shaders/bone3d/boneFrag.frag",
+	boneShader = new Shader("shaders/bone3d/boneVert.vert", "shaders/basic3d/3dfrag.frag",
 									"shaders/flat.geom");
 	boneShader->addLoc("modelMat");
 	boneShader->addLoc("viewMat");
@@ -37,7 +37,7 @@ AnimatedModelSystem::~AnimatedModelSystem()
 	delete boneShader;
 }
 
-void AnimatedModelSystem::update(double dt) 
+void AnimatedModelSystem::update(double dt)
 {
 	Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
 	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>("cameraComponent");

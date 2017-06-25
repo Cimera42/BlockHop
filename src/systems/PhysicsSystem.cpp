@@ -78,7 +78,12 @@ void PhysicsSystem::update(double dt)
 	accumulator += dt;
 
 	MouseButtonSystem* mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>("mouseButtonSystem");
+	int b = 0;
 	if(mouseButtonSystem->isButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+		b = 1;
+	else if(mouseButtonSystem->isButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
+		b = -1;
+	if(b != 0)
 	{
 		Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
 		TransformComponent* cameraTransform = cameraEntity->getComponent<TransformComponent>("transformComponent");
@@ -90,7 +95,7 @@ void PhysicsSystem::update(double dt)
 		rp3d::Vector3 end = start + rp3d::Vector3(mDirection.x,mDirection.y,mDirection.z);
 		rp3d::Ray ray(start,end);
 		
-		MyCallbackClass callback(direction);
+		MyCallbackClass callback(direction*((float)b));
 		dynamicsWorld->raycast(ray, &callback);
 	}
 	
