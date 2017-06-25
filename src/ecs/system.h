@@ -26,6 +26,16 @@ public:
     template<typename T>
         static System* create() {return new T; };
     void setRequiredComponents(std::vector<std::string> inComps);
+    
+    /*
+     * Check if entity has all required components
+     */
+    bool hasRequired(Entity *ent);
+	
+	/*
+	 * Check if an entity is subscribed to the system
+	 */
+	bool hasEntity(Entity *entToCheck);
 
     /*
      * Functions for adding/removing entities from the system.

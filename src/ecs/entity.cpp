@@ -20,8 +20,8 @@ void Entity::removeComponent(std::string compName) {
 
     if (it != subbedComponents.end())
         subbedComponents.erase(it);
-    //After updating our subscribed components, redo system subscription
-    subscribeToSystems();
+    //After updating our subscribed components, do system unsubscription
+    unsubscribeFromSystems();
 }
 
 std::vector<std::string> Entity::getComponents() const {
@@ -35,18 +35,33 @@ std::vector<std::string> Entity::getComponents() const {
 void Entity::subscribeToSystems() {
     //Move through each system
     for(auto &sys : ECSManager::i()->gameSystems) {
-        //First unsubscribe from the system
         auto sysPtr = sys.second;
 
-        //Then attempt to subscribe.
+        //Attempt to subscribe.
         //A false return type means that either the entity is already subbed
-        //or doesn't meet the requirements. However we can assume since we just
-        //unsubbed that its the latter
+        //or doesn't meet the requirements
         if(sysPtr->subscribeEntity(this)) {
             sysPtr->subscribeCallback(this);
             Logger(1) << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
         }
     }
+}
+
+void Entity::unsubscribeFromSystems() {
+	//Move through each system
+	for(auto &sys : ECSManager::i()->gameSystems) {
+		auto sysPtr = sys.second;
+
+		if(sysPtr->hasEntity(this) && !sysPtr->hasRequired(this))
+		{
+			//Attempt to unsubscribe.
+			//A false return type means that the entity is not subbed
+			if(sysPtr->unsubscribeEntity(this)) {
+				sysPtr->unsubscribeCallback(this);
+				Logger(1) << "Entity \"" << this->getName() << "\" successfully unsubscribed from "<<sys.first;
+			}
+		}
+	}
 }
 
 std::string Entity::getName() const
