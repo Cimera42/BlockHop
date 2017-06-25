@@ -29,9 +29,9 @@ bool System::hasEntity(Entity* entToCheck)
 bool System::subscribeEntity(Entity* entToSub) {
     //Check if in subbedEntities
     if(!hasEntity(entToSub)) {
-		bool hasRequired = hasRequired(entToSub);
+		bool hasReq = hasRequired(entToSub);
         // All components exist within this system, subscribe!
-        if(hasRequired) {
+        if(hasReq) {
             subbedEntities.push_back(entToSub);
             return true;
         }
