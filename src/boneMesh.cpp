@@ -112,7 +112,7 @@ void BoneMesh::load(aiMesh *assimpMesh)
     {
         aiBone* assimpBone = assimpMesh->mBones[i];
 
-        Logger(1) << assimpBone->mName.C_Str();
+        //Logger(1) << assimpBone->mName.C_Str();
         Bone* bone = new Bone();
         bone->id = i;
         bone->name = assimpBone->mName.C_Str();
@@ -142,7 +142,6 @@ void BoneMesh::load(aiMesh *assimpMesh)
                 {
                     vert.BoneIds[k] = i;
                     vert.BoneWeights[k] = assimpWeight.mWeight;
-					Logger(1) << "        " << vert.BoneIds[k] << ", " << vert.BoneWeights[k];
                     break;
                 }
             }
