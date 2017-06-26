@@ -7,17 +7,16 @@
 
 class ImageAsset : public BaseAsset
 {
-    public:
-        ImageAsset(std::string filename);
-        ~ImageAsset();
-
-        //bool loaded;
-        int width;
-        int height;
-        int comp;
-        unsigned char* imageData;
-
-        void load();
+    friend class ImageLoader;
+    bool load();
+    ImageAsset(std::string filename);
+    ~ImageAsset();
+public:
+    //bool loaded;
+    int width;
+    int height;
+    int comp;
+    unsigned char* imageData;
 };
 
 #endif // TEXTURE_H_INCLUDED

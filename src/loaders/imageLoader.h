@@ -19,8 +19,6 @@ public:
     }
     ~ImageLoader();
 
-    /*TODO default image for asynch loading*/
-
     BaseAsset* loadAsset(std::string filename);
 
     /*

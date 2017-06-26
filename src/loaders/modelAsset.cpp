@@ -192,7 +192,7 @@ ModelAsset::~ModelAsset()
 		bM.second->destruct();
 }
 
-void ModelAsset::load()
+bool ModelAsset::load()
 {
 	Assimp::Importer importer;
 	Logger(1) << "Loading model: " << filename;
@@ -210,7 +210,7 @@ void ModelAsset::load()
 	{
 		Logger(1) << importer.GetErrorString();
 		Logger(1) << "Could not load Mesh. Error importing";
-		return;
+		return false;
 	}
 
 	Logger(1) << "Animations: " << scene->mNumAnimations;
@@ -290,6 +290,7 @@ void ModelAsset::load()
 			normalMeshes[i] = new Mesh(meshName, assimpMesh);
 		}
 	}
+	return true;
 }
 
 NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)

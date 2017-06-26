@@ -40,10 +40,6 @@ public:
 	}
     Entity* findEntity(std::string name);
 
-    //Is there a point to this when we could just call addComponent on the entity itself
-    //static void addComponentToEntity(Entity* ent, std::string comp);
-    //static void removeComponentFromEntity(Entity* ent, std::string comp);
-
     /*
      * Functions for the generation of game elements
      */
@@ -70,7 +66,6 @@ public:
     /*
      * ECS data accessible to public
      * TODO Add getters/settings and force this to be private
-     * TODO Add vector/another way to maintain order of systems for use in updating
      */
     std::map<std::string, Entity*> gameEntities;
     //std::map<std::string, System*> gameSystems;

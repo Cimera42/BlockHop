@@ -12,7 +12,7 @@ ImageAsset::~ImageAsset()
     stbi_image_free(imageData);
 }
 
-void ImageAsset::load()
+bool ImageAsset::load()
 {
     stbi_set_flip_vertically_on_load(true);
     int tempWidth, tempHeight, tempComp;
@@ -25,6 +25,7 @@ void ImageAsset::load()
     if(!imageData)
     {
         Logger(1) << "Could not load image: " << filename << " - " << stbi_failure_reason();
-        //TODO Destroy this asset? or at least invalidate somehow
+        return false;
     }
+    return true;
 }

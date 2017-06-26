@@ -7,7 +7,9 @@
 
 AssetManager *AssetManager::c_instance = 0;
 
-AssetManager::AssetManager() {
+AssetManager::AssetManager() {}
+
+void AssetManager::readConfig(){
 
     //TODO possibly replace this with non-hard? Is it worth it?
     exportedLoaders.insert(std::pair<std::string, AssetLoader*>("image", new ImageLoader()));
@@ -28,17 +30,19 @@ AssetManager::AssetManager() {
         //Use json file to prime the asset loader
         for(json loaderType : j) {
             std::string type = loaderType["loaderType"];
+            auto it = exportedLoaders.find(type);
             for(json extension : loaderType["extensions"]) {
                 std::string ext = extension.get<std::string>();
-                auto it = exportedLoaders.find(type);
                 if(it == exportedLoaders.end()) {
                     Logger(1) << "Loader for '" << ext
                               << "' doesn't exist. Assets of this type will not work correctly"<<std::endl;
                 }
                 else {
                     extLoaders.insert(std::pair<std::string, AssetLoader*>(ext, it->second));
-                    //TODO load the default item synchronously
                 }
+            }
+            if(it != exportedLoaders.end()) {
+                it->second->defaultAsset = loadSync(loaderType["default"]["filename"]);
             }
         }
     }catch (std::invalid_argument invalidArgument) {
@@ -53,7 +57,11 @@ AssetManager::AssetManager() {
     i.close();
 }
 
-AssetManager::~AssetManager() {}
+AssetManager::~AssetManager() {
+    for (auto it : exportedLoaders) {
+        delete it.second;
+    }
+}
 
 BaseAsset* AssetManager::loadSync(std::string filename) {
     //Determine file extension

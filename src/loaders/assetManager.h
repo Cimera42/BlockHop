@@ -38,6 +38,8 @@ public:
     AssetManager();
     ~AssetManager();
 
+    void readConfig();
+
     /*
      * Singleton pattern. Must use i()-> to access any class methods.
      */
@@ -55,7 +57,9 @@ public:
      * it will conduct a load synchronously.
      */
     BaseAsset* loadSync(std::string filename); //Loads from file
-    //loadAsync();
+
+    //TODO: Asynchronous loading with multithreading - still to determine behaviour :)
+    //BaseAsset* loadAsync(std::string filename);
 
     /*
      * Used to retrieve a specific loader (eg. ImageLoader) in order to provide

@@ -8,12 +8,13 @@
 #include <string>
 
 class BaseAsset {
+    friend class AssetLoader;
+    virtual bool load();
 protected:
     std::string filename = "";
 public:
     BaseAsset(std::string filename);
     virtual ~BaseAsset();
-    virtual void load();
     std::string getName();
 };
 

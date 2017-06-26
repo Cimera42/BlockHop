@@ -8,7 +8,6 @@
 #include "../logger.h"
 
 ImageLoader::~ImageLoader() {
-    //TODO: Free all textures and images
     //Delete textures
     for(auto tex : textureList) {
         glDeleteTextures(1, &tex.second);
@@ -22,8 +21,6 @@ BaseAsset* ImageLoader::loadAsset(std::string filename) {
 }
 
 GLuint ImageLoader::loadTexture(std::vector<std::string> names) {
-    //TODO think about sync/asynch behaviour
-    //TODO: Review if the input to this should just be a set not a vector?
     std::set<std::string> filenameSet(names.begin(), names.end());
 
     //Attempt to find all strings inside OpenGL textureList
@@ -35,7 +32,8 @@ GLuint ImageLoader::loadTexture(std::vector<std::string> names) {
         //For each of our file names check if we have all files loaded
         std::vector<ImageAsset*> images;
         for(std::string filename : names){
-            //TODO find in map and if not found, load - load synch? async? how to reset?
+            //Find in map and if not found, load - load sync
+            //(basically ensure preloaded to avoid this!)
             ImageAsset* img = static_cast<ImageAsset*>(findAsset(filename));
             if(img == nullptr) {
                 img = static_cast<ImageAsset*>(loadAsset(filename));

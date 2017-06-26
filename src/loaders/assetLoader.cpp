@@ -10,8 +10,10 @@
 
 AssetLoader::AssetLoader() {}
 AssetLoader::~AssetLoader() {
-    //TODO Wait for everything in load to finalise and then remove
-    //while not in load..
+    //Wait for everything in load to finalise and then remove
+    while(inLoad.begin() != inLoad.end()) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10)); //Sleep and recheck load
+    }
 
     for(auto img : fileList) {
         delete img.second;
@@ -19,12 +21,19 @@ AssetLoader::~AssetLoader() {
     fileList.clear();
 }
 
+BaseAsset* AssetLoader::getDefaultAsset() const {
+    return defaultAsset;
+}
+
 BaseAsset* AssetLoader::loadAsset(std::string filename, BaseAsset* newAsset){
     //Add to the fact we're loading
     inLoad.push_back(filename);
     //Do actual loading
-    //BaseAsset* asset = new BaseAsset(filename);
-    newAsset->load();
+    if(!newAsset->load()) {
+        //Delete the new asset and add the default for this
+        delete newAsset;
+        newAsset = defaultAsset;
+    }
     //Once loading is complete add to final and remove from loading
     fileList.insert(std::pair<std::string, BaseAsset*>(filename, newAsset));
     auto it = std::find(inLoad.begin(), inLoad.end(), filename);
@@ -54,7 +63,7 @@ bool AssetLoader::assetExists(std::string filename) {
 }
 
 BaseAsset* AssetLoader::findAsset(std::string filename) {
-    //TODO: Possibly redo to do while at top - depends on most used use case
+    //NOTE: Could be optimised further when needed!
     //If asset is already loaded return
     auto it = fileList.find(filename);
     if (it != fileList.end()) {
