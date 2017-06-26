@@ -114,7 +114,7 @@ void AnimatedModelComponent::transformNodes(float dt)
 
 NodeChanging* AnimatedModelComponent::FindChangingNode(std::string findThis)
 {
-	std::map<std::string, NodeChanging*>::iterator t = changingNodes.find(findThis);
+	auto t = changingNodes.find(findThis);
 	if(t != changingNodes.end())
 		return t->second;
 	return nullptr;
@@ -122,7 +122,7 @@ NodeChanging* AnimatedModelComponent::FindChangingNode(std::string findThis)
 
 BoneMeshChanging* AnimatedModelComponent::FindChangingBoneMesh(std::string findThis)
 {
-	std::map<std::string, BoneMeshChanging*>::iterator t = changingBoneMeshes.find(findThis);
+	auto t = changingBoneMeshes.find(findThis);
 	if(t != changingBoneMeshes.end())
 		return t->second;
 	return nullptr;
@@ -166,7 +166,7 @@ void BoneMeshChanging::transformBones(glm::mat4 inverseMesh, std::map<std::strin
 
 NodeChanging *BoneMeshChanging::FindChangingNode(std::map<std::string, NodeChanging*> chNodes, std::string findThis)
 {
-	std::map<std::string, NodeChanging*>::iterator t = chNodes.find(findThis);
+	auto t = chNodes.find(findThis);
 	if(t != chNodes.end())
 		return t->second;
 	return nullptr;

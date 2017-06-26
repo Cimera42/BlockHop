@@ -14,15 +14,15 @@ void windowCloseEvent(GLFWwindow *closingWindow)
 
 int main()
 {
-    Logger(1) << "First Line of Program";
-    initGLFW();
-	
-    window = new Window("Template", 640, 480);
+	Logger(1) << "First Line of Program";
+	initGLFW();
+
+	window = new Window("Template", 640, 480);
 	window->cursorMode(GLFW_CURSOR_DISABLED);
 
     initGLEW();
 
-    glfwSetWindowCloseCallback(window->glfwWindow, windowCloseEvent);
+	glfwSetWindowCloseCallback(window->glfwWindow, windowCloseEvent);
 
     //Load scene from file
     ECSLoader ecsLoader = ECSLoader();

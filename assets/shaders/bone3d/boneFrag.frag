@@ -18,7 +18,7 @@ void main()
     vec3 colour = texture(textureSampler, vec3(gUV, gMaterialIndex)).rgb;
     colour *= intensity;
 
-    outColour = vec4(gColour,1);
+    outColour = vec4(colour,1);
     outNormal = vec4(gNorm,1);
     outPosition = vec4(gPos,1);
 }
