@@ -62,7 +62,7 @@ void KeyboardInputSystem::update(double dt)
 					   {"halfWidth",1},
 					   {"halfHeight",1},
 					   {"halfDepth",1}};;
-			json aj = {{"filename","models/ColourfulCube/framedCube.fbx"}};
+			json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
 			std::vector<json> compData = {tj,pj,aj};
 			ECSManager::i()->createEntity("projectile", comps, compData);			
 		}

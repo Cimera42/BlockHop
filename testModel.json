@@ -241,7 +241,7 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "kinematic",
+						"mode": "static",
 						"colliderShape": "cube",
 						"halfWidth": 20,
 						"halfHeight": 0.5,
