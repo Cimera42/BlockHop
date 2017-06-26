@@ -5,20 +5,24 @@
 #include "TextComponent.h"
 #include "../ecs/ecsManager.h"
 #include "../openGLFunctions.h"
+#include "../loaders/assetManager.h"
 #include <fstream>
 
 COMPONENT_EXPORT(TextComponent, "textComponent")
 
 Font::Font()
 {
-    std::ifstream i("./textures/OpenSans-Regular.json");
+    std::ifstream i("./assets/textures/OpenSans-Regular.json");
     i >> metrics;
-    texture = new Texture("./textures/text.png");
+
+    image = static_cast<ImageAsset*>(AssetManager::i()->loadSync("./assets/textures/text.png"));
+    ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
+    texture = imgLoader->loadTexture(image->getName());
 }
 
 Font::~Font()
 {
-    delete texture;
+    //delete texture;
 }
 
 TextComponent::TextComponent()
@@ -108,8 +112,8 @@ void TextComponent::add(std::string inText)
 
             int horiBearingX = metric[2];
             int horiBearingY = metric[3];
-            float w = font->texture->widths[0];
-            float h = font->texture->heights[0];
+            float w = font->image->width;
+            float h = font->image->height;
             float posX = metric[5] / w;
             float posY = metric[6] / h;
 

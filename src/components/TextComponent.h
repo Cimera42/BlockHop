@@ -8,7 +8,7 @@
 #include <array>
 #include <map>
 #include <json.hpp>
-#include "../texture.h"
+#include "../loaders/imageAsset.h"
 #include "../shader.h"
 #include "../ecs/component.h"
 #include <glm/glm.hpp>
@@ -21,7 +21,8 @@ public:
     Font();
     ~Font();
 
-    Texture* texture;
+    ImageAsset* image;
+    GLuint texture;
     int spacing = 3;
     json metrics;
 };

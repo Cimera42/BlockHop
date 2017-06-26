@@ -17,20 +17,21 @@ SYSTEM_EXPORT(AnimatedModelSystem, "animatedModelSystem")
 
 AnimatedModelSystem::AnimatedModelSystem()
 {
-	genericShader = new Shader("shaders/basic3d/3dvert.vert", "shaders/basic3d/3dfrag.frag");
+	genericShader = new Shader("./assets/shaders/basic3d/3dvert.vert", "./assets/shaders/basic3d/3dfrag.frag");
 	genericShader->addLoc("modelMat");
 	genericShader->addLoc("viewMat");
 	genericShader->addLoc("projMat");
 	genericShader->addLoc("textureSampler");
 
-	boneShader = new Shader("shaders/bone3d/boneVert.vert", "shaders/bone3d/boneFrag.frag",
-									"shaders/flat.geom");
+	boneShader = new Shader("./assets/shaders/bone3d/boneVert.vert", "./assets/shaders/bone3d/boneFrag.frag",
+									"./assets/shaders/flat.geom");
 	boneShader->addLoc("modelMat");
 	boneShader->addLoc("viewMat");
 	boneShader->addLoc("projMat");
 	boneShader->addLoc("textureSampler");
 	boneShader->addLoc("boneMats");
 }
+
 AnimatedModelSystem::~AnimatedModelSystem()
 {
 	delete genericShader;
@@ -94,7 +95,7 @@ void AnimatedModelSystem::update(double dt)
 			glUniformMatrix4fv(shader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
 
 			glSetActiveTexture(GL_TEXTURE0);
-			glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->modelAsset->texture->textureID);
+			glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->modelAsset->texture);
 			glUniform1i(shader->getLoc("textureSampler"), 0);
 
 			if(isBoned)

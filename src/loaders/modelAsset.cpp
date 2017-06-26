@@ -10,7 +10,7 @@
 #include <glm/gtx/transform.hpp>
 #include "../mesh.h"
 #include "../boneMesh.h"
-#include "../texture.h"
+#include "assetManager.h"
 
 AnimationNode::AnimationNode()
 {
@@ -182,10 +182,7 @@ glm::vec3 NodePart::InterpolateScaling(float time, Animation* animation)
 	return glm::mix(nodeScaling, nextNodeScaling, between);
 }
 
-ModelAsset::ModelAsset(std::string inFilename)
-{
-	filename = inFilename;
-}
+ModelAsset::ModelAsset(std::string inFilename) : BaseAsset(inFilename) {}
 
 ModelAsset::~ModelAsset()
 {
@@ -195,7 +192,7 @@ ModelAsset::~ModelAsset()
 		bM.second->destruct();
 }
 
-void ModelAsset::load()
+bool ModelAsset::load()
 {
 	Assimp::Importer importer;
 	Logger(1) << "Loading model: " << filename;
@@ -213,7 +210,7 @@ void ModelAsset::load()
 	{
 		Logger(1) << importer.GetErrorString();
 		Logger(1) << "Could not load Mesh. Error importing";
-		return;
+		return false;
 	}
 
 	Logger(1) << "Animations: " << scene->mNumAnimations;
@@ -251,29 +248,30 @@ void ModelAsset::load()
 		aiString texPath;
 		if(assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
 		{
-			material.texturePath = std::string(texPath.C_Str());
+            std::string backslashFixed = texPath.C_Str();
+            std::replace(backslashFixed.begin(), backslashFixed.end(), '\\', '/');
+
+			//Convert to correct folder
+			std::string baseFolder = std::string(filename);
+			baseFolder = baseFolder.substr(0, baseFolder.find_last_of("/"));
+            //Load image
+			material.image = static_cast<ImageAsset*>(AssetManager::i()->loadSync(std::string(baseFolder +"/"+ backslashFixed)));
 		}
 
 		materials.push_back(material);
 	}
 
+    //Collate images for texture
 	std::vector<std::string> texPaths;
 	for(unsigned int i = 0; i < materials.size(); i++)
 	{
-		if(materials[i].texturePath.find_first_not_of(' ') != std::string::npos)
-		{
-			std::string backslashFixed = materials[i].texturePath;
-			std::replace(backslashFixed.begin(), backslashFixed.end(), '\\', '/');
-
-			std::string baseFolder = std::string(filename);
-			baseFolder = baseFolder.substr(0, baseFolder.find_last_of("/"));
-
-			texPaths.push_back((baseFolder +"/"+ backslashFixed).c_str());
-		}
+        texPaths.push_back(materials[i].image->getName());
 	}
-	if(texPaths.size() > 0)
+
+	if(materials.size() > 0)
 	{
-		texture = new Texture(texPaths, true);
+        ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
+        texture = imgLoader->loadTexture(texPaths);
 	}
 
 	rootNodeName = scene->mRootNode->mName.C_Str();
@@ -292,6 +290,7 @@ void ModelAsset::load()
 			normalMeshes[i] = new Mesh(meshName, assimpMesh);
 		}
 	}
+	return true;
 }
 
 NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
