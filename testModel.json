@@ -161,7 +161,7 @@
 				{
 					"name": "animatedModelComponent",
 					"values": {
-						"filename": "models/Org/org3.fbx"
+						"filename": "./assets/models/Org/org3.fbx"
 					}
 				}
 			]
@@ -193,7 +193,7 @@
 				{
 					"name": "animatedModelComponent",
 					"values": {
-						"filename": "models/ColourfulCube/colourfulCube.fbx"
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
 					}
 				},
 				{
@@ -235,7 +235,7 @@
 				{
 					"name": "animatedModelComponent",
 					"values": {
-						"filename": "models/ColourfulCube/framedCube.fbx"
+						"filename": "./assets/models/ColourfulCube/framedCube.fbx"
 					}
 				},
 				{
