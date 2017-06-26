@@ -73,12 +73,12 @@ BaseAsset* AssetManager::loadSync(std::string filename) {
 
     //Load using loader
     if(extLoader != extLoaders.end()) {
-        if(!extLoader->second->assetExists(filename)) {
+        //Attempt to find and return, else load it
+        BaseAsset* asset = extLoader->second->findAsset(filename);
+        if(asset == nullptr) {
             return extLoader->second->loadAsset(filename);
-        } else {
-            //Else we wait for it to be loaded and then return
-            return extLoader->second->findAsset(filename);
         }
+        return asset;
     } else {
         Logger(1)<<"Could not find a loader for the file '"<<filename<<"'."<<std::endl;
     }

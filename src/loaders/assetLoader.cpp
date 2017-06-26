@@ -63,22 +63,15 @@ bool AssetLoader::assetExists(std::string filename) {
 }
 
 BaseAsset* AssetLoader::findAsset(std::string filename) {
-    //NOTE: Could be optimised further when needed!
-    //If asset is already loaded return
+    //If in loading, wait until loaded
+    while(std::find(inLoad.begin(), inLoad.end(), filename) != inLoad.end()) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10)); //Sleep and recheck load
+    }
+    //If asset is now loaded, return
     auto it = fileList.find(filename);
     if (it != fileList.end()) {
         return it->second;
-    } else {
-        //Either loading or not at all
-        //Wait until loaded
-        while(std::find(inLoad.begin(), inLoad.end(), filename) != inLoad.end()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(10)); //Sleep and recheck load
-        }
-        //Either loaded or not at all
-        auto assetIt = fileList.find(filename);
-        if(assetIt != fileList.end()) {
-            return assetIt->second;
-        }
     }
+    //Else doesnt exist
     return nullptr;
 }
