@@ -112,6 +112,7 @@ void BoneMesh::load(aiMesh *assimpMesh)
     {
         aiBone* assimpBone = assimpMesh->mBones[i];
 
+        //Logger(1) << assimpBone->mName.C_Str();
         Bone* bone = new Bone();
         bone->id = i;
         bone->name = assimpBone->mName.C_Str();

@@ -12,8 +12,8 @@
 #include <glm/gtc/quaternion.hpp>
 #include <assimp/scene.h>
 #include <assimp/anim.h>
+#include "imageAsset.h"
 
-class Texture;
 class Mesh;
 class BoneMesh;
 
@@ -84,25 +84,23 @@ struct MeshPart
 
 struct Material
 {
-	std::string texturePath;
+	ImageAsset* image;
 };
 
 struct BoneMesh;
-class ModelAsset
+class ModelAsset : public BaseAsset
 {
-
+    friend class ModelLoader;
+	bool load();
+    ModelAsset(std::string inFilename);
+    ~ModelAsset();
 public:
-	ModelAsset(std::string inFilename);
-	~ModelAsset();
-	
-	void load();
 	NodePart* nodeLoop(aiNode *assimpNode, int indent, NodePart *parent);
 	Animation* FindAnim(std::string findThis);
 
-	std::string filename;
 	std::string rootNodeName;
 	std::vector<Material> materials;
-	Texture* texture;
+	GLuint texture;
 
 	std::map<unsigned int, Mesh*> normalMeshes;
 	std::map<unsigned int, BoneMesh*> boneMeshes;

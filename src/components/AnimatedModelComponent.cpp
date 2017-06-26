@@ -6,7 +6,7 @@
 #include <assimp/postprocess.h>
 #include "AnimatedModelComponent.h"
 #include "../ecs/ecsManager.h"
-#include "../assetClasses/modelAsset.h"
+#include "../loaders/assetManager.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
@@ -25,20 +25,17 @@ glm::mat4 AToGMat(aiMatrix4x4 aiMat)
 }
 
 AnimatedModelComponent::AnimatedModelComponent() {}
-AnimatedModelComponent::~AnimatedModelComponent() 
-{
-}
+AnimatedModelComponent::~AnimatedModelComponent() {}
 
 void AnimatedModelComponent::setValues(json inValues) 
 {
     //Will throw if incorrect/should automatically be caught by ECSManager
-	modelAsset = new ModelAsset(inValues["filename"].get<std::string>());
+	modelAsset = static_cast<ModelAsset*>(AssetManager::i()->loadSync(inValues["filename"].get<std::string>()));
 	load();
 }
 
 void AnimatedModelComponent::load()
 {
-	modelAsset->load();
 	if(modelAsset->animations.size() > 0)
 	{
 		animated = true;

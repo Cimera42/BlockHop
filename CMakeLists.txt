@@ -13,8 +13,6 @@ set(SOURCE_FILES src/main.cpp)
 set(SOURCE_FILES ${SOURCE_FILES} src/logger.cpp src/logger.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/mesh.cpp src/mesh.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/window.cpp src/window.h)
-set(SOURCE_FILES ${SOURCE_FILES} src/texture.cpp src/texture.h)
-set(SOURCE_FILES ${SOURCE_FILES} src/shader.cpp src/shader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/shader.cpp src/shader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/openGLFunctions.cpp src/openGLFunctions.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loadShader.cpp src/loadShader.h)
@@ -45,7 +43,14 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/MouseControlComponent.cpp src/co
 set(SOURCE_FILES ${SOURCE_FILES} src/components/KeyboardControlComponent.cpp src/components/KeyboardControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/PhysicsComponent.cpp src/components/PhysicsComponent.h)
 
-set(SOURCE_FILES ${SOURCE_FILES} src/assetClasses/modelAsset.cpp src/assetClasses/modelAsset.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageLoader.cpp src/loaders/imageLoader.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetManager.cpp src/loaders/assetManager.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetLoader.cpp src/loaders/assetLoader.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/baseAsset.cpp src/loaders/baseAsset.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelAsset.cpp src/loaders/modelAsset.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageAsset.cpp src/loaders/imageAsset.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelLoader.cpp src/loaders/modelLoader.h)
+>>>>>>> master
 
 add_executable(BlockHop ${SOURCE_FILES})
 
