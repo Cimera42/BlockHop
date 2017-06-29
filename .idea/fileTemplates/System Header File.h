@@ -12,12 +12,12 @@
 
 class ${NAME} : public System 
 {
-    static bool exported;
+	static bool exported;
 public:
-    ${NAME}();
-    ~${NAME}();
+	${NAME}();
+	~${NAME}();
 
-    void update(double dt);
+	void update(double dt);
 };
 
 #[[#endif]]# //${INCLUDE_GUARD}

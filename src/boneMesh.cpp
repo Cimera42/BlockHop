@@ -166,7 +166,7 @@ void BoneMesh::load(aiMesh *assimpMesh)
 
 NodePart* BoneMesh::FindNode(std::map<std::string, NodePart *> nodes, std::string findThis)
 {
-	std::map<std::string, NodePart*>::iterator t = nodes.find(findThis);
+	auto t = nodes.find(findThis);
     if(t == nodes.end())
         return nullptr;
     return t->second;

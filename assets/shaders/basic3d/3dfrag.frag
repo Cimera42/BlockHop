@@ -1,9 +1,9 @@
 #version 420
 
-in vec3 vPos;
-in vec2 vUV;
-in vec3 vNorm;
-flat in int vMaterialIndex;
+layout(location=0) in vec3 inPos;
+layout(location=1) in vec2 inUV;
+layout(location=2) in vec3 inNorm;
+layout(location=3) flat in int inMaterialIndex;
 
 out vec4 outColour;
 out vec4 outNormal;
@@ -13,11 +13,11 @@ uniform sampler2DArray textureSampler;
 
 void main()
 {
-    float intensity = dot(normalize(vec3(1,1,1)), vNorm);
-    vec3 colour = texture(textureSampler, vec3(vUV, vMaterialIndex)).rgb;
+    float intensity = dot(normalize(vec3(1,1,1)), inNorm);
+    vec3 colour = texture(textureSampler, vec3(inUV, inMaterialIndex)).rgb;
     colour *= intensity;
 
     outColour = vec4(colour,1);
-    outNormal = vec4(vNorm,1);
-    outPosition = vec4(vPos,1);
+    outNormal = vec4(inNorm,1);
+    outPosition = vec4(inPos,1);
 }

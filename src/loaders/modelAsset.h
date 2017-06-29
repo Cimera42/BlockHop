@@ -79,7 +79,7 @@ struct MeshPart
 {
 	unsigned int mesh;
 
-	NodePart* nodeParent;
+	NodePart* nodePart;
 };
 
 struct Material

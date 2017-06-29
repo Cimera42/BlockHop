@@ -15,6 +15,9 @@
 
 COMPONENT_EXPORT(AnimatedModelComponent, "animatedModelComponent")
 
+/*
+ * Convert from Assimp 4x4 matrix to GLM 4x4 matrix
+ */
 glm::mat4 AToGMat(aiMatrix4x4 aiMat)
 {
 	glm::mat4 glmMatrix(aiMat.a1, aiMat.b1, aiMat.c1, aiMat.d1,
@@ -36,27 +39,40 @@ void AnimatedModelComponent::setValues(json inValues)
 
 void AnimatedModelComponent::load()
 {
+	//If there are available animations, animate the model
 	if(modelAsset->animations.size() > 0)
 	{
 		animated = true;
-		currentAnimation = modelAsset->animations.begin()->first;
+		//Get a default animation to use
+		currentAnimation = modelAsset->animations.begin()->second;
+		
+		//Create a changeable node above the shared asset
+		for(std::pair<const std::string, NodePart*> pair : modelAsset->nodeParts)
+		{
+			NodePart* node = pair.second;
+			changingNodes[node->name] = new NodeChanging(node);
+		}
+
+		//Create a changeable node above the shared asset
+		for(std::pair<const unsigned int, BoneMesh*> pair : modelAsset->boneMeshes)
+		{
+			BoneMesh* boneMesh = pair.second;
+			BoneMeshChanging* boneMeshChanging = new BoneMeshChanging(boneMesh, FindChangingNode(boneMesh->name));
+			//Link between bone and changing node to save on string finds
+			for(auto bone : boneMesh->bones)
+			{
+				boneMeshChanging->changingBones.push_back(new BoneChanging(bone, FindChangingNode(bone->name)));
+			}
+			changingBoneMeshes[boneMesh->name] = boneMeshChanging;
+		}
+		nodeFamilySetup();
+		transformNodes(0);
 	}
-	for(std::pair<const std::string, NodePart*> pair : modelAsset->nodeParts)
-	{
-		NodePart* node = pair.second;
-		changingNodes[node->name] = new NodeChanging();
-		changingNodes[node->name]->node = node;
-	}
-	for(std::pair<const unsigned int, BoneMesh*> pair : modelAsset->boneMeshes)
-	{
-		BoneMesh* boneMesh = pair.second;
-		changingBoneMeshes[boneMesh->name] = new BoneMeshChanging();
-		changingBoneMeshes[boneMesh->name]->boneMesh = boneMesh;
-	}	
-	nodeFamilySetup();
-	transformNodes(0);
 }
 
+/*
+ * Link parents and children
+ */
 void AnimatedModelComponent::nodeFamilySetup()
 {
 	for(std::pair<const std::string, NodeChanging*> pair : changingNodes)
@@ -65,6 +81,7 @@ void AnimatedModelComponent::nodeFamilySetup()
 
 		if(chNode->node->nodeParent != nullptr)
 			chNode->nodeChParent = FindChangingNode(chNode->node->nodeParent->name);
+		
 		for(NodePart *node : chNode->node->nodeChildren)
 		{
 			chNode->nodeChChildren.push_back(FindChangingNode(node->name));
@@ -72,42 +89,47 @@ void AnimatedModelComponent::nodeFamilySetup()
 	}
 }
 
+/*
+ * Animate nodes using delta time
+ */
 void AnimatedModelComponent::transformNodes(float dt)
 {
 	if(animated)
 	{
-		if(time > modelAsset->animations[currentAnimation]->duration)
+		//Repeat animation if over
+		//TODO dynamic behaviour on animation end
+		if (time > currentAnimation->duration)
 			time = 0;
-		time += dt * modelAsset->animations[currentAnimation]->tickRate;
-	}
-	for(std::pair<const std::string, NodeChanging *> pair : changingNodes)
-	{
-		NodeChanging *chNode = pair.second;
-		NodePart *node = chNode->node;
+		time += dt * currentAnimation->tickRate;
 
-		glm::mat4 transform;
-		if(animated) 
+		//Find local transforms of all nodes
+		for (std::pair<const std::string, NodeChanging *> pair : changingNodes)
 		{
-			glm::vec3 position = node->InterpolatePosition(time, modelAsset->animations[currentAnimation]);
-			glm::quat rotation = node->InterpolateRotation(time, modelAsset->animations[currentAnimation]);
-			glm::vec3 scale = node->InterpolateScaling(time, modelAsset->animations[currentAnimation]);
-	
+			NodeChanging *chNode = pair.second;
+			NodePart *node = chNode->node;
+
+			glm::mat4 transform;
+			glm::vec3 position = node->InterpolatePosition(time, currentAnimation);
+			glm::quat rotation = node->InterpolateRotation(time, currentAnimation);
+			glm::vec3 scale = node->InterpolateScaling(time, currentAnimation);
+
 			transform *= glm::translate(position);
 			transform *= glm::mat4_cast(rotation);
 			transform *= glm::scale(scale);
-	
+
 			chNode->localMatrix = transform;
 		}
-		else
-			chNode->localMatrix = chNode->node->defaultTransform;			
-	}
-	recursiveTransform(changingNodes[modelAsset->rootNodeName]);
+		//Recursively collate transforms
+		recursiveTransform(FindChangingNode(modelAsset->rootNodeName));
 
-	for(std::pair<const std::string, BoneMeshChanging *> pair : changingBoneMeshes)
-	{
-		BoneMeshChanging *chBone = pair.second;
-		glm::mat4 inv = glm::inverse(FindChangingNode(chBone->boneMesh->name)->collectiveMatrix);
-		chBone->transformBones(inv, changingNodes);
+		//Animate bone meshes
+		for (std::pair<const std::string, BoneMeshChanging *> pair : changingBoneMeshes)
+		{
+			BoneMeshChanging *chBone = pair.second;
+			//Convert from world space back into bone space
+			glm::mat4 inv = glm::inverse(chBone->node->collectiveMatrix);
+			chBone->transformBones(inv);
+		}
 	}
 }
 
@@ -127,18 +149,26 @@ BoneMeshChanging* AnimatedModelComponent::FindChangingBoneMesh(std::string findT
 	return nullptr;
 }
 
+/*
+ * Recursively collate transforms
+ */
 void AnimatedModelComponent::recursiveTransform(NodeChanging *chNode)
 {
+	//Root node won't have a parent
 	if(chNode->nodeChParent)
 	{
 		chNode->collectiveMatrix = chNode->nodeChParent->collectiveMatrix;
 	}
 	chNode->collectiveMatrix *= chNode->localMatrix;
 
+	//Transform children
 	for(auto nodeChildren : chNode->nodeChChildren)
 		recursiveTransform(nodeChildren);
 }
 
+/*
+ * Find animation by name and play
+ */
 bool AnimatedModelComponent::playAnimation(std::string name)
 {
 	Animation* anim = modelAsset->FindAnim(name);
@@ -146,27 +176,20 @@ bool AnimatedModelComponent::playAnimation(std::string name)
 		return false;
 	
 	time = 0;
-	currentAnimation = name;
+	currentAnimation = anim;
 	return true;
 }
 
-void BoneMeshChanging::transformBones(glm::mat4 inverseMesh, std::map<std::string, NodeChanging *> chNodes)
+/*
+ * Collate bone transformations
+ */
+void BoneMeshChanging::transformBones(glm::mat4 inverseMesh)
 {
+	//Clear old transforms
 	boneMats.clear();
 	//Update matrices of all bones
-	for(unsigned int i = 0; i < boneMesh->bones.size(); i++)
+	for(auto bone : changingBones)
 	{
-		Bone* bone = boneMesh->bones[i];
-
-		NodeChanging* chNode = FindChangingNode(chNodes, bone->name);
-		boneMats.push_back(inverseMesh * chNode->collectiveMatrix * bone->offsetMatrix);
+		boneMats.push_back(inverseMesh * bone->node->collectiveMatrix * bone->bone->offsetMatrix);
 	}
-}
-
-NodeChanging *BoneMeshChanging::FindChangingNode(std::map<std::string, NodeChanging*> chNodes, std::string findThis)
-{
-	auto t = chNodes.find(findThis);
-	if(t != chNodes.end())
-		return t->second;
-	return nullptr;
 }
