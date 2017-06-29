@@ -32,7 +32,7 @@ void PhysicsComponent::setValues(json inValues)
 	{
 		collisionShape = new rp3d::CylinderShape(inValues["radius"].get<float>(), inValues["height"].get<float>());
 	}
-	else if(shape == "cylinder")
+	else if(shape == "capsule")
 	{
 		collisionShape = new rp3d::CapsuleShape(inValues["radius"].get<float>(), inValues["height"].get<float>());
 	}
