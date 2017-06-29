@@ -18,6 +18,7 @@ AnimationNode::AnimationNode()
 }
 AnimationNode::AnimationNode(aiNodeAnim* animNode, aiNode* node)
 {
+	//Default animation state (still) if no animation node/channel found
 	if(animNode == nullptr)
 	{
 		mName = node->mName.C_Str();
@@ -52,6 +53,7 @@ AnimationNode::AnimationNode(aiNodeAnim* animNode, aiNode* node)
 	mNumRotationKeys = animNode->mNumRotationKeys;
 	mNumScalingKeys = animNode->mNumScalingKeys;
 
+	//Convert from assimp format to own format (vectors)
 	for(int i = 0; i < mNumPositionKeys; i++)
 	{
 		aiVector3D p = animNode->mPositionKeys[i].mValue;
@@ -88,6 +90,9 @@ aiNodeAnim* Animation::FindAnimNode(std::string findThis)
 	return nullptr;
 }
 
+/*
+ * Determine which animation key to use
+ */
 unsigned int NodePart::PositionIndex(float time, Animation* animation)
 {
 	AnimationNode* animationNode = animation->animationNodes[name];
@@ -99,6 +104,9 @@ unsigned int NodePart::PositionIndex(float time, Animation* animation)
 	}
 	return 0;
 }
+/*
+ * Interpolate position between two animation keys
+ */
 glm::vec3 NodePart::InterpolatePosition(float time, Animation* animation)
 {
 	AnimationNode* animationNode = animation->animationNodes[name];
@@ -119,6 +127,9 @@ glm::vec3 NodePart::InterpolatePosition(float time, Animation* animation)
 
 	return glm::mix(nodePosition, nextNodePosition, between);
 }
+/*
+ * Determine which animation key to use
+ */
 unsigned int NodePart::RotationIndex(float time, Animation* animation)
 {
 	AnimationNode* animationNode = animation->animationNodes[name];
@@ -130,6 +141,9 @@ unsigned int NodePart::RotationIndex(float time, Animation* animation)
 	}
 	return 0;
 }
+/*
+ * Interpolate rotation between two animation keys
+ */
 glm::quat NodePart::InterpolateRotation(float time, Animation* animation)
 {
 	AnimationNode* animationNode = animation->animationNodes[name];
@@ -150,6 +164,9 @@ glm::quat NodePart::InterpolateRotation(float time, Animation* animation)
 
 	return glm::mix(nodeRotation, nextNodeRotation, between);
 }
+/*
+ * Determine which animation key to use
+ */
 unsigned int NodePart::ScalingIndex(float time, Animation* animation)
 {
 	AnimationNode* animationNode = animation->animationNodes[name];
@@ -161,6 +178,9 @@ unsigned int NodePart::ScalingIndex(float time, Animation* animation)
 	}
 	return 0;
 }
+/*
+ * Interpolate scaling between two animation keys
+ */
 glm::vec3 NodePart::InterpolateScaling(float time, Animation* animation)
 {
 	AnimationNode* animationNode = animation->animationNodes[name];
@@ -200,9 +220,9 @@ bool ModelAsset::load()
 											 aiProcess_CalcTangentSpace |
 											 aiProcess_Triangulate |
 											 aiProcess_JoinIdenticalVertices |
-											 aiProcess_SortByPType //|
-											 //aiProcess_LimitBoneWeights |
-											 //aiProcess_ValidateDataStructure// |
+											 aiProcess_SortByPType |
+											 aiProcess_LimitBoneWeights |
+											 aiProcess_ValidateDataStructure// |
 			//aiProcess_PreTransformVertices
 	);
 
@@ -221,16 +241,22 @@ bool ModelAsset::load()
 		Logger(1) << "Animation channels: " << assimpAnimation->mNumChannels;
 		Logger(1) << "TPS: " << assimpAnimation->mTicksPerSecond;
 
+		//Convert into own class layout
+		//Actually using vectors instead of array+size
 		Animation* anim = new Animation();
 		anim->name = assimpAnimation->mName.C_Str();
+		//One channel per node
 		anim->channels = assimpAnimation->mNumChannels;
+		//Framerate of animation basically
 		anim->tickRate = assimpAnimation->mTicksPerSecond;
+		//Duration of animation
 		anim->duration = assimpAnimation->mDuration;
 		for(unsigned int j = 0; j < assimpAnimation->mNumChannels; j++)
 		{
 			aiNodeAnim* an = assimpAnimation->mChannels[j];
 			anim->animNodes[an->mNodeName.C_Str()] = an;
 		}
+		//Add to map of animations
 		animations[anim->name] = anim;
 	}
 	
@@ -240,12 +266,14 @@ bool ModelAsset::load()
 
 		aiString nnn;
 		assimpMaterial->Get(AI_MATKEY_NAME, nnn);
+		//Don't care about default material
 		if(strcmp(nnn.C_Str(), AI_DEFAULT_MATERIAL_NAME) == 0)
 			continue;
 
 		Material material = Material();
 
 		aiString texPath;
+		//Retrieve diffuse texture and load it
 		if(assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
 		{
             std::string backslashFixed = texPath.C_Str();
@@ -261,22 +289,26 @@ bool ModelAsset::load()
 		materials.push_back(material);
 	}
 
-    //Collate images for texture
+    //Collate images for opengl texture array
 	std::vector<std::string> texPaths;
 	for(unsigned int i = 0; i < materials.size(); i++)
 	{
         texPaths.push_back(materials[i].image->getName());
 	}
 
-	if(materials.size() > 0)
+	//Load textures and place into singular OpenGL texture Array
+	if(texPaths.size() > 0)
 	{
         ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
         texture = imgLoader->loadTexture(texPaths);
 	}
 
+	//Save root node
 	rootNodeName = scene->mRootNode->mName.C_Str();
+	//Loop over all nodes recursively starting from root
 	nodeLoop(scene->mRootNode, 0, nullptr);
 
+	//Load as specific mesh type depending on if boned or not
 	for(unsigned int i = 0; i < scene->mNumMeshes; i++)
 	{
 		aiMesh* assimpMesh = scene->mMeshes[i];
@@ -295,21 +327,19 @@ bool ModelAsset::load()
 
 NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
 {
+	//Create own node format from Assimp node
 	NodePart* nodePart = new NodePart();
 	nodePart->name = assimpNode->mName.C_Str();
 	assimpNodes[nodePart->name] = assimpNode;
+	
 	nodePart->nodeParent = parent;
+	//Link assimpNode to animation nodes
 	for(std::pair<const std::string, Animation*> pair : animations)
 	{
 		Animation* anim = pair.second;
 		aiNodeAnim* a = anim->FindAnimNode(nodePart->name);
 		anim->animationNodes[nodePart->name] = new AnimationNode(a, assimpNode);
 	}
-	//nodePart->defaultTransform = AToGMat(assimpNode->mTransformation);
-
-//	glm::vec3 skew;
-//	glm::vec4 perspective;
-//	glm::decompose(nodePart->defaultTransform, scale, rotation, position, skew, perspective);
 
 	/*
 	 * Extract scale, rotation and position
@@ -338,16 +368,19 @@ NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
 	Logger(1) << indentS << "    RotationE: " << glm::eulerAngles(rotation);
 	Logger(1) << indentS << "    Scale: " << scale;*/
 
+	//Add node to map
 	nodeParts[nodePart->name] = nodePart;
 
+	//Create mesh instances from the node
 	for(int i = 0; i < assimpNode->mNumMeshes; i++)
 	{
 		MeshPart* meshPart = new MeshPart();
 		meshPart->mesh = assimpNode->mMeshes[i];
-		meshPart->nodeParent = nodePart;
-		meshParts[meshPart->nodeParent->name] = meshPart;
+		meshPart->nodePart = nodePart;
+		meshParts[meshPart->nodePart->name] = meshPart;
 	}
 
+	//Recursively loop over children
 	for(unsigned int i = 0; i < assimpNode->mNumChildren; i++)
 	{
 		aiNode* childNode = assimpNode->mChildren[i];

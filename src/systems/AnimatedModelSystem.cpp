@@ -50,6 +50,7 @@ void AnimatedModelSystem::update(double dt)
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
         AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
 
+	    //Temporary test animation switching
 		if(keyInput)
 		{
 			if(keyInput->isKeyPressed(GLFW_KEY_1))
@@ -61,23 +62,30 @@ void AnimatedModelSystem::update(double dt)
 			else if(keyInput->isKeyPressed(GLFW_KEY_3))
 				animatedModel->playAnimation("Armature|Chop");
 		}
+	    //Animate model
 		animatedModel->transformNodes((float) dt);
 		
 		for(auto pair : animatedModel->modelAsset->meshParts)
 		{
-			MeshPart* meshPart = pair.second;
-			NodePart* nodePart = meshPart->nodeParent;
+			MeshPart *meshPart = pair.second;
+			NodePart *nodePart = meshPart->nodePart;
 			glm::mat4 modelMatrix = transform->getMatrix();
-			
-			NodeChanging* chNode = animatedModel->FindChangingNode(nodePart->name);
-			if(chNode)
+
+			//If model is animated, use animated transformation
+			if(animatedModel->animated) 
 			{
-				modelMatrix *= chNode->collectiveMatrix;
+				NodeChanging *chNode = animatedModel->FindChangingNode(nodePart->name);
+				if(chNode)
+				{
+					modelMatrix *= chNode->collectiveMatrix;
+				}
 			}
 
+			//Check if mesh has bones
 			bool isBoned = animatedModel->modelAsset->normalMeshes.find(meshPart->mesh) == animatedModel->modelAsset->normalMeshes.end();
 			Mesh* mesh;
 			Shader* shader;
+			//Retrieve correct mesh and use correct shader if boned
 			if(isBoned)
 			{
 				mesh = animatedModel->modelAsset->boneMeshes[meshPart->mesh];
@@ -94,10 +102,12 @@ void AnimatedModelSystem::update(double dt)
 			glUniformMatrix4fv(shader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
 			glUniformMatrix4fv(shader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
 
+			//Bind texture
 			glSetActiveTexture(GL_TEXTURE0);
 			glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->modelAsset->texture);
 			glUniform1i(shader->getLoc("textureSampler"), 0);
 
+			//Push bone matrices to shader
 			if(isBoned)
 			{				
 				BoneMeshChanging* chBoneMesh = animatedModel->FindChangingBoneMesh(nodePart->name);

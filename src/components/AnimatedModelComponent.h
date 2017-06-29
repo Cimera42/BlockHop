@@ -20,6 +20,13 @@ glm::mat4 AToGMat(aiMatrix4x4 aiMat);
 struct NodePart;
 struct NodeChanging
 {
+	NodeChanging(NodePart* node) {
+		NodeChanging::node = node;
+		NodeChanging::localMatrix = glm::mat4();
+		NodeChanging::collectiveMatrix = glm::mat4();
+		NodeChanging::nodeChParent = nullptr;
+	}
+	
 	NodePart* node;
 	glm::mat4 localMatrix;
 	glm::mat4 collectiveMatrix;
@@ -27,14 +34,32 @@ struct NodeChanging
 	NodeChanging* nodeChParent;
 	std::vector<NodeChanging*> nodeChChildren;
 };
+struct Bone;
 struct BoneMesh;
+struct BoneChanging
+{
+	BoneChanging(Bone* bone, NodeChanging* node) {
+		BoneChanging::bone = bone;
+		BoneChanging::node = node;
+	}
+	
+	Bone* bone;
+	NodeChanging* node;
+};
 struct BoneMeshChanging
 {
+	BoneMeshChanging(BoneMesh* boneMesh, NodeChanging* node) {
+		BoneMeshChanging::boneMesh = boneMesh;
+		BoneMeshChanging::node = node;
+	}
+	
+	NodeChanging* node;
+	
 	BoneMesh* boneMesh;
+	std::vector<BoneChanging*> changingBones;
 	std::vector<glm::mat4> boneMats;
 
-	NodeChanging* FindChangingNode(std::map<std::string, NodeChanging*> chNodes, std::string findThis);
-	void transformBones(glm::mat4 inverseMesh, std::map<std::string, NodeChanging *> nodes);
+	void transformBones(glm::mat4 inverseMesh);
 };
 
 class ModelAsset;
@@ -52,7 +77,7 @@ public:
 	std::map<std::string, BoneMeshChanging*> changingBoneMeshes;
 
 	float time = 0;
-	std::string currentAnimation;
+	Animation* currentAnimation;
 
 	void load();
 
