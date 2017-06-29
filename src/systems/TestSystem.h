@@ -10,13 +10,13 @@
 
 class TestSystem : public System
 {
-    static bool exported;
+	static bool exported;
 public:
-    TestSystem();
-    ~TestSystem();
+	TestSystem();
+	~TestSystem();
 
-    int ok = 100;
-    void update(double dt);
+	int ok = 100;
+	void update(double dt);
 };
 
 #endif //BLOCKHOP_TESTSYSTEM_H

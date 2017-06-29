@@ -18,49 +18,49 @@ using json = nlohmann::json;
 class Font
 {
 public:
-    Font();
-    ~Font();
+	Font();
+	~Font();
 
-    ImageAsset* image;
-    GLuint texture;
-    int spacing = 3;
-    json metrics;
+	ImageAsset* image;
+	GLuint texture;
+	int spacing = 3;
+	json metrics;
 };
 
 struct Vertex2D
 {
-    glm::vec2 pos;
-    glm::vec2 uv;
+	glm::vec2 pos;
+	glm::vec2 uv;
 };
 
 class TextComponent : public Component
 {
-    static bool exported;
+	static bool exported;
 
-    Font* font;
-    std::vector<Vertex2D> vertices;
+	Font* font;
+	std::vector<Vertex2D> vertices;
 
-    GLuint VAO = 0;
-    GLuint vertexBuffer;
+	GLuint VAO = 0;
+	GLuint vertexBuffer;
 
-    std::string text;
-    int xBuffer;
-    int yBuffer;
+	std::string text;
+	int xBuffer;
+	int yBuffer;
 
 public:
-    TextComponent();
-    ~TextComponent();
-    void setValues(json inValues);
+	TextComponent();
+	~TextComponent();
+	void setValues(json inValues);
 
-    Font *getFont() const;
-    const std::vector<Vertex2D> &getVertices() const;
-    GLuint getVAO() const;
+	Font *getFont() const;
+	const std::vector<Vertex2D> &getVertices() const;
+	GLuint getVAO() const;
 
-    void set(std::string inText);
-    void add(std::string inText);
-    void createBuffers();
-    void fillBuffers();
-    void createVAO();
+	void set(std::string inText);
+	void add(std::string inText);
+	void createBuffers();
+	void fillBuffers();
+	void createVAO();
 };
 
 

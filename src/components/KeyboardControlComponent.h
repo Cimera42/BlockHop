@@ -9,16 +9,16 @@
 
 class KeyboardControlComponent : public Component
 {
-    static bool exported;
-    
-    int forwardKey, backKey, leftKey, rightKey, upKey, downKey;
+	static bool exported;
+
+	int forwardKey, backKey, leftKey, rightKey, upKey, downKey;
 	
 	int convertStringCode(std::string val);
 	
 public:
-    KeyboardControlComponent();
-    ~KeyboardControlComponent();
-    void setValues(json inValues);
+	KeyboardControlComponent();
+	~KeyboardControlComponent();
+	void setValues(json inValues);
 
 	int getForwardKey() const;
 	int getBackKey() const;
@@ -28,9 +28,9 @@ public:
 	int getDownKey() const;
 
 	friend std::ostream &operator<< (std::ostream &os, KeyboardControlComponent const &c) {
-        os << "KeyboardControlComponent";
-        return os;
-    }
+		os << "KeyboardControlComponent";
+		return os;
+	}
 };
 
 #endif //BLOCKHOP_KEYBOARDCONTROLCOMPONENT_H

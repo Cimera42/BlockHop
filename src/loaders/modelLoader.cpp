@@ -7,6 +7,6 @@
 ModelLoader::~ModelLoader() {}
 
 BaseAsset* ModelLoader::loadAsset(std::string filename){
-    ModelAsset* model = new ModelAsset(filename);
-    return AssetLoader::loadAsset(filename, model);
+	ModelAsset* model = new ModelAsset(filename);
+	return AssetLoader::loadAsset(filename, model);
 }

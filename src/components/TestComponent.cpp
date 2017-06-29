@@ -10,6 +10,6 @@ TestComponent::TestComponent() {}
 TestComponent::~TestComponent() {}
 
 void TestComponent::setValues(json inValues) {
-    //Will throw if incorrect/should automatically be caught by ECSManager
-    inValues["test"].get<bool>();
+	//Will throw if incorrect/should automatically be caught by ECSManager
+	inValues["test"].get<bool>();
 }

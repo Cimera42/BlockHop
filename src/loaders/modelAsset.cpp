@@ -276,31 +276,31 @@ bool ModelAsset::load()
 		//Retrieve diffuse texture and load it
 		if(assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS)
 		{
-            std::string backslashFixed = texPath.C_Str();
-            std::replace(backslashFixed.begin(), backslashFixed.end(), '\\', '/');
+			std::string backslashFixed = texPath.C_Str();
+			std::replace(backslashFixed.begin(), backslashFixed.end(), '\\', '/');
 
 			//Convert to correct folder
 			std::string baseFolder = std::string(filename);
 			baseFolder = baseFolder.substr(0, baseFolder.find_last_of("/"));
-            //Load image
+			//Load image
 			material.image = static_cast<ImageAsset*>(AssetManager::i()->loadSync(std::string(baseFolder +"/"+ backslashFixed)));
 		}
 
 		materials.push_back(material);
 	}
 
-    //Collate images for opengl texture array
+	//Collate images for opengl texture array
 	std::vector<std::string> texPaths;
 	for(unsigned int i = 0; i < materials.size(); i++)
 	{
-        texPaths.push_back(materials[i].image->getName());
+		texPaths.push_back(materials[i].image->getName());
 	}
 
 	//Load textures and place into singular OpenGL texture Array
 	if(texPaths.size() > 0)
 	{
-        ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
-        texture = imgLoader->loadTexture(texPaths);
+		ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
+		texture = imgLoader->loadTexture(texPaths);
 	}
 
 	//Save root node
@@ -360,13 +360,13 @@ NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
 	scale = glm::vec3(s.x, s.y, s.z);
 	nodePart->defaultTransform = glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
 
-	/*std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="    ";} return c;}();
+	/*std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="	";} return c;}();
 	Logger(1) << indentS << "Node: \"" << nodePart->name << "\"";
-	Logger(1) << indentS << "    Position: " << position;
-	Logger(1) << indentS << "    Rotation: " << rotation;
-	Logger(1) << indentS << "    RotationA: " << glm::axis(rotation);
-	Logger(1) << indentS << "    RotationE: " << glm::eulerAngles(rotation);
-	Logger(1) << indentS << "    Scale: " << scale;*/
+	Logger(1) << indentS << "	Position: " << position;
+	Logger(1) << indentS << "	Rotation: " << rotation;
+	Logger(1) << indentS << "	RotationA: " << glm::axis(rotation);
+	Logger(1) << indentS << "	RotationE: " << glm::eulerAngles(rotation);
+	Logger(1) << indentS << "	Scale: " << scale;*/
 
 	//Add node to map
 	nodeParts[nodePart->name] = nodePart;

@@ -8,14 +8,14 @@
 #include <string>
 
 class BaseAsset {
-    friend class AssetLoader;
-    virtual bool load();
+	friend class AssetLoader;
+	virtual bool load();
 protected:
-    std::string filename = "";
+	std::string filename = "";
 public:
-    BaseAsset(std::string filename);
-    virtual ~BaseAsset();
-    std::string getName();
+	BaseAsset(std::string filename);
+	virtual ~BaseAsset();
+	std::string getName();
 };
 
 

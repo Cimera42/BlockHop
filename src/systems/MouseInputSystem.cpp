@@ -22,10 +22,10 @@ MouseInputSystem::~MouseInputSystem() {}
 
 void MouseInputSystem::update(double dt) 
 {
-    /*for(auto entity : getEntities())
-    {
-        //XComponent* x = entity->getComponent<XComponent>("xComponent");
-    }*/
+	/*for(auto entity : getEntities())
+	{
+		//XComponent* x = entity->getComponent<XComponent>("xComponent");
+	}*/
 }
 
 glm::vec2 MouseInputSystem::getLastPos() const

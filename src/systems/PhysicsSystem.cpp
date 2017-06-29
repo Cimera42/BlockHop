@@ -105,9 +105,9 @@ void PhysicsSystem::update(double dt)
 		
 		accumulator -= idealTimestep;
 	}
-    for(auto entity : getEntities())
-    {
-        TransformComponent* transformComp = entity->getComponent<TransformComponent>("transformComponent");
+	for(auto entity : getEntities())
+	{
+		TransformComponent* transformComp = entity->getComponent<TransformComponent>("transformComponent");
 		 
 		rp3d::RigidBody* rb = findRigidBody(entity);
 		if(rb)
@@ -120,7 +120,7 @@ void PhysicsSystem::update(double dt)
 				transformComp->setRotation(glm::quat(rot.w, rot.x, rot.y, rot.z));
 			}
 		}
-    }
+	}
 }
 
 rp3d::RigidBody* PhysicsSystem::findRigidBody(Entity* toFind)

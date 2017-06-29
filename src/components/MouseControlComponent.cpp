@@ -12,7 +12,7 @@ MouseControlComponent::~MouseControlComponent() {}
 
 void MouseControlComponent::setValues(json inValues) 
 {
-    //Will throw if incorrect/should automatically be caught by ECSManager
+	//Will throw if incorrect/should automatically be caught by ECSManager
 	xSensitivity = inValues["xSensitivity"].get<double>();
 	ySensitivity = inValues["ySensitivity"].get<double>();
 }

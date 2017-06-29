@@ -21,28 +21,28 @@ KeyboardInputSystem::~KeyboardInputSystem() {}
 
 void KeyboardInputSystem::update(double dt) 
 {
-    for(auto entity : getEntities())
-    {
+	for(auto entity : getEntities())
+	{
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
 		KeyboardControlComponent* keyboardControl = entity->getComponent<KeyboardControlComponent>("keyboardControlComponent");
 
 		glm::vec3 displaced = transform->getPosition();
-        if(isKeyPressed(keyboardControl->getForwardKey()))
+		if(isKeyPressed(keyboardControl->getForwardKey()))
 			displaced += transform->getForward() * ((float)dt) * 5.0f;
 		
-        if(isKeyPressed(keyboardControl->getBackKey()))
+		if(isKeyPressed(keyboardControl->getBackKey()))
 			displaced -= transform->getForward() * ((float)dt) * 5.0f;
 		
-        if(isKeyPressed(keyboardControl->getLeftKey()))
+		if(isKeyPressed(keyboardControl->getLeftKey()))
 			displaced += transform->getRight() * ((float)dt) * 5.0f;
 		
-        if(isKeyPressed(keyboardControl->getRightKey()))
+		if(isKeyPressed(keyboardControl->getRightKey()))
 			displaced -= transform->getRight() * ((float)dt) * 5.0f;
 		
-        if(isKeyPressed(keyboardControl->getUpKey()))
+		if(isKeyPressed(keyboardControl->getUpKey()))
 			displaced += glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
 		
-        if(isKeyPressed(keyboardControl->getDownKey()))
+		if(isKeyPressed(keyboardControl->getDownKey()))
 			displaced -= glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
 		
 		transform->setPosition(displaced);
@@ -66,7 +66,7 @@ void KeyboardInputSystem::update(double dt)
 			std::vector<json> compData = {tj,pj,aj};
 			ECSManager::i()->createEntity("projectile", comps, compData);			
 		}
-    }
+	}
 }
 
 bool KeyboardInputSystem::isKeyPressed(int keyCode)

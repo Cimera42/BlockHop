@@ -5,17 +5,17 @@
 class Window
 {
 public:
-    Window();
-    Window(const char* title, int width, int height);
-    ~Window();
+	Window();
+	Window(const char* title, int width, int height);
+	~Window();
 
-    GLFWwindow* glfwWindow;
-    int width, height;
-    const char* title;
+	GLFWwindow* glfwWindow;
+	int width, height;
+	const char* title;
 
-    void destroy();
-    void createGLFWWindow();
-    void cursorMode(int mode);
+	void destroy();
+	void createGLFWWindow();
+	void cursorMode(int mode);
 };
 
 #endif // WINDOW_H_INCLUDED
