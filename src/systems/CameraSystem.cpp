@@ -14,13 +14,13 @@ CameraSystem::~CameraSystem() {}
 
 void CameraSystem::update(double dt) 
 {
-    for(auto entity : getEntities())
-    {
-        CameraComponent* camera = entity->getComponent<CameraComponent>("cameraComponent");
-        TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
+	for(auto entity : getEntities())
+	{
+		CameraComponent* camera = entity->getComponent<CameraComponent>("cameraComponent");
+		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
 		
 		camera->lookAt(transform->getPosition(),
 					   transform->getPosition() + transform->getForward(),
 					   transform->getUp());
-    }
+	}
 }

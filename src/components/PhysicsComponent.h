@@ -16,9 +16,9 @@ class PhysicsComponent : public Component
 
 	static bool exported;
 public:
-    PhysicsComponent();
-    ~PhysicsComponent();
-    void setValues(json inValues);
+	PhysicsComponent();
+	~PhysicsComponent();
+	void setValues(json inValues);
 	
 	rp3d::CollisionShape *getCollisionShape() const;
 	void setCollisionShapeInstance(rp3d::ProxyShape *collisionShapeInstance);
@@ -26,9 +26,9 @@ public:
 	rp3d::BodyType getMode() const;
 
 	friend std::ostream &operator<< (std::ostream &os, PhysicsComponent const &c) {
-        os << "PhysicsComponent";
-        return os;
-    }
+		os << "PhysicsComponent";
+		return os;
+	}
 };
 
 #endif //BLOCKHOP_PHYSICSCOMPONENT_H

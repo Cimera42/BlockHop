@@ -90,10 +90,10 @@ struct Material
 struct BoneMesh;
 class ModelAsset : public BaseAsset
 {
-    friend class ModelLoader;
+	friend class ModelLoader;
 	bool load();
-    ModelAsset(std::string inFilename);
-    ~ModelAsset();
+	ModelAsset(std::string inFilename);
+	~ModelAsset();
 public:
 	NodePart* nodeLoop(aiNode *assimpNode, int indent, NodePart *parent);
 	Animation* FindAnim(std::string findThis);

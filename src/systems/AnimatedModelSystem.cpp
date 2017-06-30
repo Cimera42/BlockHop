@@ -45,12 +45,12 @@ void AnimatedModelSystem::update(double dt)
 
 	KeyboardInputSystem* keyInput = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
 	
-    for(auto entity : getEntities())
-    {
+	for(auto entity : getEntities())
+	{
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
-        AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
+		AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
 
-	    //Temporary test animation switching
+		//Temporary test animation switching
 		if(keyInput)
 		{
 			if(keyInput->isKeyPressed(GLFW_KEY_1))
@@ -62,7 +62,7 @@ void AnimatedModelSystem::update(double dt)
 			else if(keyInput->isKeyPressed(GLFW_KEY_3))
 				animatedModel->playAnimation("Armature|Chop");
 		}
-	    //Animate model
+		//Animate model
 		animatedModel->transformNodes((float) dt);
 		
 		for(auto pair : animatedModel->modelAsset->meshParts)
@@ -124,5 +124,5 @@ void AnimatedModelSystem::update(double dt)
 			glDrawElements(GL_TRIANGLES, (GLint) mesh->indices.size(), GL_UNSIGNED_INT, 0);
 			glSetBindVertexArray(0);
 		}
-    }
+	}
 }

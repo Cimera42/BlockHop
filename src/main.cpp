@@ -10,7 +10,7 @@ bool shouldExit = false;
 
 void windowCloseEvent(GLFWwindow *closingWindow)
 {
-    shouldExit = true;
+	shouldExit = true;
 }
 
 int main()
@@ -21,24 +21,24 @@ int main()
 	window = new Window("Template", 640, 480);
 	window->cursorMode(GLFW_CURSOR_DISABLED);
 
-    initGLEW();
+	initGLEW();
 
 	glfwSetWindowCloseCallback(window->glfwWindow, windowCloseEvent);
 
 	//Prime our asset loader
 	AssetManager::i()->readConfig();
 
-    //Load scene from file
-    ECSLoader ecsLoader = ECSLoader();
-    ecsLoader.readStream("testModel.json");
+	//Load scene from file
+	ECSLoader ecsLoader = ECSLoader();
+	ecsLoader.readStream("testModel.json");
 
-    std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
-    start = std::chrono::steady_clock::now();
-    previous = start;
-    while(!shouldExit)
-    {
-        glClearColor(0.55f, 0.65f, 0.8f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
+	start = std::chrono::steady_clock::now();
+	previous = start;
+	while(!shouldExit)
+	{
+		glClearColor(0.55f, 0.65f, 0.8f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		current = std::chrono::steady_clock::now();
 		std::chrono::duration<double> dt = (current - previous);

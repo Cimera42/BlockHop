@@ -12,16 +12,16 @@
 
 class TextSystem : public System
 {
-    static bool exported;
+	static bool exported;
 public:
-    TextSystem();
-    ~TextSystem();
+	TextSystem();
+	~TextSystem();
 
-    Shader *textShader;
+	Shader *textShader;
 
-    void update(double dt);
+	void update(double dt);
 
-    void renderText(TransformComponent *transform, TextComponent *text);
+	void renderText(TransformComponent *transform, TextComponent *text);
 };
 
 #endif //BLOCKHOP_TEXTSYSTEM_H

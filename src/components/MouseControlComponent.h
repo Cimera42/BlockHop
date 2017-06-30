@@ -9,21 +9,21 @@
 
 class MouseControlComponent : public Component
 {
-    static bool exported;
-    double xSensitivity, ySensitivity;
-    
+	static bool exported;
+	double xSensitivity, ySensitivity;
+
 public:
-    MouseControlComponent();
-    ~MouseControlComponent();
-    void setValues(json inValues);
+	MouseControlComponent();
+	~MouseControlComponent();
+	void setValues(json inValues);
 
 	double getXSensitivity() const;
 	double getYSensitivity() const;
 
 	friend std::ostream &operator<< (std::ostream &os, MouseControlComponent const &c) {
-        os << "MouseControlComponent";
-        return os;
-    }
+		os << "MouseControlComponent";
+		return os;
+	}
 };
 
 #endif //BLOCKHOP_MOUSECONTROLCOMPONENT_H

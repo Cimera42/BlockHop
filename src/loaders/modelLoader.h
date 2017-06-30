@@ -11,14 +11,14 @@
 class ModelLoader : public AssetLoader {
 
 public:
-    ModelLoader() {
-        loaderType = "model";
-    }
-    ~ModelLoader();
+	ModelLoader() {
+		loaderType = "model";
+	}
+	~ModelLoader();
 
-    /*TODO default model for asynch loading*/
+	/*TODO default model for asynch loading*/
 
-    BaseAsset* loadAsset(std::string filename);
+	BaseAsset* loadAsset(std::string filename);
 };
 
 

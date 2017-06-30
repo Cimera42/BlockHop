@@ -10,14 +10,14 @@
 
 class ECSLoader {
 public:
-    ECSLoader();
-    ~ECSLoader();
+	ECSLoader();
+	~ECSLoader();
 
-    //Systems or components can be created in either order
-    //Probably components first
-    void readStream(std::string fileName);
+	//Systems or components can be created in either order
+	//Probably components first
+	void readStream(std::string fileName);
 
-    //Then entities
+	//Then entities
 };
 
 #endif //BLOCKHOP_ECSLOADER_H

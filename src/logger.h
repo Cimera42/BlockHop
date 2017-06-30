@@ -12,8 +12,8 @@
 
 class Logger
 {
-    bool endLine;
-    std::string between;
+	bool endLine;
+	std::string between;
 	std::stringstream buffer;
 
 public:
@@ -26,14 +26,14 @@ public:
 	//when logger object is destroyed
 	~Logger();
 
-    //Function for general types
-    template <typename T>
-    Logger& operator<<(const T& val)
-    {
-        //Push input to stringstream
-        buffer << val << between;
-        return *this;
-    }
+	//Function for general types
+	template <typename T>
+	Logger& operator<<(const T& val)
+	{
+		//Push input to stringstream
+		buffer << val << between;
+		return *this;
+	}
 	Logger& operator<<(const glm::vec2 val);
 	Logger& operator<<(const glm::vec3 val);
 	Logger& operator<<(const glm::vec4 val);

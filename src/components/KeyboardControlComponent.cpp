@@ -12,7 +12,7 @@ KeyboardControlComponent::~KeyboardControlComponent() {}
 
 void KeyboardControlComponent::setValues(json inValues) 
 {
-    //Will throw if incorrect/should automatically be caught by ECSManager
+	//Will throw if incorrect/should automatically be caught by ECSManager
 	forwardKey 	= convertStringCode(inValues["forward"].get<std::string>());
 	backKey 	= convertStringCode(inValues["back"].get<std::string>());
 	leftKey 	= convertStringCode(inValues["left"].get<std::string>());

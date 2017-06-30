@@ -10,12 +10,12 @@
 
 class MouseInputSystem : public System 
 {
-    static bool exported;
+	static bool exported;
 	glm::vec2 lastPos;
 	
 public:
-    MouseInputSystem();
-    ~MouseInputSystem();
+	MouseInputSystem();
+	~MouseInputSystem();
 	
 	glm::vec2 getLastPos() const;
 	void setLastPos(glm::vec2 inLastPos);

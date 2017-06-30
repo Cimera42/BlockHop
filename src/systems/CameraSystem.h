@@ -9,12 +9,12 @@
 
 class CameraSystem : public System 
 {
-    static bool exported;
+	static bool exported;
 public:
-    CameraSystem();
-    ~CameraSystem();
+	CameraSystem();
+	~CameraSystem();
 
-    void update(double dt);
+	void update(double dt);
 };
 
 #endif //BLOCKHOP_CAMERASYSTEM_H

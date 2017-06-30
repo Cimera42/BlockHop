@@ -4,38 +4,38 @@
 
 Shader::Shader(const char* vertName, const char* fragName)
 {
-    shaderID = loadShader(vertName, fragName);
+	shaderID = loadShader(vertName, fragName);
 }
 Shader::Shader(const char* vertName, const char* fragName, const char* geomName)
 {
-    shaderID = loadShaderG(vertName, fragName, geomName);
+	shaderID = loadShaderG(vertName, fragName, geomName);
 }
 
 Shader::~Shader()
 {
-    glDeleteShader(shaderID);
+	glDeleteShader(shaderID);
 }
 
 void Shader::use()
 {
-    glSetUseProgram(shaderID);
+	glSetUseProgram(shaderID);
 }
 
 bool Shader::addLoc(const char* name)
 {
-    GLint loc = glGetUniformLocation(shaderID, name);
-    if(loc >= 0)
-    {
-        locations[name] = loc;
-        return true;
-    }
-    return false;
+	GLint loc = glGetUniformLocation(shaderID, name);
+	if(loc >= 0)
+	{
+		locations[name] = loc;
+		return true;
+	}
+	return false;
 }
 
 GLint Shader::getLoc(const char* name) const
 {
-    auto iter = locations.find(name);
-    if(iter != locations.end())
-        return iter->second;
-    return -1;
+	auto iter = locations.find(name);
+	if(iter != locations.end())
+		return iter->second;
+	return -1;
 }

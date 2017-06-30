@@ -20,12 +20,12 @@ class PhysicsSystem : public System
 	std::map<Entity*, rp3d::RigidBody*> rigidBodies;
 	
 public:
-    PhysicsSystem();
-    ~PhysicsSystem();
+	PhysicsSystem();
+	~PhysicsSystem();
 
 	void subscribeCallback(Entity* entSubbed);
 	
-    void update(double dt);
+	void update(double dt);
 	
 	rp3d::RigidBody *findRigidBody(Entity *toFind);
 };

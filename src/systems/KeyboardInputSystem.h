@@ -9,16 +9,16 @@
 
 class KeyboardInputSystem : public System 
 {
-    static bool exported;
+	static bool exported;
 public:
-    KeyboardInputSystem();
-    ~KeyboardInputSystem();
+	KeyboardInputSystem();
+	~KeyboardInputSystem();
 	
 	std::map<int, int> keyList;
 
 	bool isKeyPressed(int keyCode);
 
-    void update(double dt);
+	void update(double dt);
 };
 
 #endif //BLOCKHOP_KEYBOARDINPUTSYSTEM_H

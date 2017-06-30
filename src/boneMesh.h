@@ -12,40 +12,40 @@
 
 struct BoneVertex
 {
-    glm::vec3 pos;
-    glm::vec2 uv;
-    glm::vec3 normal;
-    int materialIndex;
-    int BoneIds[4] = {0,0,0,0};
-    float BoneWeights[4] = {0,0,0,0};
+	glm::vec3 pos;
+	glm::vec2 uv;
+	glm::vec3 normal;
+	int materialIndex;
+	int BoneIds[4] = {0,0,0,0};
+	float BoneWeights[4] = {0,0,0,0};
 };
 
 struct Bone
 {
-    int id;
-    std::string name;
-    glm::mat4 offsetMatrix;
+	int id;
+	std::string name;
+	glm::mat4 offsetMatrix;
 };
 
 class NodePart;
 class BoneMesh : public Mesh
 {
-    public:
-        BoneMesh(std::string inName, aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes);
-        ~BoneMesh();
+	public:
+		BoneMesh(std::string inName, aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes);
+		~BoneMesh();
 
-        std::vector<Bone*> bones;
-        std::vector<BoneVertex> collatedVertices;
+		std::vector<Bone*> bones;
+		std::vector<BoneVertex> collatedVertices;
 
-        void createVAO();
-        void genBuffers();
-        void load(aiMesh *assimpMesh);
-        void loadWithVectors(std::vector<glm::vec3> inVertices,
-                             std::vector<glm::vec2> inUvs,
-                             std::vector<glm::vec3> inNormals,
-                             std::vector<unsigned int> inIndices);
+		void createVAO();
+		void genBuffers();
+		void load(aiMesh *assimpMesh);
+		void loadWithVectors(std::vector<glm::vec3> inVertices,
+							 std::vector<glm::vec2> inUvs,
+							 std::vector<glm::vec3> inNormals,
+							 std::vector<unsigned int> inIndices);
 
-        NodePart* FindNode(std::map<std::string, NodePart *> nodes, std::string findThis);
+		NodePart* FindNode(std::map<std::string, NodePart *> nodes, std::string findThis);
 };
 
 #endif // BONEMESH_H_INCLUDED

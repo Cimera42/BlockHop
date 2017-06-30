@@ -12,7 +12,7 @@
 
 class TransformComponent : public Component
 {
-    static bool exported;
+	static bool exported;
 	
 	glm::mat4 matrix;
 	glm::vec3 position;
@@ -27,9 +27,9 @@ class TransformComponent : public Component
 	void genVectors();
 	
 public:
-    TransformComponent();
-    ~TransformComponent();
-    void setValues(json inValues);
+	TransformComponent();
+	~TransformComponent();
+	void setValues(json inValues);
 	
 	glm::mat4 getMatrix() const;
 	glm::vec3 getPosition() const;
@@ -43,13 +43,13 @@ public:
 	glm::vec3 getRight() const;
 	glm::vec3 getUp() const;
 
-    friend std::ostream &operator<< (std::ostream &os, TransformComponent const &t) {
-        os << "TransformComponent: ";
-        os << "(" << t.position.x << ", " << t.position.y << ", " << t.position.z << "), ";
-        os << "(" << t.rotation.w << ", " << t.rotation.x << ", " << t.rotation.y << ", " << t.rotation.z << "), ";
-        os << "(" << t.scale.x << ", " << t.scale.y << ", " << t.scale.z << "), ";
-        return os;
-    }
+	friend std::ostream &operator<< (std::ostream &os, TransformComponent const &t) {
+		os << "TransformComponent: ";
+		os << "(" << t.position.x << ", " << t.position.y << ", " << t.position.z << "), ";
+		os << "(" << t.rotation.w << ", " << t.rotation.x << ", " << t.rotation.y << ", " << t.rotation.z << "), ";
+		os << "(" << t.scale.x << ", " << t.scale.y << ", " << t.scale.z << "), ";
+		return os;
+	}
 };
 
 

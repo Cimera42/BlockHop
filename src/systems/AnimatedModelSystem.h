@@ -10,15 +10,15 @@
 
 class AnimatedModelSystem : public System 
 {
-    static bool exported;
+	static bool exported;
 public:
-    AnimatedModelSystem();
-    ~AnimatedModelSystem();
+	AnimatedModelSystem();
+	~AnimatedModelSystem();
 
 	Shader *genericShader;
 	Shader *boneShader;
 	
-    void update(double dt);
+	void update(double dt);
 };
 
 #endif //BLOCKHOP_ANIMATEDMODELSYSTEM_H

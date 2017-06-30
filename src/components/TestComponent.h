@@ -10,13 +10,13 @@
 
 class TestComponent : public Component
 {
-    static bool exported;
+	static bool exported;
 public:
-    TestComponent();
-    ~TestComponent();
-    void setValues(json inValues);
+	TestComponent();
+	~TestComponent();
+	void setValues(json inValues);
 
-    int testInt = 10;
+	int testInt = 10;
 };
 
 #endif //BLOCKHOP_TESTCOMPONENT_H
