@@ -2,11 +2,11 @@
 #include "openGLFunctions.h"
 #include "logger.h"
 
-Mesh::Mesh(std::string inName)
+Mesh::Mesh(const std::string &inName)
 {
-	name = inName;	
+	name = inName;
 }
-Mesh::Mesh(std::string inName, aiMesh *assimpMesh) 
+Mesh::Mesh(const std::string &inName, aiMesh *assimpMesh)
 		: Mesh(inName)
 {
 	load(assimpMesh);
@@ -103,13 +103,14 @@ void Mesh::load(aiMesh* assimpMesh)
 	genBuffers();
 }
 
-void Mesh::loadWithVectors(std::vector<glm::vec3> inVertices, std::vector<glm::vec2> inUvs, std::vector<glm::vec3> inNormals, std::vector<unsigned int> inIndices)
+void Mesh::loadWithVectors(std::vector<glm::vec3> inVertices, std::vector<glm::vec2> inUvs,
+                           std::vector<glm::vec3> inNormals, std::vector<unsigned int> inIndices)
 {
 	vertices.swap(inVertices);
 	uvs.swap(inUvs);
 	normals.swap(inNormals);
 	indices.swap(inIndices);
-	for(int i = 0; inIndices.size(); i++)
+	for(int i = 0; i < inIndices.size(); i++)
 		materialIndices.push_back(0);
 
 	for(unsigned int i = 0; i < vertices.size(); i++)

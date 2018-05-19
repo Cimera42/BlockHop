@@ -6,11 +6,7 @@
 #include "../ecs/ecsManager.h"
 
 COMPONENT_EXPORT(KeyboardControlComponent, "keyboardControlComponent")
-
-KeyboardControlComponent::KeyboardControlComponent() {}
-KeyboardControlComponent::~KeyboardControlComponent() {}
-
-void KeyboardControlComponent::setValues(json inValues) 
+void KeyboardControlComponent::setValues(const json &inValues)
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
 	forwardKey 	= convertStringCode(inValues["forward"].get<std::string>());

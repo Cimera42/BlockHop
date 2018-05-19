@@ -15,7 +15,7 @@ void windowCloseEvent(GLFWwindow *closingWindow)
 
 int main()
 {
-	Logger(1) << "First Line of Program";
+	Logger() << "First Line of Program";
 	initGLFW();
 
 	window = new Window("Template", 640, 480);

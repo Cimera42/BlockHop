@@ -8,11 +8,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 COMPONENT_EXPORT(TransformComponent, "transformComponent")
-
-TransformComponent::TransformComponent() {}
-TransformComponent::~TransformComponent() {}
-
-void TransformComponent::setValues(json inValues) {
+void TransformComponent::setValues(const json &inValues) {
 	//Will throw if incorrect/should automatically be caught by ECSManager
 	position.x = inValues["position"]["x"].get<float>();
 	position.y = inValues["position"]["y"].get<float>();
@@ -26,7 +22,7 @@ void TransformComponent::setValues(json inValues) {
 	scale.x = inValues["scale"]["x"].get<float>();
 	scale.y = inValues["scale"]["y"].get<float>();
 	scale.z = inValues["scale"]["z"].get<float>();
-	
+
 	genMatrix();
 	genVectors();
 }

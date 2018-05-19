@@ -12,9 +12,7 @@ class TestComponent : public Component
 {
 	static bool exported;
 public:
-	TestComponent();
-	~TestComponent();
-	void setValues(json inValues);
+	void setValues(const json &inValues) override;
 
 	int testInt = 10;
 };

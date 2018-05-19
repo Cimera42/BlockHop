@@ -11,7 +11,6 @@
 #include <string>
 #include <map>
 #include <vector>
-#include "../logger.h"
 
 typedef Component* (*ComponentFactoryPtr)();
 typedef System* (*SystemFactoryPtr)();
@@ -21,15 +20,15 @@ typedef System* (*SystemFactoryPtr)();
 
 class ECSManager {
 public:
-	ECSManager();
-	~ECSManager();
+	ECSManager() = default;
+	~ECSManager() = default;
 
 	/*
 	 * Helper functions
 	 * Will return nullptr if a match cannot be found
 	 */
 	template <typename T>
-	T* findSystem(std::string name) {
+	T* findSystem(const std::string &name) {
 		auto it =
 				std::find_if(gameSystems.begin(), gameSystems.end(), [&name](std::pair<std::string, System*> o) {
 					return (o.first == name);
@@ -38,14 +37,14 @@ public:
 			return static_cast<T*>(it->second);
 		return nullptr;
 	}
-	Entity* findEntity(std::string name);
+	Entity* findEntity(const std::string &name);
 
 	/*
 	 * Functions for the generation of game elements
 	 */
-	Component* createComponent(std::string name, json compData);
-	System* createSystem(std::string name, std::vector<std::string> compsNeeded);
-	Entity* createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData);
+	Component* createComponent(const std::string &name, const json &compData);
+	System* createSystem(const std::string &name, const std::vector<std::string> &compsNeeded, const json &inValues);
+	Entity* createEntity(const std::string &name, const std::vector<std::string> &compsToSub, const std::vector<json> &compsData);
 
 	//Used to generate references to systems by string
 	template<typename T>

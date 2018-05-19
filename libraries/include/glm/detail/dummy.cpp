@@ -1,7 +1,7 @@
 /// @ref core
 /// @file glm/core/dummy.cpp
 ///
-/// GLM is a header only library. There is nothing to compile. 
+/// GLM is a header only library. There is nothing to compile.
 /// dummy.cpp exist only a wordaround for CMake file.
 
 /*
@@ -59,7 +59,7 @@ void glUniformMatrix4fv(GLuint, int, int, float*){}
 // Sample 2
 #include <glm/vec3.hpp> // glm::vec3
 #include <glm/vec4.hpp> // glm::vec4, glm::ivec4
-#include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/glm.hpp> // glm::mat4
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 void func(GLuint LocationMVP, float Translate, glm::vec2 const & Rotate)

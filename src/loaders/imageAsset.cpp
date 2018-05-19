@@ -5,7 +5,7 @@
 #include <stb_image.h>
 
 
-ImageAsset::ImageAsset(std::string filename): BaseAsset(filename) {}
+ImageAsset::ImageAsset(const std::string &filename): BaseAsset(filename) {}
 
 ImageAsset::~ImageAsset()
 {
@@ -24,7 +24,7 @@ bool ImageAsset::load()
 
 	if(!imageData)
 	{
-		Logger(1) << "Could not load image: " << filename << " - " << stbi_failure_reason();
+		Logger() << "Could not load image: " << filename << " - " << stbi_failure_reason();
 		return false;
 	}
 	return true;

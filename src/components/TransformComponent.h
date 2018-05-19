@@ -8,29 +8,29 @@
 #include "../ecs/component.h"
 #include "../ecs/ecsManager.h"
 #include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <glm/glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
 
 class TransformComponent : public Component
 {
 	static bool exported;
-	
+
 	glm::mat4 matrix;
 	glm::vec3 position;
 	glm::quat rotation;
 	glm::vec3 scale;
-	
+
 	glm::vec3 forward;
 	glm::vec3 right;
 	glm::vec3 up;
 
 	void genMatrix();
 	void genVectors();
-	
+
 public:
-	TransformComponent();
-	~TransformComponent();
-	void setValues(json inValues);
-	
+	void setValues(const json &inValues) override;
+
 	glm::mat4 getMatrix() const;
 	glm::vec3 getPosition() const;
 	void setPosition(glm::vec3 inPosition);
@@ -51,6 +51,5 @@ public:
 		return os;
 	}
 };
-
 
 #endif //BLOCKHOP_TRANSFORMCOMPONENT_H

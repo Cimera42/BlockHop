@@ -6,7 +6,7 @@
 
 Logger::Logger()
 {
-	endLine = false;
+	endLine = true;
 	between = "";
 }
 Logger::Logger(bool doEndLine)

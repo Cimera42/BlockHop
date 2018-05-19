@@ -1,5 +1,6 @@
 #include "entity.h"
 #include "ecsManager.h"
+#include "../logger.h"
 
 Entity::Entity(std::string inName)
 {
@@ -42,7 +43,7 @@ void Entity::subscribeToSystems() {
 		//or doesn't meet the requirements
 		if(sysPtr->subscribeEntity(this)) {
 			sysPtr->subscribeCallback(this);
-			Logger(1) << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
+			Logger() << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
 		}
 	}
 }
@@ -58,7 +59,7 @@ void Entity::unsubscribeFromSystems() {
 			//A false return type means that the entity is not subbed
 			if(sysPtr->unsubscribeEntity(this)) {
 				sysPtr->unsubscribeCallback(this);
-				Logger(1) << "Entity \"" << this->getName() << "\" successfully unsubscribed from "<<sys.first;
+				Logger() << "Entity \"" << this->getName() << "\" successfully unsubscribed from "<<sys.first;
 			}
 		}
 	}

@@ -10,12 +10,12 @@
 
 class ECSLoader {
 public:
-	ECSLoader();
-	~ECSLoader();
+	ECSLoader() = default;
+	~ECSLoader() = default;
 
 	//Systems or components can be created in either order
 	//Probably components first
-	void readStream(std::string fileName);
+	void readStream(const std::string &fileName);
 
 	//Then entities
 };

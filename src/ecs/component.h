@@ -29,8 +29,8 @@ public:
 	 */
 	template<typename T>
 		static Component* create() {return new T; };
-	virtual void setValues(json inValues) = 0;
-	void setName(std::string inName) {name = inName; };
+	virtual void setValues(const json &inValues) = 0;
+	void setName(const std::string &inName) { name = inName; };
 	std::string getName() {return name; };
 
 private:

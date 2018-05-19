@@ -46,6 +46,14 @@
 				"transformComponent",
 				"textComponent"
 			]
+		},
+		{
+			"name": "networkSystem",
+			"compsToSub": [
+			],
+			"values": {
+
+			}
 		}
 	],
 	"entities": [

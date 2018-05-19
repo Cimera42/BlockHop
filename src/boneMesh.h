@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <assimp/scene.h>
+#include <glm/vec2.hpp>
+#include <glm/glm.hpp>
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -37,13 +39,13 @@ class BoneMesh : public Mesh
 		std::vector<Bone*> bones;
 		std::vector<BoneVertex> collatedVertices;
 
-		void createVAO();
-		void genBuffers();
-		void load(aiMesh *assimpMesh);
+		void createVAO() override;
+		void genBuffers() override;
+		void load(aiMesh *assimpMesh) override;
 		void loadWithVectors(std::vector<glm::vec3> inVertices,
-							 std::vector<glm::vec2> inUvs,
-							 std::vector<glm::vec3> inNormals,
-							 std::vector<unsigned int> inIndices);
+		                     std::vector<glm::vec2> inUvs,
+		                     std::vector<glm::vec3> inNormals,
+		                     std::vector<unsigned int> inIndices) override;
 
 		NodePart* FindNode(std::map<std::string, NodePart *> nodes, std::string findThis);
 };

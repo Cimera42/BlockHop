@@ -13,9 +13,7 @@ class MouseControlComponent : public Component
 	double xSensitivity, ySensitivity;
 
 public:
-	MouseControlComponent();
-	~MouseControlComponent();
-	void setValues(json inValues);
+	void setValues(const json &inValues) override;
 
 	double getXSensitivity() const;
 	double getYSensitivity() const;

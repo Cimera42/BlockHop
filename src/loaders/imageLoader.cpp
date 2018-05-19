@@ -15,12 +15,12 @@ ImageLoader::~ImageLoader() {
 	textureList.clear();
 }
 
-BaseAsset* ImageLoader::loadAsset(std::string filename) {
+BaseAsset* ImageLoader::loadAsset(const std::string &filename) {
 	ImageAsset* model = new ImageAsset(filename);
 	return AssetLoader::loadAsset(filename, model);
 }
 
-GLuint ImageLoader::loadTexture(std::vector<std::string> names) {
+GLuint ImageLoader::loadTexture(const std::vector<std::string> &names) {
 	std::set<std::string> filenameSet(names.begin(), names.end());
 
 	//Attempt to find all strings inside OpenGL textureList
@@ -49,13 +49,13 @@ GLuint ImageLoader::loadTexture(std::vector<std::string> names) {
 	}
 }
 
-GLuint ImageLoader::loadTexture(std::string name) {
+GLuint ImageLoader::loadTexture(const std::string &name) {
 	std::vector<std::string> nameVec;
 	nameVec.push_back(name);
 	return loadTexture(nameVec);
 }
 
-GLuint ImageLoader::generateTexture(std::vector<ImageAsset*> images) {
+GLuint ImageLoader::generateTexture(const std::vector<ImageAsset*> &images) {
 	GLuint textureID;
 	glGenTextures(1, &textureID);
 
@@ -90,9 +90,9 @@ GLuint ImageLoader::generateTexture(std::vector<ImageAsset*> images) {
 							images[i]->imageData);
 			GLenum err = glGetError();
 			if (!err) {
-				Logger(1) << "Texture loaded: " << images[i]->getName();
+				Logger() << "Texture loaded: " << images[i]->getName();
 			} else {
-				Logger(1) << "Texture load failed: " << images[i]->getName() << " - " << std::hex << err;
+				Logger() << "Texture load failed: " << images[i]->getName() << " - " << std::hex << err;
 				isLoaded = false;
 				break;
 			}

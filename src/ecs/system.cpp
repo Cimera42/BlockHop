@@ -1,9 +1,6 @@
 #include "system.h"
 
-System::System() {}
-System::~System() {}
-
-void System::setRequiredComponents(std::vector<std::string> inComps) {
+void System::setRequiredComponents(const std::vector<std::string> &inComps) {
 	requiredComps = inComps;
 }
 
@@ -12,7 +9,7 @@ bool System::hasRequired(Entity* ent)
 	auto compNames = ent->getComponents();
 	//Check existence of all required components
 	bool isInside = true;
-	for(auto reqComp : requiredComps) {
+	for(const auto &reqComp : requiredComps) {
 		if(std::find(compNames.begin(), compNames.end(), reqComp) == compNames.end()) {
 			isInside = false;
 			break;

@@ -9,8 +9,8 @@
 #include "../components/TransformComponent.h"
 #include "../components/CameraComponent.h"
 #include "KeyboardInputSystem.h"
-#include <glm/gtx/transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
 SYSTEM_EXPORT(AnimatedModelSystem, "animatedModelSystem")
@@ -44,7 +44,7 @@ void AnimatedModelSystem::update(double dt)
 	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>("cameraComponent");
 
 	KeyboardInputSystem* keyInput = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
-	
+
 	for(auto entity : getEntities())
 	{
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
@@ -64,7 +64,7 @@ void AnimatedModelSystem::update(double dt)
 		}
 		//Animate model
 		animatedModel->transformNodes((float) dt);
-		
+
 		for(auto pair : animatedModel->modelAsset->meshParts)
 		{
 			MeshPart *meshPart = pair.second;
@@ -72,7 +72,7 @@ void AnimatedModelSystem::update(double dt)
 			glm::mat4 modelMatrix = transform->getMatrix();
 
 			//If model is animated, use animated transformation
-			if(animatedModel->animated) 
+			if(animatedModel->animated)
 			{
 				NodeChanging *chNode = animatedModel->FindChangingNode(nodePart->name);
 				if(chNode)
@@ -96,7 +96,7 @@ void AnimatedModelSystem::update(double dt)
 				mesh = animatedModel->modelAsset->normalMeshes[meshPart->mesh];
 				shader = genericShader;
 			}
-			
+
 			shader->use();
 			glUniformMatrix4fv(shader->getLoc("viewMat"), 1, GL_FALSE, &camera->getViewMatrix()[0][0]);
 			glUniformMatrix4fv(shader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
@@ -109,7 +109,7 @@ void AnimatedModelSystem::update(double dt)
 
 			//Push bone matrices to shader
 			if(isBoned)
-			{				
+			{
 				BoneMeshChanging* chBoneMesh = animatedModel->FindChangingBoneMesh(nodePart->name);
 				unsigned int matsNum = (unsigned int) chBoneMesh->boneMats.size();
 				if(matsNum > 0)

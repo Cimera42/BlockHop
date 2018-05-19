@@ -12,8 +12,8 @@ public:
 	 * of the engine. A system is first exported via the ECSManager
 	 * and then created through the ECSManager.
 	 */
-	System();
-	virtual ~System();
+	System() = default;
+	virtual ~System() = default;
 
 	/*
 	 * create() is used during the creation process of the system
@@ -25,13 +25,14 @@ public:
 	 */
 	template<typename T>
 		static System* create() {return new T; };
-	void setRequiredComponents(std::vector<std::string> inComps);
+	virtual void setValues(const json &inValues) {};
+	void setRequiredComponents(const std::vector<std::string> &inComps);
 
 	/*
 	 * Check if entity has all required components
 	 */
 	bool hasRequired(Entity *ent);
-	
+
 	/*
 	 * Check if an entity is subscribed to the system
 	 */

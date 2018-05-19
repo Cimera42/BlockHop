@@ -16,10 +16,8 @@ class PhysicsComponent : public Component
 
 	static bool exported;
 public:
-	PhysicsComponent();
-	~PhysicsComponent();
-	void setValues(json inValues);
-	
+	void setValues(const json &inValues) override;
+
 	rp3d::CollisionShape *getCollisionShape() const;
 	void setCollisionShapeInstance(rp3d::ProxyShape *collisionShapeInstance);
 	rp3d::ProxyShape *getCollisionShapeInstance() const;

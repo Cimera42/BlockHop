@@ -12,13 +12,11 @@ class KeyboardControlComponent : public Component
 	static bool exported;
 
 	int forwardKey, backKey, leftKey, rightKey, upKey, downKey;
-	
+
 	int convertStringCode(std::string val);
-	
+
 public:
-	KeyboardControlComponent();
-	~KeyboardControlComponent();
-	void setValues(json inValues);
+	void setValues(const json &inValues) override;
 
 	int getForwardKey() const;
 	int getBackKey() const;

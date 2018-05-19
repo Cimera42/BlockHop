@@ -5,15 +5,15 @@
 #include "baseAsset.h"
 #include "../logger.h"
 
-BaseAsset::BaseAsset(std::string filename) {
+BaseAsset::BaseAsset(const std::string &filename) {
 	this->filename = filename;
 }
 
 BaseAsset::~BaseAsset() {}
 
 bool BaseAsset::load() {
-	Logger(1)<<"Default load implementation being used to load '"<<filename<<"'. "
-			"Please implement an asset class for this extension correctly."<<std::endl;
+	Logger()<<"Default load implementation being used to load '"<<filename<<"'. "
+			"Please implement an asset class for this extension correctly.";
 	return false;
 }
 

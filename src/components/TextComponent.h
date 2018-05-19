@@ -11,7 +11,7 @@
 #include "../loaders/imageAsset.h"
 #include "../shader.h"
 #include "../ecs/component.h"
-#include <glm/glm.hpp>
+#include <glm/vec2.hpp>
 
 using json = nlohmann::json;
 
@@ -49,19 +49,18 @@ class TextComponent : public Component
 
 public:
 	TextComponent();
-	~TextComponent();
-	void setValues(json inValues);
+	~TextComponent() override;
+	void setValues(const json &inValues) override;
 
 	Font *getFont() const;
 	const std::vector<Vertex2D> &getVertices() const;
 	GLuint getVAO() const;
 
-	void set(std::string inText);
-	void add(std::string inText);
+	void set(const std::string &inText);
+	void add(const std::string &inText);
 	void createBuffers();
 	void fillBuffers();
 	void createVAO();
 };
-
 
 #endif //BLOCKHOP_TEXTCOMPONENT_H

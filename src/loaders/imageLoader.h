@@ -8,18 +8,19 @@
 #include "assetLoader.h"
 #include "imageAsset.h"
 #include <set>
+#include <GL/glew.h>
 
 class ImageLoader : public AssetLoader {
 	std::map<std::set<std::string>, GLuint> textureList;
 
-	GLuint generateTexture(std::vector<ImageAsset*> images);
+	GLuint generateTexture(const std::vector<ImageAsset*> &images);
 public:
 	ImageLoader() {
 		loaderType = "image";
 	}
-	~ImageLoader();
+	~ImageLoader() override;
 
-	BaseAsset* loadAsset(std::string filename);
+	BaseAsset* loadAsset(const std::string &filename);
 
 	/*
 	 * Retrieves a GLuint for the texture with all the given filenames.
@@ -27,8 +28,8 @@ public:
 	 * If none are found, checks fileList for each image in supplied vector.
 	 * Will load images that don't exist and then create a new GLuint
 	 */
-	GLuint loadTexture(std::vector<std::string> names);
-	GLuint loadTexture(std::string name);
+	GLuint loadTexture(const std::vector<std::string> &names);
+	GLuint loadTexture(const std::string &name);
 };
 
 

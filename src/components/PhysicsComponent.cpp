@@ -7,11 +7,7 @@
 #include <reactphysics3d.h>
 
 COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
-
-PhysicsComponent::PhysicsComponent() {}
-PhysicsComponent::~PhysicsComponent() {}
-
-void PhysicsComponent::setValues(json inValues) 
+void PhysicsComponent::setValues(const json &inValues)
 {
 	std::string shape = inValues["colliderShape"].get<std::string>();
 	if(shape == "cube")

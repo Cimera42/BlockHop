@@ -5,8 +5,9 @@
 #include <sstream>
 #include <chrono>
 #include <string>
-#include <glm/vec3.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <glm/glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
 
 #include <reactphysics3d.h>
 
@@ -40,7 +41,7 @@ public:
 	Logger& operator<<(const glm::quat val);
 	Logger& operator<<(const glm::mat4 val);
 	Logger& operator<<(std::ostream& (*val)(std::ostream &));
-	
+
 	Logger& operator<<(const rp3d::Vector3 val);
 };
 

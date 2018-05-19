@@ -3,6 +3,7 @@ project(BlockHop)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(libraries/include)
 # filepaths in header includes for reactphysics3d are based on itself being the root
@@ -50,6 +51,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/loaders/baseAsset.cpp src/loaders/baseAsset
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelAsset.cpp src/loaders/modelAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageAsset.cpp src/loaders/imageAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelLoader.cpp src/loaders/modelLoader.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/systems/NetworkSystem.cpp src/systems/NetworkSystem.h)
 
 add_executable(BlockHop ${SOURCE_FILES})
 

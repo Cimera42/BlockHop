@@ -5,18 +5,18 @@
 #ifndef BLOCKHOP_MOUSEINPUTSYSTEM_H
 #define BLOCKHOP_MOUSEINPUTSYSTEM_H
 
-#include <glm/glm.hpp>
+#include <glm/vec2.hpp>
 #include "../ecs/system.h"
 
-class MouseInputSystem : public System 
+class MouseInputSystem : public System
 {
 	static bool exported;
 	glm::vec2 lastPos;
-	
+
 public:
 	MouseInputSystem();
 	~MouseInputSystem();
-	
+
 	glm::vec2 getLastPos() const;
 	void setLastPos(glm::vec2 inLastPos);
 

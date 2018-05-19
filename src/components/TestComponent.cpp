@@ -5,11 +5,7 @@
 #include "TestComponent.h"
 
 COMPONENT_EXPORT(TestComponent, "testComponent")
-
-TestComponent::TestComponent() {}
-TestComponent::~TestComponent() {}
-
-void TestComponent::setValues(json inValues) {
+void TestComponent::setValues(const json &inValues) {
 	//Will throw if incorrect/should automatically be caught by ECSManager
 	inValues["test"].get<bool>();
 }

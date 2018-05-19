@@ -14,13 +14,13 @@ SYSTEM_EXPORT(MouseInputSystem, "mouseInputSystem")
 extern Window* window;
 void mouseMoveInputEvent(GLFWwindow *window, double xpos, double ypos);
 
-MouseInputSystem::MouseInputSystem() 
+MouseInputSystem::MouseInputSystem()
 {
 	glfwSetCursorPosCallback(window->glfwWindow, mouseMoveInputEvent);
 }
 MouseInputSystem::~MouseInputSystem() {}
 
-void MouseInputSystem::update(double dt) 
+void MouseInputSystem::update(double dt)
 {
 	/*for(auto entity : getEntities())
 	{
@@ -44,15 +44,15 @@ void mouseMoveInputEvent(GLFWwindow *window, double xpos, double ypos)
 	glm::vec2 lastPos = mouseSystem->getLastPos();
 	if(lastPos.x == 0 && lastPos.y == 0)
 		lastPos = glm::vec2(xpos, ypos);
-	
+
 	double pitch = (lastPos.y - ypos)/100.0f;
 	double yaw = (lastPos.x - xpos)/100.0f;
-	
+
 	for(auto entity : mouseSystem->getEntities())
 	{
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
 		MouseControlComponent* mouseControl = entity->getComponent<MouseControlComponent>("mouseControlComponent");
-		
+
 		glm::quat rotation = transform->getRotation();
 		glm::quat y = glm::angleAxis((float) (-yaw*(mouseControl->getXSensitivity()/100)), glm::vec3(0,1,0));
 		glm::quat p = glm::angleAxis((float) (pitch*(mouseControl->getYSensitivity()/100)), transform->getRight());

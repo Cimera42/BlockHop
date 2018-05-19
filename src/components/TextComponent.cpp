@@ -39,7 +39,7 @@ TextComponent::~TextComponent()
 	glDeleteBuffers(1, &vertexBuffer);
 }
 
-void TextComponent::setValues(json inValues)
+void TextComponent::setValues(const json &inValues)
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
 	font = new Font();
@@ -80,7 +80,7 @@ void TextComponent::fillBuffers()
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex2D), vertices.data(), GL_STREAM_DRAW);
 }
 
-void TextComponent::set(std::string inText)
+void TextComponent::set(const std::string &inText)
 {
 	text = "";
 	vertices.clear();
@@ -90,7 +90,7 @@ void TextComponent::set(std::string inText)
 	add(inText);
 }
 
-void TextComponent::add(std::string inText)
+void TextComponent::add(const std::string &inText)
 {
 	text += inText;
 	for(unsigned int i = 0; i < inText.size(); i++)

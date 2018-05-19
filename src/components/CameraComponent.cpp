@@ -8,10 +8,7 @@
 
 COMPONENT_EXPORT(CameraComponent, "cameraComponent")
 
-CameraComponent::CameraComponent() {}
-CameraComponent::~CameraComponent() {}
-
-void CameraComponent::setValues(json inValues) 
+void CameraComponent::setValues(const json &inValues)
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
 	fov = inValues["fov"].get<float>();

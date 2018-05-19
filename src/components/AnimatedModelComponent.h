@@ -11,7 +11,7 @@
 #include "../boneMesh.h"
 #include "../loaders/modelAsset.h"
 #include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <assimp/scene.h>
 #include <assimp/anim.h>
 
@@ -20,13 +20,13 @@ glm::mat4 AToGMat(aiMatrix4x4 aiMat);
 struct NodePart;
 struct NodeChanging
 {
-	NodeChanging(NodePart* node) {
+	explicit NodeChanging(NodePart* node) {
 		NodeChanging::node = node;
 		NodeChanging::localMatrix = glm::mat4();
 		NodeChanging::collectiveMatrix = glm::mat4();
 		NodeChanging::nodeChParent = nullptr;
 	}
-	
+
 	NodePart* node;
 	glm::mat4 localMatrix;
 	glm::mat4 collectiveMatrix;
@@ -42,7 +42,7 @@ struct BoneChanging
 		BoneChanging::bone = bone;
 		BoneChanging::node = node;
 	}
-	
+
 	Bone* bone;
 	NodeChanging* node;
 };
@@ -52,9 +52,9 @@ struct BoneMeshChanging
 		BoneMeshChanging::boneMesh = boneMesh;
 		BoneMeshChanging::node = node;
 	}
-	
+
 	NodeChanging* node;
-	
+
 	BoneMesh* boneMesh;
 	std::vector<BoneChanging*> changingBones;
 	std::vector<glm::mat4> boneMats;
@@ -67,9 +67,7 @@ class AnimatedModelComponent : public Component
 {
 	static bool exported;
 public:
-	AnimatedModelComponent();
-	~AnimatedModelComponent();
-	void setValues(json inValues);
+	void setValues(const json &inValues) override;
 
 	bool animated = false;
 	ModelAsset* modelAsset;
@@ -91,7 +89,7 @@ public:
 	NodeChanging* FindChangingNode(std::string findThis);
 	BoneMeshChanging* FindChangingBoneMesh(std::string findThis);
 	bool playAnimation(std::string name);
-	
+
 	void nodeFamilySetup();
 };
 

@@ -9,10 +9,12 @@
 #include <vector>
 #include <map>
 #include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
 #include <assimp/scene.h>
 #include <assimp/anim.h>
 #include "imageAsset.h"
+#include <GL/glew.h>
 
 class Mesh;
 class BoneMesh;
@@ -53,7 +55,7 @@ struct Animation
 
 	std::map<std::string, AnimationNode*> animationNodes;
 	std::map<std::string, aiNodeAnim*> animNodes;
-	
+
 	aiNodeAnim* FindAnimNode(std::string findThis);
 };
 
@@ -91,9 +93,9 @@ struct BoneMesh;
 class ModelAsset : public BaseAsset
 {
 	friend class ModelLoader;
-	bool load();
-	ModelAsset(std::string inFilename);
-	~ModelAsset();
+	bool load() override;
+	explicit ModelAsset(const std::string &inFilename);
+	~ModelAsset() override;
 public:
 	NodePart* nodeLoop(aiNode *assimpNode, int indent, NodePart *parent);
 	Animation* FindAnim(std::string findThis);

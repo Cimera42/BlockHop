@@ -13,7 +13,7 @@ class BaseAsset {
 protected:
 	std::string filename = "";
 public:
-	BaseAsset(std::string filename);
+	explicit BaseAsset(const std::string &filename);
 	virtual ~BaseAsset();
 	std::string getName();
 };

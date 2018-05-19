@@ -2,14 +2,12 @@
 // Created by Jono on 03/03/2017.
 //
 #include "ecsManager.h"
+#include "../logger.h"
 
-ECSManager *ECSManager::c_instance = 0;
-
-ECSManager::ECSManager() {}
-ECSManager::~ECSManager() {}
+ECSManager *ECSManager::c_instance = nullptr;
 
 //Helpers for ECS
-Entity* ECSManager::findEntity(std::string name) {
+Entity* ECSManager::findEntity(const std::string &name) {
 	auto it = gameEntities.find(name);
 	if(it != gameEntities.end())
 		return it->second;
@@ -17,7 +15,7 @@ Entity* ECSManager::findEntity(std::string name) {
 }
 
 //Generation of ESC Classes
-Component* ECSManager::createComponent(std::string name, json compData) {
+Component* ECSManager::createComponent(const std::string &name, const json &compData) {
 	try {
 		//Get component from map and create a new instance
 		auto createFunc = gameComponentExports.at(name);
@@ -26,34 +24,39 @@ Component* ECSManager::createComponent(std::string name, json compData) {
 		try {
 			t->setValues(compData);
 		} catch(...) {
-			Logger(1)<< "Incorrect json object given to " << name << " @ "<<t;
+			Logger()<< "Incorrect json object given to " << name << " @ "<<t;
 		}
 		return t;
 	}
 	catch (...) {
-		Logger(1)<< "Component type " << name << " doesn't exist.";
+		Logger()<< "Component type " << name << " doesn't exist.";
 	}
 	return nullptr;
 }
 
-System* ECSManager::createSystem(std::string name, std::vector<std::string> compsNeeded){
+System* ECSManager::createSystem(const std::string &name, const std::vector<std::string> &compsNeeded, const json &inValues){
 	try {
 		//Get system from map and instantiate with a list of required components
 		auto createFunc = gameSystemExports.at(name);
 		System *t = createFunc();
 		//Add to list of required components for this system
 		t->setRequiredComponents(compsNeeded);
+		try {
+			t->setValues(inValues);
+		} catch(...) {
+			Logger()<< "Incorrect json object given to " << name << " @ "<<t;
+		}
 		//Add to global gameSystems store
-		gameSystems.push_back(std::make_pair(name, t));
+		gameSystems.emplace_back(std::make_pair(name, t));
 		return t;
 	}
 	catch (...) {
-		Logger(1)<< "System type " << name << " doesn't exist.";
+		Logger()<< "System type " << name << " doesn't exist.";
 	}
 	return nullptr;
 };
 
-Entity* ECSManager::createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData){
+Entity* ECSManager::createEntity(const std::string &name, const std::vector<std::string> &compsToSub, const std::vector<json> &compsData){
 	/* Entity creation handles:
 	 * - Creation of all components needed
 	 * - Addition of components to entities and by extention, subscription to systems
