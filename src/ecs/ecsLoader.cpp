@@ -1,10 +1,11 @@
 //
 // Created by Jono on 16/03/2017.
 //
-
-#include <fstream>
 #include "ecsLoader.h"
 #include "../logger.h"
+#include "ecsManager.h"
+#include <fstream>
+#include <json.hpp>
 
 void ECSLoader::readStream(const std::string &fileName) {
 

@@ -6,11 +6,10 @@
 #define BLOCKHOP_TRANSFORMCOMPONENT_H
 
 #include "../ecs/component.h"
-#include "../ecs/ecsManager.h"
-#include <glm/glm.hpp>
-#include <glm/glm.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <ostream>
 
 class TransformComponent : public Component
 {

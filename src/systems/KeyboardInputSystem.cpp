@@ -1,12 +1,13 @@
 //
 // Created by Tim on 25/05/2017.
 //
-
 #include "KeyboardInputSystem.h"
 #include "../ecs/ecsManager.h"
 #include "../window.h"
 #include "../components/TransformComponent.h"
 #include "../components/KeyboardControlComponent.h"
+#include <glm/vec3.hpp>
+#include <string>
 
 SYSTEM_EXPORT(KeyboardInputSystem, "keyboardInputSystem")
 

@@ -1,8 +1,9 @@
 //
 // Created by Tim on 8/06/2017.
 //
-
 #include "logger.h"
+#include <ctime>
+#include <iostream>
 
 Logger::Logger()
 {

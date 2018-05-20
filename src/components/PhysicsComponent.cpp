@@ -1,10 +1,8 @@
 //
 // Created by Tim on 24/06/2017.
 //
-
 #include "PhysicsComponent.h"
 #include "../ecs/ecsManager.h"
-#include <reactphysics3d.h>
 
 COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
 void PhysicsComponent::setValues(const json &inValues)

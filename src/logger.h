@@ -1,14 +1,12 @@
 #ifndef LOGGER_H_INCLUDED
 #define LOGGER_H_INCLUDED
 
-#include <iostream>
-#include <sstream>
-#include <chrono>
 #include <string>
-#include <glm/glm.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
-
+#include <sstream>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/mat4x4.hpp>
 #include <reactphysics3d.h>
 
 class Logger

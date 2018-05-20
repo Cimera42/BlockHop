@@ -1,10 +1,9 @@
 //
 // Created by Tim on 25/05/2017.
 //
-
-#include <glm/gtc/matrix_transform.hpp>
 #include "CameraComponent.h"
 #include "../ecs/ecsManager.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 COMPONENT_EXPORT(CameraComponent, "cameraComponent")
 

@@ -1,7 +1,6 @@
 #ifndef TEXTURE_H_INCLUDED
 #define TEXTURE_H_INCLUDED
 
-#include <string>
 #include "baseAsset.h"
 
 class ImageAsset : public BaseAsset

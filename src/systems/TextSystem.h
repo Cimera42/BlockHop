@@ -6,9 +6,9 @@
 #define BLOCKHOP_TEXTSYSTEM_H
 
 #include "../ecs/system.h"
-#include "../shader.h"
-#include "../components/TextComponent.h"
 #include "../components/TransformComponent.h"
+#include "../components/TextComponent.h"
+#include "../shader.h"
 
 class TextSystem : public System
 {

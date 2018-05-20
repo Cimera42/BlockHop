@@ -5,10 +5,10 @@
 #ifndef BLOCKHOP_TEXTURELOADER_H
 #define BLOCKHOP_TEXTURELOADER_H
 
-#include "assetLoader.h"
 #include "imageAsset.h"
-#include <set>
+#include "assetLoader.h"
 #include <GL/glew.h>
+#include <set>
 
 class ImageLoader : public AssetLoader {
 	std::map<std::set<std::string>, GLuint> textureList;

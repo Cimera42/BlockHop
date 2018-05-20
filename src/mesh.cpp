@@ -1,6 +1,5 @@
 #include "mesh.h"
 #include "openGLFunctions.h"
-#include "logger.h"
 
 Mesh::Mesh(const std::string &inName)
 {

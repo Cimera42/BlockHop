@@ -1,8 +1,7 @@
 #ifndef COMPONENT_H_INCLUDED
 #define COMPONENT_H_INCLUDED
 
-#include <vector>
-#include <json.hpp>
+#include "json.hpp"
 
 using json = nlohmann::json;
 
@@ -13,8 +12,8 @@ public:
 	 * systems. A component is first exported via the ECSManager
 	 * and then created through the ECSManager.
 	 */
-	Component();
-	virtual ~Component();
+	Component() = default;
+	virtual ~Component() = default;
 
 	/*
 	 * create() is used during the creation process of the component

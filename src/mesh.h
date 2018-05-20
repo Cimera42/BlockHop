@@ -1,12 +1,12 @@
 #ifndef MESH_H_INCLUDED
 #define MESH_H_INCLUDED
 
-#include <vector>
-#include <assimp/scene.h>
-#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
+#include <string>
+#include <vector>
 #include <GL/glew.h>
-#include "shader.h"
+#include <assimp/scene.h>
 
 struct Vertex
 {

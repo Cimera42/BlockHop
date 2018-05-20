@@ -5,13 +5,10 @@
 #ifndef BLOCKHOP_ASSETMANAGER_H
 #define BLOCKHOP_ASSETMANAGER_H
 
-
-#include <string>
 #include <json.hpp>
+#include "baseAsset.h"
 #include "assetLoader.h"
-#include "imageLoader.h"
-#include "modelLoader.h"
-#include "../logger.h"
+
 using json = nlohmann::json;
 
 class AssetManager {

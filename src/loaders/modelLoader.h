@@ -6,7 +6,6 @@
 #define BLOCKHOP_MODELLOADER_H
 
 #include "assetLoader.h"
-#include "modelAsset.h"
 
 class ModelLoader : public AssetLoader {
 

@@ -1,7 +1,6 @@
 //
 // Created by Tim on 25/05/2017.
 //
-
 #include "KeyboardControlComponent.h"
 #include "../ecs/ecsManager.h"
 

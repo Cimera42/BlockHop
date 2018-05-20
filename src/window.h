@@ -1,7 +1,8 @@
 #ifndef WINDOW_H_INCLUDED
 #define WINDOW_H_INCLUDED
 
-#include <GLFW/glfw3.h>
+#include <glfw/glfw3.h>
+
 class Window
 {
 public:

@@ -1,7 +1,6 @@
 //
 // Created by Tim on 19/05/2018.
 //
-
 #include "NetworkSystem.h"
 #include "../ecs/ecsManager.h"
 

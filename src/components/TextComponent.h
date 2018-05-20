@@ -5,12 +5,10 @@
 #ifndef BLOCKHOP_TEXTCOMPONENT_H
 #define BLOCKHOP_TEXTCOMPONENT_H
 
-#include <array>
-#include <map>
-#include <json.hpp>
 #include "../loaders/imageAsset.h"
-#include "../shader.h"
 #include "../ecs/component.h"
+#include <GL/glew.h>
+#include <json.hpp>
 #include <glm/vec2.hpp>
 
 using json = nlohmann::json;

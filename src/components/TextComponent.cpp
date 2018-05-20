@@ -1,11 +1,11 @@
 //
 // Created by Tim on 24/05/2017.
 //
-
 #include "TextComponent.h"
 #include "../ecs/ecsManager.h"
-#include "../openGLFunctions.h"
 #include "../loaders/assetManager.h"
+#include "../loaders/imageLoader.h"
+#include "../openGLFunctions.h"
 #include <fstream>
 
 COMPONENT_EXPORT(TextComponent, "textComponent")

@@ -1,16 +1,14 @@
 //
 // Created by Tim on 13/06/2017.
 //
-
 #include "modelAsset.h"
-#include "../logger.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#include "../logger.h"
+#include "assetManager.h"
+#include "imageLoader.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
-#include "../mesh.h"
-#include "../boneMesh.h"
-#include "assetManager.h"
 
 AnimationNode::AnimationNode()
 {

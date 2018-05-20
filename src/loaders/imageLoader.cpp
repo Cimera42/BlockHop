@@ -1,9 +1,7 @@
 //
 // Created by Jono on 10/06/2017.
 //
-
 #include "imageLoader.h"
-
 #include "../openGLFunctions.h"
 #include "../logger.h"
 

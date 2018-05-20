@@ -1,31 +1,26 @@
 //
 // Created by Tim on 24/06/2017.
 //
-
 #include "PhysicsSystem.h"
 #include "../ecs/ecsManager.h"
-#include "../logger.h"
 #include "../components/TransformComponent.h"
 #include "../components/PhysicsComponent.h"
+#include "../systems/MouseButtonSystem.h"
 #include "../window.h"
-#include "KeyboardInputSystem.h"
-#include "MouseButtonSystem.h"
-
-#include <reactphysics3d.h>
-#include <GLFW/glfw3.h>
-
+#include <glm/vec3.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 SYSTEM_EXPORT(PhysicsSystem, "physicsSystem")
 
-PhysicsSystem::PhysicsSystem() 
+PhysicsSystem::PhysicsSystem()
 {
 	accumulator = 0;
-	
+
 	rp3d::Vector3 gravity(0,-9.81f,0);
 	dynamicsWorld = new rp3d::DynamicsWorld(gravity);
 	//dynamicsWorld->enableSleeping(false);
 }
-PhysicsSystem::~PhysicsSystem() 
+PhysicsSystem::~PhysicsSystem()
 {
 //	dynamicsWorld.destroyCollisionBody(collisionBody);
 	delete dynamicsWorld;
@@ -36,21 +31,21 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 	TransformComponent* transformComp = entSubbed->getComponent<TransformComponent>("transformComponent");
 	PhysicsComponent* physicsComp = entSubbed->getComponent<PhysicsComponent>("physicsComponent");
 	glm::vec3 startPos = transformComp->getPosition();
-	
+
 	rp3d::Vector3 initPos(startPos.x,startPos.y,startPos.z);
 	rp3d::Quaternion initRot = rp3d::Quaternion::identity();
 	rp3d::Transform transform(initPos, initRot);
 	rp3d::RigidBody* rigidBody;
-	
+
 	rigidBody = dynamicsWorld->createRigidBody(transform);
 	rigidBodies[entSubbed] = rigidBody;
-	
+
 	rp3d::ProxyShape* proxyShape = rigidBody->addCollisionShape(physicsComp->getCollisionShape(), rp3d::Transform::identity(), 1.0f);
 	physicsComp->setCollisionShapeInstance(proxyShape);
 	rigidBody->setType(physicsComp->getMode());
 }
 
-// Class WorldRaycastCallback 
+// Class WorldRaycastCallback
 class MyCallbackClass : public rp3d::RaycastCallback {
 
 public:
@@ -59,7 +54,7 @@ public:
 		dir = inDir;
 	}
 
-	virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info) 
+	virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info)
 	{
 		if(info.body->getType() == rp3d::DYNAMIC)
 		{
@@ -67,12 +62,12 @@ public:
 			rb->applyForce(rp3d::Vector3(dir.x,dir.y,dir.z)*20.0f, info.worldPoint);
 		}
 
-		// Return a fraction of 1.0 to gather all hits 
+		// Return a fraction of 1.0 to gather all hits
 		return rp3d::decimal(1.0);
 	}
 };
 
-extern Window window;
+extern Window* window;
 void PhysicsSystem::update(double dt)
 {
 	accumulator += dt;
@@ -90,25 +85,25 @@ void PhysicsSystem::update(double dt)
 		glm::vec3 startGlm = cameraTransform->getPosition();
 		glm::vec3 direction = cameraTransform->getForward();
 		glm::vec3 mDirection = direction*20.0f;
-		
+
 		rp3d::Vector3 start(startGlm.x,startGlm.y,startGlm.z);
 		rp3d::Vector3 end = start + rp3d::Vector3(mDirection.x,mDirection.y,mDirection.z);
 		rp3d::Ray ray(start,end);
-		
+
 		MyCallbackClass callback(direction*((float)b));
 		dynamicsWorld->raycast(ray, &callback);
 	}
-	
+
 	while(accumulator >= idealTimestep)
 	{
 		dynamicsWorld->update(idealTimestep);
-		
+
 		accumulator -= idealTimestep;
 	}
 	for(auto entity : getEntities())
 	{
 		TransformComponent* transformComp = entity->getComponent<TransformComponent>("transformComponent");
-		 
+
 		rp3d::RigidBody* rb = findRigidBody(entity);
 		if(rb)
 		{

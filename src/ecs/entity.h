@@ -1,8 +1,6 @@
 #ifndef ENTITY_H_INCLUDED
 #define ENTITY_H_INCLUDED
 
-#include <vector>
-#include <string>
 #include "component.h"
 
 class Entity {

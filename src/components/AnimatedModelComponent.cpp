@@ -1,16 +1,11 @@
 //
 // Created by Tim on 25/05/2017.
 //
-
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
 #include "AnimatedModelComponent.h"
 #include "../ecs/ecsManager.h"
 #include "../loaders/assetManager.h"
-
+#include <glm/mat4x4.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/matrix_decompose.hpp>
-#include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
 
 COMPONENT_EXPORT(AnimatedModelComponent, "animatedModelComponent")

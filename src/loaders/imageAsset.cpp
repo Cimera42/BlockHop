@@ -1,9 +1,7 @@
 #include "imageAsset.h"
 #include "../logger.h"
-
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-
 
 ImageAsset::ImageAsset(const std::string &filename): BaseAsset(filename) {}
 

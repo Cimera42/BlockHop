@@ -1,17 +1,16 @@
 //
 // Created by Tim on 25/05/2017.
 //
-
 #include "AnimatedModelSystem.h"
 #include "../ecs/ecsManager.h"
-#include "../components/AnimatedModelComponent.h"
-#include "../openGLFunctions.h"
-#include "../components/TransformComponent.h"
-#include "../components/CameraComponent.h"
 #include "KeyboardInputSystem.h"
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
+#include "../components/CameraComponent.h"
+#include "../components/TransformComponent.h"
+#include "../components/AnimatedModelComponent.h"
+#include "../mesh.h"
+#include "../openGLFunctions.h"
+#include <glfw/glfw3.h>
+#include <glm/mat4x4.hpp>
 
 SYSTEM_EXPORT(AnimatedModelSystem, "animatedModelSystem")
 

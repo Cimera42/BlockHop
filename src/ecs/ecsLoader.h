@@ -5,7 +5,6 @@
 #ifndef BLOCKHOP_ECSLOADER_H
 #define BLOCKHOP_ECSLOADER_H
 
-#include "ecsManager.h"
 #include <string>
 
 class ECSLoader {

@@ -1,8 +1,10 @@
 //
 // Created by Jono on 10/06/2017.
 //
-
 #include "assetManager.h"
+#include "imageLoader.h"
+#include "modelLoader.h"
+#include "../logger.h"
 #include <fstream>
 
 AssetManager *AssetManager::c_instance = 0;

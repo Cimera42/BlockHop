@@ -6,8 +6,10 @@
 #define BLOCKHOP_CAMERACOMPONENT_H
 
 #include "../ecs/component.h"
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 #include <json.hpp>
-#include <glm/glm.hpp>
+
 using json = nlohmann::json;
 
 class CameraComponent : public Component

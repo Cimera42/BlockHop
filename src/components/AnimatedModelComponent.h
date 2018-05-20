@@ -6,14 +6,8 @@
 #define BLOCKHOP_BONEMODELCOMPONENT_H
 
 #include "../ecs/component.h"
-#include "../loaders/imageAsset.h"
-#include "../mesh.h"
-#include "../boneMesh.h"
+#include <json.hpp>
 #include "../loaders/modelAsset.h"
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <assimp/scene.h>
-#include <assimp/anim.h>
 
 glm::mat4 AToGMat(aiMatrix4x4 aiMat);
 

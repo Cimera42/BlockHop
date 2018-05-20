@@ -1,8 +1,7 @@
 #ifndef SYSTEM_H_INCLUDED
 #define SYSTEM_H_INCLUDED
 
-#include <vector>
-#include <string>
+#include <json.hpp>
 #include "entity.h"
 
 class System {

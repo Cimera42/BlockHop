@@ -1,12 +1,10 @@
 //
 // Created by Jono on 10/06/2017.
 //
-
-#include "assetLoader.h"
-#include "../logger.h"
-#include <algorithm>
 #include <chrono>
 #include <thread>
+#include "assetLoader.h"
+#include "../logger.h"
 
 AssetLoader::AssetLoader() {}
 AssetLoader::~AssetLoader() {

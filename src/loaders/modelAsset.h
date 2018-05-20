@@ -5,19 +5,15 @@
 #ifndef BLOCKHOP_MODELASSET_H
 #define BLOCKHOP_MODELASSET_H
 
-#include <string>
+#include <glm/gtc/quaternion.hpp>
+#include "imageAsset.h"
+#include "baseAsset.h"
+#include <assimp/scene.h>
 #include <vector>
 #include <map>
-#include <glm/glm.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
-#include <assimp/scene.h>
-#include <assimp/anim.h>
-#include "imageAsset.h"
 #include <GL/glew.h>
-
-class Mesh;
-class BoneMesh;
+#include "../mesh.h"
+#include "../boneMesh.h"
 
 struct VectorKey
 {
@@ -89,7 +85,6 @@ struct Material
 	ImageAsset* image;
 };
 
-struct BoneMesh;
 class ModelAsset : public BaseAsset
 {
 	friend class ModelLoader;

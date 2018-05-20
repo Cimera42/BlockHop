@@ -1,7 +1,6 @@
 //
 // Created by Tim on 19/05/2018.
 //
-
 #ifndef BLOCKHOP_NETWORKSYSTEM_H
 #define BLOCKHOP_NETWORKSYSTEM_H
 

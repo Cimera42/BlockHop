@@ -1,6 +1,6 @@
 #include "shader.h"
-#include "openGLFunctions.h"
 #include "loadShader.h"
+#include "openGLFunctions.h"
 
 Shader::Shader(const char* vertName, const char* fragName)
 {

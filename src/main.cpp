@@ -1,9 +1,11 @@
-#include <iostream>
 #include "openGLFunctions.h"
+#include <GLFW/glfw3.h>
 #include "window.h"
-#include "ecs/ecsManager.h"
-#include "ecs/ecsLoader.h"
+#include "logger.h"
 #include "loaders/assetManager.h"
+#include "ecs/ecsLoader.h"
+#include "ecs/ecsManager.h"
+#include <chrono>
 
 Window* window;
 bool shouldExit = false;

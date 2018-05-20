@@ -1,6 +1,6 @@
 #include "entity.h"
-#include "ecsManager.h"
 #include "../logger.h"
+#include "ecsManager.h"
 
 Entity::Entity(std::string inName)
 {

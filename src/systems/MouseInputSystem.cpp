@@ -1,10 +1,10 @@
 //
 // Created by Tim on 25/05/2017.
 //
-
-#include <GLFW/glfw3.h>
 #include "MouseInputSystem.h"
 #include "../ecs/ecsManager.h"
+#include <glfw/glfw3.h>
+#include <glm/gtc/quaternion.hpp>
 #include "../window.h"
 #include "../components/TransformComponent.h"
 #include "../components/MouseControlComponent.h"

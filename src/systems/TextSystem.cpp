@@ -1,13 +1,11 @@
 //
 // Created by Tim on 25/05/2017.
 //
-
 #include "TextSystem.h"
+#include "../ecs/ecsManager.h"
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "../openGLFunctions.h"
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/quaternion.hpp>
 
 SYSTEM_EXPORT(TextSystem, "textSystem")
 

@@ -8,7 +8,7 @@
 #include "../ecs/system.h"
 #include "../shader.h"
 
-class AnimatedModelSystem : public System 
+class AnimatedModelSystem : public System
 {
 	static bool exported;
 public:
@@ -17,7 +17,7 @@ public:
 
 	Shader *genericShader;
 	Shader *boneShader;
-	
+
 	void update(double dt);
 };
 

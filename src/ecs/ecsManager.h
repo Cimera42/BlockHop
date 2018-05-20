@@ -8,9 +8,6 @@
 #include "entity.h"
 #include "component.h"
 #include "system.h"
-#include <string>
-#include <map>
-#include <vector>
 
 typedef Component* (*ComponentFactoryPtr)();
 typedef System* (*SystemFactoryPtr)();

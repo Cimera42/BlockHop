@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <iostream>
 
 /*void loadBinaryShaderPart(GLuint partID, const char * path)
 {

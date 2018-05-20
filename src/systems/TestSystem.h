@@ -6,7 +6,6 @@
 #define BLOCKHOP_TESTSYSTEM_H
 
 #include "../ecs/system.h"
-#include "../ecs/ecsManager.h"
 
 class TestSystem : public System
 {

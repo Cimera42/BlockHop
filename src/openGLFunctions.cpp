@@ -1,5 +1,6 @@
 #include "openGLFunctions.h"
 #include "logger.h"
+#include <glfw/glfw3.h>
 
 GLenum currentState;
 void glSetActiveTexture(GLenum state) //Handler to stop redundant glActiveTexture calls, hopefully speed up frames.

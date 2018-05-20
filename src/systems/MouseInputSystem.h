@@ -5,8 +5,8 @@
 #ifndef BLOCKHOP_MOUSEINPUTSYSTEM_H
 #define BLOCKHOP_MOUSEINPUTSYSTEM_H
 
-#include <glm/vec2.hpp>
 #include "../ecs/system.h"
+#include <glm/vec2.hpp>
 
 class MouseInputSystem : public System
 {

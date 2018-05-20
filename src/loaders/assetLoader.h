@@ -5,9 +5,8 @@
 #ifndef BLOCKHOP_ASSETLOADER_H
 #define BLOCKHOP_ASSETLOADER_H
 
-#include <map>
-#include <string>
 #include <vector>
+#include <map>
 #include "baseAsset.h"
 
 class AssetLoader {

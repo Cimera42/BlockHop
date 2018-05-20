@@ -1,10 +1,6 @@
 #include "boneMesh.h"
 #include "openGLFunctions.h"
-#include "logger.h"
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
+#include "./components/AnimatedModelComponent.h"
 
 BoneMesh::BoneMesh(std::string inName, aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes)
 		: Mesh(inName)

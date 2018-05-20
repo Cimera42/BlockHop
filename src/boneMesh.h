@@ -1,16 +1,14 @@
 #ifndef BONEMESH_H_INCLUDED
 #define BONEMESH_H_INCLUDED
 
-#include <vector>
-#include <assimp/scene.h>
 #include <glm/vec2.hpp>
-#include <glm/glm.hpp>
-#include <glm/glm.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
-#include <GL/glew.h>
-#include "mesh.h"
-#include "components/AnimatedModelComponent.h"
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <string>
+#include <vector>
+#include <map>
+#include <assimp/scene.h>
+#include "Mesh.h"
 
 struct BoneVertex
 {

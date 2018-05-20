@@ -1,11 +1,10 @@
 //
 // Created by Tim on 19/04/2017.
 //
-
 #include "TransformComponent.h"
+#include "../ecs/ecsManager.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
-#include <glm/gtx/quaternion.hpp>
 
 COMPONENT_EXPORT(TransformComponent, "transformComponent")
 void TransformComponent::setValues(const json &inValues) {
@@ -31,7 +30,7 @@ void TransformComponent::genMatrix()
 {
 	matrix = glm::mat4();
 	matrix *= glm::translate(position);
-	matrix *= glm::toMat4(rotation);
+	matrix *= glm::mat4_cast(rotation);
 	matrix *= glm::scale(scale);
 }
 

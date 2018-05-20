@@ -6,7 +6,6 @@
 #define BLOCKHOP_TESTCOMPONENT_H
 
 #include "../ecs/component.h"
-#include "../ecs/ecsManager.h"
 
 class TestComponent : public Component
 {
