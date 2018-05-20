@@ -7,6 +7,7 @@
 
 #include "../loaders/imageAsset.h"
 #include "../ecs/component.h"
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <json.hpp>
 #include <glm/vec2.hpp>

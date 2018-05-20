@@ -71,7 +71,38 @@ void BoneMesh::genBuffers()
 
 void BoneMesh::load(aiMesh *assimpMesh)
 {
-	Mesh::load(assimpMesh);
+	for(unsigned int j = 0; j < assimpMesh->mNumFaces; j++)
+	{
+		aiFace& assimpFace = assimpMesh->mFaces[j];
+
+		for(unsigned int k = 0; k < assimpFace.mNumIndices; k++)
+		{
+			indices.push_back(assimpFace.mIndices[k]);
+		}
+	}
+	for(unsigned int j = 0; j < assimpMesh->mNumVertices; j++)
+	{
+		aiVector3D vertex = assimpMesh->mVertices[j];
+		glm::vec3 glmVert = glm::vec3(vertex.x,vertex.y,vertex.z);
+		vertices.push_back(glmVert);
+
+		aiVector3D uv = assimpMesh->mTextureCoords[0][j];
+		glm::vec2 glmUv = glm::vec2(uv.x,uv.y);
+		uvs.push_back(glmUv);
+
+		aiVector3D normal = assimpMesh->mNormals[j];
+		glm::vec3 glmNormal = glm::vec3(normal.x,normal.y,normal.z);
+		normals.push_back(glmNormal);
+
+		materialIndices.push_back(assimpMesh->mMaterialIndex);
+
+		BoneVertex collatedVertex;
+		collatedVertex.pos = glmVert;
+		collatedVertex.uv = glmUv;
+		collatedVertex.normal = glmNormal;
+		collatedVertex.materialIndex = assimpMesh->mMaterialIndex;
+		collatedVertices.push_back(collatedVertex);
+	}
 
 	for(unsigned int i = 0; i < assimpMesh->mNumBones; i++)
 	{

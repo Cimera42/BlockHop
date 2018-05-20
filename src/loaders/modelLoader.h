@@ -17,7 +17,7 @@ public:
 
 	/*TODO default model for asynch loading*/
 
-	BaseAsset* loadAsset(std::string filename);
+	BaseAsset* loadAsset(const std::string &filename) override;
 };
 
 

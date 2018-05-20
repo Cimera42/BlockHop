@@ -1,6 +1,7 @@
 #ifndef SHADER_H_INCLUDED
 #define SHADER_H_INCLUDED
 
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <string>
 #include <map>

@@ -11,6 +11,7 @@
 #include <assimp/scene.h>
 #include <vector>
 #include <map>
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include "../mesh.h"
 #include "../boneMesh.h"

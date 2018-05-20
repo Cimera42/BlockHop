@@ -3,7 +3,7 @@ project(BlockHop)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_BUILD_TYPE Debug)
+#set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(libraries/include)
 # filepaths in header includes for reactphysics3d are based on itself being the root
@@ -34,6 +34,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/systems/MouseInputSystem.cpp src/systems/Mo
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/KeyboardInputSystem.cpp src/systems/KeyboardInputSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/MouseButtonSystem.cpp src/systems/MouseButtonSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/PhysicsSystem.cpp src/systems/PhysicsSystem.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/systems/NetworkSystem.cpp src/systems/NetworkSystem.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TestComponent.cpp src/components/TestComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TransformComponent.cpp src/components/TransformComponent.h)
@@ -44,14 +45,13 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/MouseControlComponent.cpp src/co
 set(SOURCE_FILES ${SOURCE_FILES} src/components/KeyboardControlComponent.cpp src/components/KeyboardControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/PhysicsComponent.cpp src/components/PhysicsComponent.h)
 
-set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageLoader.cpp src/loaders/imageLoader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetManager.cpp src/loaders/assetManager.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetLoader.cpp src/loaders/assetLoader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/baseAsset.cpp src/loaders/baseAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelAsset.cpp src/loaders/modelAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageAsset.cpp src/loaders/imageAsset.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageLoader.cpp src/loaders/imageLoader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelLoader.cpp src/loaders/modelLoader.h)
-set(SOURCE_FILES ${SOURCE_FILES} src/systems/NetworkSystem.cpp src/systems/NetworkSystem.h)
 
 add_executable(BlockHop ${SOURCE_FILES})
 
@@ -59,6 +59,6 @@ find_package(OpenGL REQUIRED)
 
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/glew32.lib)
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libassimp.dll.a)
-target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/glfw3dll.lib)
+target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libglfw3.a)
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libreactphysics3d.a)
 target_link_libraries(BlockHop ${OPENGL_LIBRARIES})

@@ -1,6 +1,7 @@
 #ifndef LOADSHADER_H_INCLUDED
 #define LOADSHADER_H_INCLUDED
 
+#define GLEW_STATIC
 #include <GL/glew.h>
 
 //! \brief Loads a shader to display images on screen.

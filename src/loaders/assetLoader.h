@@ -39,7 +39,7 @@ public:
 	 * Will need to create a new asset of type X and pass to protected
 	 * loadAsset
 	 */
-	virtual BaseAsset* loadAsset(std::string filename);
+	virtual BaseAsset* loadAsset(const std::string &filename);
 
 	/*
 	 * An asset is deemed to exist if it is either loaded

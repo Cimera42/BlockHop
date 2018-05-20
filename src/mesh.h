@@ -5,6 +5,7 @@
 #include <glm/vec2.hpp>
 #include <string>
 #include <vector>
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <assimp/scene.h>
 

@@ -7,6 +7,7 @@
 
 #include "imageAsset.h"
 #include "assetLoader.h"
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <set>
 
@@ -20,7 +21,7 @@ public:
 	}
 	~ImageLoader() override;
 
-	BaseAsset* loadAsset(const std::string &filename);
+	BaseAsset* loadAsset(const std::string &filename) override;
 
 	/*
 	 * Retrieves a GLuint for the texture with all the given filenames.

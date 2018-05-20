@@ -40,7 +40,7 @@ BaseAsset* AssetLoader::loadAsset(std::string filename, BaseAsset* newAsset){
 	return newAsset;
 }
 
-BaseAsset* AssetLoader::loadAsset(std::string filename) {
+BaseAsset* AssetLoader::loadAsset(const std::string &filename) {
 	Logger()<<"Default asset type attempting to be used for loading '"<<filename<<"'. "
 			"Please implement a loader with loadAsset and a correct asset type to use correctly.";
 }
