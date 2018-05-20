@@ -16,7 +16,7 @@ class ${NAME} : public Component
 public:
 	${NAME}();
 	~${NAME}();
-	void setValues(json inValues);
+	void setValues(const json &inValues);
 
 	friend std::ostream &operator<< (std::ostream &os, ${NAME} const &c) {
 		os << "${NAME}";

@@ -50,9 +50,12 @@
 		{
 			"name": "networkSystem",
 			"compsToSub": [
+				"networkComponent"
 			],
 			"values": {
-
+				"thisPort": 2345,
+				"otherIp": "127.0.0.1",
+				"otherPort": 1234
 			}
 		}
 	],
@@ -254,6 +257,54 @@
 						"halfWidth": 20,
 						"halfHeight": 0.5,
 						"halfDepth": 20
+					}
+				}
+			]
+		},
+		{
+			"name": "NetworkEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 5,
+							"y": 0,
+							"z": 5
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "keyboardControlComponent",
+					"values": {
+						"forward": "I",
+						"back": "K",
+						"left": "J",
+						"right": "L",
+						"up": "Y",
+						"down": "H"
+					}
+				},
+				{
+					"name": "networkComponent",
+					"values": {
 					}
 				}
 			]

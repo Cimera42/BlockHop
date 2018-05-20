@@ -10,6 +10,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <ostream>
+#include <string>
 
 class TransformComponent : public Component
 {
@@ -41,6 +42,9 @@ public:
 	glm::vec3 getForward() const;
 	glm::vec3 getRight() const;
 	glm::vec3 getUp() const;
+
+	std::string serialise();
+	void deserialise(const std::string &data);
 
 	friend std::ostream &operator<< (std::ostream &os, TransformComponent const &t) {
 		os << "TransformComponent: ";

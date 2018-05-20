@@ -18,7 +18,8 @@ set(SOURCE_FILES ${SOURCE_FILES} src/shader.cpp src/shader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/openGLFunctions.cpp src/openGLFunctions.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loadShader.cpp src/loadShader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/boneMesh.cpp src/boneMesh.h)
-set(SOURCE_FILES ${SOURCE_FILES} src/angle.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/utils.cpp src/utils.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/UDPSocket.cpp src/UDPSocket.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/component.cpp src/ecs/component.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/ecsLoader.cpp src/ecs/ecsLoader.h)
@@ -44,6 +45,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/CameraComponent.cpp src/componen
 set(SOURCE_FILES ${SOURCE_FILES} src/components/MouseControlComponent.cpp src/components/MouseControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/KeyboardControlComponent.cpp src/components/KeyboardControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/PhysicsComponent.cpp src/components/PhysicsComponent.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/components/NetworkComponent.cpp src/components/NetworkComponent.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetManager.cpp src/loaders/assetManager.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetLoader.cpp src/loaders/assetLoader.h)
@@ -62,3 +64,10 @@ target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libassi
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libglfw3.a)
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libreactphysics3d.a)
 target_link_libraries(BlockHop ${OPENGL_LIBRARIES})
+
+if(WIN32)
+    target_link_libraries(BlockHop wsock32 ws2_32)
+else()
+    find_package (Threads)
+    target_link_libraries (BlockHop ${CMAKE_THREAD_LIBS_INIT})
+endif()
