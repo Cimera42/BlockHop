@@ -63,14 +63,13 @@ void PhysicsSystem::update(double dt)
 	//Run triggers
 	for(auto trig : getTriggers()) {
 		trig->runSystemFunction(this);
-		//std::cout<< trig->getName() << std::endl;
 	}
 
 	for(auto entity : getEntities())
 	{
-		//Check if entity has triggers that are in this system (TODO optimise with sub lists)
+		//Check if entity has triggers that are in this system
 		for(Trigger* entTrig : entity->getTriggers()) {
-			if(entTrig->isInTriggerList(getTriggers())) {
+			if(entTrig->getSystemName() == "physicsSystem") {
 				//Do something
 				entTrig->runEntityCheck(this, entity);
 			}

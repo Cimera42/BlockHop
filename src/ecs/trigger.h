@@ -48,13 +48,15 @@ public:
 	virtual void setValues(json inValues) = 0;
 	void setName(std::string inName) {name = inName; };
 	std::string getName() {return name; };
+	void setSystemName(std::string inSystemName) {systemName = inSystemName; }
+	std::string getSystemName() {return systemName; };
 
 	virtual void runSystemFunction(System* a) {}; //System level
 
 	//Entity level
 	bool isInTriggerList(std::vector<Trigger*> triggerList);
 
-	virtual void runEntityCheck(System* s, Entity* e) {};
+	virtual void runEntityCheck(System* s, Entity* e) {}; //TODO figure out a way to extend this to add in more data if needed (ie not repeating things between triggers)
 
 
 private:
@@ -66,6 +68,7 @@ private:
 	//static bool exported;
 
 	std::string name;
+	std::string systemName;
 };
 
 #endif //BLOCKHOP_TRIGGER_H

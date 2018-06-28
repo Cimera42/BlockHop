@@ -47,14 +47,6 @@ std::vector<std::string> Entity::getComponents() const {
 	return compNames;
 }
 
-/*void Entity::subscribeTriggersToEntity(System* subbedSys) {
-	//Given a system
-	// Get all triggers for system
-	subbedSys.g
-	// Check if triggers have required extra components
-	// If so create instance and attach to entity
-}*/
-
 void Entity::subscribeToSystems() {
 	//Move through each system
 	for(auto &sys : ECSManager::i()->gameSystems) {

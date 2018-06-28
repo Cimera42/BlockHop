@@ -221,7 +221,7 @@
 				{
 					"name": "clickedTrigger",
 					"values": {
-						"testData": 77
+						"force": 30
 					}
 				}
 			]

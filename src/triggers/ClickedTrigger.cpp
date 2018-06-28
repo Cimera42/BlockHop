@@ -5,38 +5,36 @@
 #include "ClickedTrigger.h"
 #include "../ecs/ecsManager.h"
 #include "../systems/MouseButtonSystem.h"
-#include "../systems/PhysicsSystem.h"
 #include "../components/TransformComponent.h"
 #include <GLFW/glfw3.h>
 
 TRIGGER_EXPORT(ClickedTrigger, "clickedTrigger");
 
-int ClickedTrigger::testSystemValue = 0;
+rp3d::RigidBody* ClickedTrigger::clicked;
+rp3d::Vector3 ClickedTrigger::worldPoint;
+glm::vec3 ClickedTrigger::direction;
 
 ClickedTrigger::ClickedTrigger(){}
 ClickedTrigger::~ClickedTrigger(){}
 
 void ClickedTrigger::setValues(json inValues) {
-	testEntityValue = inValues["testData"].get<int>();
+	int theForce = inValues["force"].get<int>();
+	force = theForce;
 }
 
 // Class WorldRaycastCallback
 class MyCallbackClass : public rp3d::RaycastCallback {
 
 public:
-	glm::vec3 dir;
-	float forceValue;
-	MyCallbackClass(glm::vec3 inDir, float inForceValue) {
-		dir = inDir;
-		forceValue = inForceValue;
-	}
+	MyCallbackClass() {}
 
 	virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info)
 	{
 		if(info.body->getType() == rp3d::DYNAMIC)
 		{
 			rp3d::RigidBody* rb = (reactphysics3d::RigidBody *) info.body;
-			rb->applyForce(rp3d::Vector3(dir.x,dir.y,dir.z)*forceValue, info.worldPoint);
+			ClickedTrigger::clicked = rb;
+			ClickedTrigger::worldPoint = info.worldPoint;
 		}
 
 		// Return a fraction of 1.0 to gather all hits
@@ -58,24 +56,31 @@ void ClickedTrigger::runSystemFunction(System* sys) {
 		Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
 		TransformComponent* cameraTransform = cameraEntity->getComponent<TransformComponent>("transformComponent");
 		glm::vec3 startGlm = cameraTransform->getPosition();
-		glm::vec3 direction = cameraTransform->getForward();
-		glm::vec3 mDirection = direction*20.0f;
+		glm::vec3 camDirection = cameraTransform->getForward();
+		glm::vec3 mDirection = camDirection*20.0f;
 
 		rp3d::Vector3 start(startGlm.x,startGlm.y,startGlm.z);
 		rp3d::Vector3 end = start + rp3d::Vector3(mDirection.x,mDirection.y,mDirection.z);
 		rp3d::Ray ray(start,end);
 
-		//TODO This would be what actions are for but yeah
-		/*TODO Basically you would store which entity it has hit, then inside runEntityCheck - check if its that entity
-		 and then run appropriate actions from here
-		 */
-		MyCallbackClass callback(direction*((float)b), testEntityValue); //this needs to be on entity level
+		direction = camDirection*(float)b;
+		MyCallbackClass callback;
 		s->getDyanmicWorld()->raycast(ray, &callback);
+	} else {
+		clicked = nullptr;
 	}
-
-	testSystemValue = 4;
 }
 
 void ClickedTrigger::runEntityCheck(System* sys, Entity* ent) {
+	PhysicsSystem* s = static_cast<PhysicsSystem*>(sys);
 
+	rp3d::RigidBody* rb = s->findRigidBody(ent);
+	if(rb) {
+		if (rb->getType() == rp3d::DYNAMIC) {
+			if(clicked == rb) {
+				//TODO Here we'd trigger an action but yeah
+				rb->applyForce(rp3d::Vector3(direction.x,direction.y,direction.z)*force, worldPoint);
+			}
+		}
+	}
 }

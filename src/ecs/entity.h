@@ -49,7 +49,7 @@ public:
 		return nullptr;
 	}
 
-	std::vector<Trigger*> getTriggers() const {
+	std::vector<Trigger*> getTriggers() {
 		return subbedTriggers;
 	}
 private:

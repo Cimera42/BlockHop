@@ -6,6 +6,8 @@
 #define BLOCKHOP_CLICKEDTRIGGER_H
 
 #include "../ecs/trigger.h"
+#include "../systems/PhysicsSystem.h"
+#include <glm/glm.hpp>
 
 class ClickedTrigger : public Trigger {
 	static bool exported;
@@ -15,8 +17,11 @@ public:
 	~ClickedTrigger();
 	void setValues(json inValues);
 
-	static int testSystemValue;
-	int testEntityValue;
+	static rp3d::RigidBody* clicked;
+	static rp3d::Vector3 worldPoint;
+	static glm::vec3 direction;
+
+	int force;
 
 	void runSystemFunction(System* s);
 	void runEntityCheck(System* s, Entity* e);

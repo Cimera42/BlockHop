@@ -42,6 +42,24 @@ Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 		auto createFunc = gameTriggerExports.at(name);
 		Trigger *t = createFunc();
 		t->setName(name);
+
+		//Get the system this trigger is to be attached to
+		bool foundSystem = false;
+		for(std::pair<std::string, System*> o : gameSystems) {
+			std::vector<Trigger*> triggers = o.second->getTriggers();
+			auto it = std::find_if(triggers.begin(), triggers.end(), [name](Trigger *t) {
+				return t->getName() == name;
+			});
+			if (it != triggers.end()) {
+				//Set name in trigger
+				t->setSystemName(o.first);
+				foundSystem = true;
+			}
+		}
+		if(!foundSystem) {
+			throw("No system with this trigger");
+		}
+
 		try {
 			t->setValues(trigData);
 		} catch(...) {
@@ -78,7 +96,7 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
 	/* Entity creation handles:
 	 * - Creation of all components needed
 	 * - Addition of components to entities and by extention, subscription to systems
-	 * - By extension then also triggers attached to entities TODO pass data
+	 * - By extension then also triggers attached to entities
 	 */
 	assert(compsToSub.size() == compsData.size());
 
@@ -91,8 +109,10 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
 
 	for(int i = 0; i < trigsToSub.size(); i++) {
 		Trigger* newTrig = createTrigger(trigsToSub[i], trigsData[i]);
-		e->addTrigger(newTrig); // TODO wrap in try catch and delete newTrig if failure
-		//TODO ALSO TO IMPROVE PERFORMANCE - have two subscriber lists for systems - one with and one without required triggers
+		if(newTrig) { //TODO remove this check - its just if creation fails - do other TODOs instead
+			e->addTrigger(newTrig); // TODO wrap in try catch and delete newTrig if failure
+			//TODO ALSO TO IMPROVE PERFORMANCE - have two subscriber lists for systems - one with and one without required triggers
+		}
 	}
 
 	//Add to global gameEntities store
