@@ -36,17 +36,17 @@ Component* ECSManager::createComponent(std::string name, json compData) {
 	return nullptr;
 }
 
-Trigger* ECSManager::createTrigger(std::string name) { //, json compData
+Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 	try {
 		//Get component from map and create a new instance
 		auto createFunc = gameTriggerExports.at(name);
 		Trigger *t = createFunc();
 		t->setName(name);
-		/*try {
-			t->setValues(compData);
+		try {
+			t->setValues(trigData);
 		} catch(...) {
 			Logger(1)<< "Incorrect json object given to " << name << " @ "<<t;
-		}*/
+		}
 		return t;
 	}
 	catch (...) {
@@ -74,7 +74,7 @@ System* ECSManager::createSystem(std::string name, std::vector<std::string> comp
 	return nullptr;
 };
 
-Entity* ECSManager::createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData, std::vector<std::string> trigsToSub){
+Entity* ECSManager::createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData, std::vector<std::string> trigsToSub, std::vector<json> trigsData){
 	/* Entity creation handles:
 	 * - Creation of all components needed
 	 * - Addition of components to entities and by extention, subscription to systems
@@ -90,7 +90,7 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
 	}
 
 	for(int i = 0; i < trigsToSub.size(); i++) {
-		Trigger* newTrig = createTrigger(trigsToSub[i]);
+		Trigger* newTrig = createTrigger(trigsToSub[i], trigsData[i]);
 		e->addTrigger(newTrig); // TODO wrap in try catch and delete newTrig if failure
 		//TODO ALSO TO IMPROVE PERFORMANCE - have two subscriber lists for systems - one with and one without required triggers
 	}

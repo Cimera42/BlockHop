@@ -219,7 +219,10 @@
 			],
 			"triggers": [
 				{
-					"name": "clickedTrigger"
+					"name": "clickedTrigger",
+					"values": {
+						"testData": 77
+					}
 				}
 			]
 		},

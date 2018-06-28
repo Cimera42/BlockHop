@@ -65,7 +65,8 @@ void KeyboardInputSystem::update(double dt)
 					   {"halfDepth",1}};;
 			json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
 			std::vector<json> compData = {tj,pj,aj};
-			ECSManager::i()->createEntity("projectile", comps, compData, trigs);
+			std::vector<json> trigData = {};
+			ECSManager::i()->createEntity("projectile", comps, compData, trigs, trigData);
 		}
 	}
 }

@@ -44,13 +44,13 @@ void ECSLoader::readStream(std::string fileName) {
 
 			//Collate all triggers for entity
 			std::vector<std::string> trigNames;
-			//std::vector<json> trigData;
+			std::vector<json> trigData;
 			for(auto &trig : ent["triggers"]) {
 				trigNames.push_back(trig["name"]);
-				//trigData.push_back(comp["values"]);
+				trigData.push_back(trig["values"]);
 			}
 
-			ECSManager::i()->createEntity(ent["name"], compNames, compData, trigNames); //trigData
+			ECSManager::i()->createEntity(ent["name"], compNames, compData, trigNames, trigData);
 		}
 
 	}catch (std::invalid_argument invalidArgument) {

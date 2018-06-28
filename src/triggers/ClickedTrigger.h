@@ -13,7 +13,10 @@ class ClickedTrigger : public Trigger {
 public:
 	ClickedTrigger();
 	~ClickedTrigger();
+	void setValues(json inValues);
+
 	static int testSystemValue;
+	int testEntityValue;
 
 	void runSystemFunction(System* s);
 	void runEntityCheck(System* s, Entity* e);

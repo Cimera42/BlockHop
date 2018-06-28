@@ -72,6 +72,7 @@ void PhysicsSystem::update(double dt)
 		for(Trigger* entTrig : entity->getTriggers()) {
 			if(entTrig->isInTriggerList(getTriggers())) {
 				//Do something
+				entTrig->runEntityCheck(this, entity);
 			}
 		}
 

@@ -16,13 +16,19 @@ int ClickedTrigger::testSystemValue = 0;
 ClickedTrigger::ClickedTrigger(){}
 ClickedTrigger::~ClickedTrigger(){}
 
+void ClickedTrigger::setValues(json inValues) {
+	testEntityValue = inValues["testData"].get<int>();
+}
+
 // Class WorldRaycastCallback
 class MyCallbackClass : public rp3d::RaycastCallback {
 
 public:
 	glm::vec3 dir;
-	MyCallbackClass(glm::vec3 inDir) {
+	float forceValue;
+	MyCallbackClass(glm::vec3 inDir, float inForceValue) {
 		dir = inDir;
+		forceValue = inForceValue;
 	}
 
 	virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info)
@@ -30,7 +36,7 @@ public:
 		if(info.body->getType() == rp3d::DYNAMIC)
 		{
 			rp3d::RigidBody* rb = (reactphysics3d::RigidBody *) info.body;
-			rb->applyForce(rp3d::Vector3(dir.x,dir.y,dir.z)*20.0f, info.worldPoint);
+			rb->applyForce(rp3d::Vector3(dir.x,dir.y,dir.z)*forceValue, info.worldPoint);
 		}
 
 		// Return a fraction of 1.0 to gather all hits
@@ -63,7 +69,7 @@ void ClickedTrigger::runSystemFunction(System* sys) {
 		/*TODO Basically you would store which entity it has hit, then inside runEntityCheck - check if its that entity
 		 and then run appropriate actions from here
 		 */
-		MyCallbackClass callback(direction*((float)b));
+		MyCallbackClass callback(direction*((float)b), testEntityValue); //this needs to be on entity level
 		s->getDyanmicWorld()->raycast(ray, &callback);
 	}
 

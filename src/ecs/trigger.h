@@ -45,7 +45,7 @@ public:
 	 */
 	template<typename T>
 	static Trigger* create() {return new T; };
-	//virtual void setValues(json inValues) = 0;
+	virtual void setValues(json inValues) = 0;
 	void setName(std::string inName) {name = inName; };
 	std::string getName() {return name; };
 

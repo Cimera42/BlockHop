@@ -47,9 +47,9 @@ public:
 	 * Functions for the generation of game elements
 	 */
 	Component* createComponent(std::string name, json compData);
-	Trigger* createTrigger(std::string name); //, json trigData
+	Trigger* createTrigger(std::string name, json trigData);
 	System* createSystem(std::string name, std::vector<std::string> compsNeeded, std::vector<std::string> attachedTriggers);
-	Entity* createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData, std::vector<std::string> trigsToSub);
+	Entity* createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData, std::vector<std::string> trigsToSub, std::vector<json> trigsData);
 
 	//Used to generate references to systems by string
 	template<typename T>
