@@ -1,10 +1,24 @@
 #include "system.h"
+#include "ecsManager.h"
 
 System::System() {}
 System::~System() {}
 
 void System::setRequiredComponents(std::vector<std::string> inComps) {
 	requiredComps = inComps;
+}
+
+void System::setAttachedTriggers(std::vector<std::string> inTrigs) {
+	//Get all triggers and store a single instance to allow us to use static functions
+	std::vector<Trigger*> trigInstances;
+
+	for(auto trigName : inTrigs) {
+		auto it = ECSManager::i()->gameTriggers.find(trigName);
+		if(it != ECSManager::i()->gameTriggers.end()) {
+			trigInstances.push_back(it->second);
+		}
+	}
+	attachedTriggers = trigInstances;
 }
 
 bool System::hasRequired(Entity* ent)
@@ -52,6 +66,10 @@ bool System::unsubscribeEntity(Entity *entToUnSub) {
 
 std::vector<Entity*> System::getEntities() const {
 	return subbedEntities;
+}
+
+std::vector<Trigger*> System::getTriggers() const {
+	return attachedTriggers;
 }
 
 void System::subscribeCallback(Entity *entSubbed) {}

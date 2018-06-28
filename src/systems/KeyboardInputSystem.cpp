@@ -53,6 +53,7 @@ void KeyboardInputSystem::update(double dt)
 			std::vector<std::string> comps = {"transformComponent",
 											  "physicsComponent",
 											  "animatedModelComponent"};
+			std::vector<std::string> trigs = {};
 
 			json tj = {{"position",{{"x",2.5},{"y",10},{"z",0}}},
 					   {"rotation",{{"w",1},{"x",0},{"y",0},{"z",0}}},
@@ -64,7 +65,7 @@ void KeyboardInputSystem::update(double dt)
 					   {"halfDepth",1}};;
 			json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
 			std::vector<json> compData = {tj,pj,aj};
-			ECSManager::i()->createEntity("projectile", comps, compData);			
+			ECSManager::i()->createEntity("projectile", comps, compData, trigs);
 		}
 	}
 }

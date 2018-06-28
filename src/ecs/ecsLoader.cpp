@@ -27,7 +27,8 @@ void ECSLoader::readStream(std::string fileName) {
 		//Just need to sort out our systems that need certain components
 		for (auto& sys : j["systems"]) {
 			std::vector<std::string> compsToSub = sys["compsToSub"];
-			ECSManager::i()->createSystem(sys["name"], compsToSub);
+			std::vector<std::string> trigsToAttach = sys["trigsToAttach"];
+			ECSManager::i()->createSystem(sys["name"], compsToSub, trigsToAttach);
 		}
 
 		//Get entities
@@ -41,7 +42,15 @@ void ECSLoader::readStream(std::string fileName) {
 				compData.push_back(comp["values"]);
 			}
 
-			ECSManager::i()->createEntity(ent["name"], compNames, compData);
+			//Collate all triggers for entity
+			std::vector<std::string> trigNames;
+			//std::vector<json> trigData;
+			for(auto &trig : ent["triggers"]) {
+				trigNames.push_back(trig["name"]);
+				//trigData.push_back(comp["values"]);
+			}
+
+			ECSManager::i()->createEntity(ent["name"], compNames, compData, trigNames); //trigData
 		}
 
 	}catch (std::invalid_argument invalidArgument) {

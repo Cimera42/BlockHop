@@ -28,6 +28,7 @@ public:
 	void update(double dt);
 	
 	rp3d::RigidBody *findRigidBody(Entity *toFind);
+	rp3d::DynamicsWorld* getDyanmicWorld() { return dynamicsWorld; };
 };
 
 #endif //BLOCKHOP_PHYSICSSYSTEM_H

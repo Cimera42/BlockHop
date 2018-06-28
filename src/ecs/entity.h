@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "component.h"
+#include "trigger.h"
 
 class Entity {
 public:
@@ -25,6 +26,9 @@ public:
 	void addComponent(Component* comp);
 	void removeComponent(std::string compName);
 
+	void addTrigger(Trigger* trig);
+	void removeTrigger(std::string trigName);
+
 	/*
 	 * Simple getter for entity name
 	 */
@@ -44,10 +48,22 @@ public:
 			return static_cast<T*>(*it);
 		return nullptr;
 	}
+
+	std::vector<Trigger*> getTriggers() const {
+		return subbedTriggers;
+	}
 private:
+	/*
+	 * Functions for adding/removing triggers from entities.
+	 * Called upon attaching a component to a system
+	 */
+	//void subscribeTriggersToEntity(System* subbedSys);
+	//void unsubscribeTriggersToEntity(System* subbedSys);
+
 	void subscribeToSystems();
 	void unsubscribeFromSystems();
 	std::vector<Component*> subbedComponents;
+	std::vector<Trigger*> subbedTriggers;
 
 	std::string name;
 };

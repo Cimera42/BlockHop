@@ -24,6 +24,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/ecs/ecsLoader.cpp src/ecs/ecsLoader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/ecsManager.cpp src/ecs/ecsManager.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/entity.cpp src/ecs/entity.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/system.cpp src/ecs/system.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/ecs/trigger.cpp src/ecs/trigger.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/TestSystem.cpp src/systems/TestSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/TextSystem.cpp src/systems/TextSystem.h)
@@ -42,6 +43,8 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/CameraComponent.cpp src/componen
 set(SOURCE_FILES ${SOURCE_FILES} src/components/MouseControlComponent.cpp src/components/MouseControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/KeyboardControlComponent.cpp src/components/KeyboardControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/PhysicsComponent.cpp src/components/PhysicsComponent.h)
+
+set(SOURCE_FILES ${SOURCE_FILES} src/triggers/ClickedTrigger.cpp src/triggers/ClickedTrigger.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageLoader.cpp src/loaders/imageLoader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetManager.cpp src/loaders/assetManager.h)

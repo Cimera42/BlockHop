@@ -24,6 +24,21 @@ void Entity::removeComponent(std::string compName) {
 	unsubscribeFromSystems();
 }
 
+void Entity::addTrigger(Trigger *trig) {
+	//TODO validity checks to ensure given trigger only gets subbed if we have correct components
+	//else we exit
+	subbedTriggers.push_back(trig);
+}
+
+void Entity::removeTrigger(std::string trigName) {
+	auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](Trigger*& o) {
+		return (o->getName() == trigName);
+	});
+
+	if (it != subbedTriggers.end())
+		subbedTriggers.erase(it);
+}
+
 std::vector<std::string> Entity::getComponents() const {
 	std::vector<std::string> compNames;
 	for(auto &comp : subbedComponents) {
@@ -31,6 +46,14 @@ std::vector<std::string> Entity::getComponents() const {
 	}
 	return compNames;
 }
+
+/*void Entity::subscribeTriggersToEntity(System* subbedSys) {
+	//Given a system
+	// Get all triggers for system
+	subbedSys.g
+	// Check if triggers have required extra components
+	// If so create instance and attach to entity
+}*/
 
 void Entity::subscribeToSystems() {
 	//Move through each system
@@ -42,6 +65,7 @@ void Entity::subscribeToSystems() {
 		//or doesn't meet the requirements
 		if(sysPtr->subscribeEntity(this)) {
 			sysPtr->subscribeCallback(this);
+			//subscribeTriggersToEntity(sysPtr);
 			Logger(1) << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
 		}
 	}

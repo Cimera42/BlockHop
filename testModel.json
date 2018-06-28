@@ -5,25 +5,32 @@
 			"compsToSub": [
 				"transformComponent",
 				"mouseControlComponent"
-			]
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "keyboardInputSystem",
 			"compsToSub": [
 				"transformComponent",
 				"keyboardControlComponent"
-			]
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "mouseButtonSystem",
 			"compsToSub": [
-			]
+				"mouseControlComponent"
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "physicsSystem",
 			"compsToSub": [
 				"transformComponent",
 				"physicsComponent"
+			],
+			"trigsToAttach": [
+				"clickedTrigger"
 			]
 		},
 		{
@@ -31,21 +38,24 @@
 			"compsToSub": [
 				"transformComponent",
 				"cameraComponent"
-			]
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "animatedModelSystem",
 			"compsToSub": [
 				"transformComponent",
 				"animatedModelComponent"
-			]
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "textSystem",
 			"compsToSub": [
 				"transformComponent",
 				"textComponent"
-			]
+			],
+			"trigsToAttach": []
 		}
 	],
 	"entities": [
@@ -205,6 +215,11 @@
 						"halfHeight": 1,
 						"halfDepth": 1
 					}
+				}
+			],
+			"triggers": [
+				{
+					"name": "clickedTrigger"
 				}
 			]
 		},
