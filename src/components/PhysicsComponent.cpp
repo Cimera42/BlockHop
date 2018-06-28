@@ -3,6 +3,7 @@
 //
 
 #include "PhysicsComponent.h"
+#include "../Systems/PhysicsSystem.h"
 #include "../ecs/ecsManager.h"
 #include <reactphysics3d.h>
 
@@ -11,7 +12,7 @@ COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
 PhysicsComponent::PhysicsComponent() {}
 PhysicsComponent::~PhysicsComponent() {}
 
-void PhysicsComponent::setValues(json inValues) 
+void PhysicsComponent::setValues(json inValues)
 {
 	std::string shape = inValues["colliderShape"].get<std::string>();
 	if(shape == "cube")
@@ -50,6 +51,8 @@ void PhysicsComponent::setValues(json inValues)
 	{
 		collisionMode = rp3d::DYNAMIC;
 	}
+
+	jointData = inValues["joints"].get<std::vector<json> >();
 }
 
 rp3d::CollisionShape *PhysicsComponent::getCollisionShape() const

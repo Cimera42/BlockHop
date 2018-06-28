@@ -16,10 +16,14 @@ class PhysicsComponent : public Component
 
 	static bool exported;
 public:
+
 	PhysicsComponent();
 	~PhysicsComponent();
 	void setValues(json inValues);
-	
+
+	std::vector<json> jointData;
+	std::vector<rp3d::Joint*> joints;
+
 	rp3d::CollisionShape *getCollisionShape() const;
 	void setCollisionShapeInstance(rp3d::ProxyShape *collisionShapeInstance);
 	rp3d::ProxyShape *getCollisionShapeInstance() const;
