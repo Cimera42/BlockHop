@@ -8,6 +8,10 @@ void System::setRequiredComponents(std::vector<std::string> inComps) {
 	requiredComps = inComps;
 }
 
+std::vector<std::string> System::getRequiredComponents() {
+	return requiredComps;
+}
+
 void System::setAttachedTriggers(std::vector<std::string> inTrigs) {
 	//Get all triggers and store a single instance to allow us to use static functions
 	std::vector<Trigger*> trigInstances;

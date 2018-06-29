@@ -61,7 +61,7 @@ Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 		}
 
 		try {
-			t->setValues(trigData);
+			t->setValues(trigData); //TODO load and create actions
 		} catch(...) {
 			Logger(1)<< "Incorrect json object given to " << name << " @ "<<t;
 		}
@@ -109,9 +109,9 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
 
 	for(int i = 0; i < trigsToSub.size(); i++) {
 		Trigger* newTrig = createTrigger(trigsToSub[i], trigsData[i]);
+		//TODO check that trigger fufils requirements of system (and actions) - ie. has correct components
 		if(newTrig) { //TODO remove this check - its just if creation fails - do other TODOs instead
 			e->addTrigger(newTrig); // TODO wrap in try catch and delete newTrig if failure
-			//TODO ALSO TO IMPROVE PERFORMANCE - have two subscriber lists for systems - one with and one without required triggers
 		}
 	}
 

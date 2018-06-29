@@ -28,6 +28,7 @@ public:
 	template<typename T>
 		static System* create() {return new T; };
 	void setRequiredComponents(std::vector<std::string> inComps);
+	std::vector<std::string> getRequiredComponents();
 	void setAttachedTriggers(std::vector<std::string> inTrigs);
 
 	/*

@@ -15,16 +15,6 @@ using json = nlohmann::json;
 class Trigger {
 public:
 	/*
-	 * TODO to be implemented in derived:
-	 * - static exported - done
-	 * - static name of system to attach to - done in file
-	 * - static setup function if we want
-	 *
-	 * - static components needed?
-	 *
-	 * followed by actual implementation... */
-
-	/*
 	 * A trigger is an entity level object that completes checks in a specific system
 	 * and causes flow on action effects. A trigger is first exported via the ECSManager
 	 * and then created through the ECSManager.
@@ -33,11 +23,11 @@ public:
 	virtual ~Trigger();
 
 	/*
-	 * create() is used during the creation process of the component
+	 * create() is used during the creation process of the trigger
 	 * by the ECSManager.
 	 * setValues() takes in a json object and sets the initial data
-	 * state for the component. This is virtual and must be implemented
-	 * by each different component seperately!
+	 * state for the trigger. This is virtual and must be implemented
+	 * by each different trigger seperately!
 	 * In addition, setValues should implement checks to test that
 	 * the json object contains valid data. *Else an exception
 	 * should be thrown.* TODO Verify the behaviour we want
@@ -51,13 +41,12 @@ public:
 	void setSystemName(std::string inSystemName) {systemName = inSystemName; }
 	std::string getSystemName() {return systemName; };
 
-	virtual void runSystemFunction(System* a) {}; //System level
+	//System level
+	virtual void runSystemFunction(System* a) {};
 
 	//Entity level
-	bool isInTriggerList(std::vector<Trigger*> triggerList);
-
 	virtual void runEntityCheck(System* s, Entity* e) {}; //TODO figure out a way to extend this to add in more data if needed (ie not repeating things between triggers)
-
+	bool isInTriggerList(std::vector<Trigger*> triggerList);
 
 private:
 	/*
