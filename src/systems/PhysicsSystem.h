@@ -9,24 +9,24 @@
 
 #include <reactphysics3d.h>
 
-class PhysicsSystem : public System 
+class PhysicsSystem : public System
 {
 	static bool exported;
-	
+
 	rp3d::DynamicsWorld* dynamicsWorld;
 	const float idealTimestep = 1.0f/60.0f;
 	double accumulator;
-	
+
 	std::map<Entity*, rp3d::RigidBody*> rigidBodies;
-	
+
 public:
 	PhysicsSystem();
-	~PhysicsSystem();
+	~PhysicsSystem() override;
 
-	void subscribeCallback(Entity* entSubbed);
-	
-	void update(double dt);
-	
+	void subscribeCallback(Entity* entSubbed) override;
+
+	void update(double dt) override;
+
 	rp3d::RigidBody *findRigidBody(Entity *toFind);
 };
 

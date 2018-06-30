@@ -3,9 +3,7 @@
 //
 
 #include "PhysicsComponent.h"
-#include "../Systems/PhysicsSystem.h"
 #include "../ecs/ecsManager.h"
-#include <reactphysics3d.h>
 
 COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
 

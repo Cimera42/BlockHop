@@ -4,15 +4,11 @@
 
 #include "PhysicsSystem.h"
 #include "../ecs/ecsManager.h"
-#include "../logger.h"
 #include "../components/TransformComponent.h"
 #include "../components/PhysicsComponent.h"
 #include "../window.h"
-#include "KeyboardInputSystem.h"
 #include "MouseButtonSystem.h"
 
-#include <reactphysics3d.h>
-#include <GLFW/glfw3.h>
 
 SYSTEM_EXPORT(PhysicsSystem, "physicsSystem")
 
@@ -32,8 +28,8 @@ PhysicsSystem::~PhysicsSystem()
 
 void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 {
-	TransformComponent* transformComp = entSubbed->getComponent<TransformComponent>("transformComponent");
-	PhysicsComponent* physicsComp = entSubbed->getComponent<PhysicsComponent>("physicsComponent");
+	auto transformComp = entSubbed->getComponent<TransformComponent>("transformComponent");
+	auto physicsComp = entSubbed->getComponent<PhysicsComponent>("physicsComponent");
 	glm::vec3 startPos = transformComp->getPosition();
 
 	rp3d::Vector3 initPos(startPos.x,startPos.y,startPos.z);
@@ -50,7 +46,6 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 
 	for(auto jointData : physicsComp->jointData)
 	{
-		Logger() << "Data";
 		auto otherEntityName = jointData["entity"].get<std::string>();
 		auto typeName = jointData["type"].get<std::string>();
 
@@ -62,28 +57,105 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 		auto otherEntity = ECSManager::i()->findEntity(otherEntityName);
 		if(otherEntity)
 		{
-			Logger() << "otherEntity";
 			auto physicsSystem = ECSManager::i()->findSystem<PhysicsSystem>("physicsSystem");
 			auto otherRb = physicsSystem->findRigidBody(otherEntity);
 			if(otherRb)
 			{
-				Logger() << "otherRb";
 				if(typeName == "BallSocket")
 				{
-					Logger() << "BallSocket";
 					rp3d::BallAndSocketJointInfo jointInfo(rigidBody, otherRb, anchorPosition);
 
+					auto collision = jointData.find("collision");
+					if(collision != jointData.end())
+					{
+						jointInfo.isCollisionEnabled = (*collision).get<bool>();
+					}
+
 					rp3d::BallAndSocketJoint* joint;
-					joint = dynamic_cast < rp3d :: BallAndSocketJoint *>( dynamicsWorld->createJoint ( jointInfo ));
+					joint = dynamic_cast<rp3d::BallAndSocketJoint*>(dynamicsWorld->createJoint(jointInfo));
 					physicsComp->joints.emplace_back(joint);
 				}
 				else if(typeName == "Fixed")
 				{
-					Logger() << "Fixed";
 					rp3d::FixedJointInfo jointInfo(rigidBody, otherRb, anchorPosition);
 
+					auto collision = jointData.find("collision");
+					if(collision != jointData.end())
+					{
+						jointInfo.isCollisionEnabled = (*collision).get<bool>();
+					}
+
 					rp3d::FixedJoint* joint;
-					joint = dynamic_cast < rp3d :: FixedJoint*>( dynamicsWorld->createJoint ( jointInfo ));
+					joint = dynamic_cast<rp3d::FixedJoint*>(dynamicsWorld->createJoint(jointInfo));
+					physicsComp->joints.emplace_back(joint);
+				}
+				else if(typeName == "Slider")
+				{
+					rp3d::Vector3 axis;
+					axis.x = jointData["axis"]["x"].get<float>();
+					axis.y = jointData["axis"]["y"].get<float>();
+					axis.z = jointData["axis"]["z"].get<float>();
+
+					rp3d::SliderJointInfo jointInfo(rigidBody, otherRb, anchorPosition ,axis);
+
+					auto limits = jointData.find("limits");
+					if(limits != jointData.end())
+					{
+						jointInfo.isLimitEnabled = true;
+						jointInfo.minTranslationLimit = (*limits)[0].get<float>();
+						jointInfo.maxTranslationLimit = (*limits)[1].get<float>();
+					}
+
+					auto motorData = jointData.find("motor");
+					if(motorData != jointData.end())
+					{
+						jointInfo.isMotorEnabled = true;
+						jointInfo.motorSpeed = (*motorData)["speed"].get<float>();
+						jointInfo.maxMotorForce = (*motorData)["maxForce"].get<float>();
+					}
+
+					auto collision = jointData.find("collision");
+					if(collision != jointData.end())
+					{
+						jointInfo.isCollisionEnabled = (*collision).get<bool>();
+					}
+
+					rp3d::SliderJoint* joint;
+					joint = dynamic_cast<rp3d::SliderJoint*>(dynamicsWorld->createJoint(jointInfo));
+					physicsComp->joints.emplace_back(joint);
+				}
+				else if(typeName == "Hinge")
+				{
+					rp3d::Vector3 axis;
+					axis.x = jointData["axis"]["x"].get<float>();
+					axis.y = jointData["axis"]["y"].get<float>();
+					axis.z = jointData["axis"]["z"].get<float>();
+
+					rp3d::HingeJointInfo jointInfo(rigidBody, otherRb, anchorPosition, axis);
+					auto limits = jointData.find("limits");
+					if(limits != jointData.end())
+					{
+						jointInfo.isLimitEnabled = true;
+						jointInfo.minAngleLimit = (*limits)[0].get<float>();
+						jointInfo.maxAngleLimit = (*limits)[1].get<float>();
+					}
+
+					auto motorData = jointData.find("motor");
+					if(motorData != jointData.end())
+					{
+						jointInfo.isMotorEnabled = true;
+						jointInfo.motorSpeed = (*motorData)["speed"].get<float>();
+						jointInfo.maxMotorTorque = (*motorData)["maxTorque"].get<float>();
+					}
+
+					auto collision = jointData.find("collision");
+					if(collision != jointData.end())
+					{
+						jointInfo.isCollisionEnabled = (*collision).get<bool>();
+					}
+
+					rp3d::HingeJoint* joint;
+					joint = dynamic_cast<rp3d::HingeJoint*>(dynamicsWorld->createJoint(jointInfo));
 					physicsComp->joints.emplace_back(joint);
 				}
 			}
@@ -96,15 +168,15 @@ class MyCallbackClass : public rp3d::RaycastCallback {
 
 public:
 	glm::vec3 dir;
-	MyCallbackClass(glm::vec3 inDir) {
+	explicit MyCallbackClass(glm::vec3 inDir) {
 		dir = inDir;
 	}
 
-	virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info)
+	rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info) override
 	{
 		if(info.body->getType() == rp3d::DYNAMIC)
 		{
-			rp3d::RigidBody* rb = (reactphysics3d::RigidBody *) info.body;
+			auto rb = dynamic_cast<reactphysics3d::RigidBody*>(info.body);
 			rb->applyForce(rp3d::Vector3(dir.x,dir.y,dir.z)*20.0f, info.worldPoint);
 		}
 
@@ -118,7 +190,7 @@ void PhysicsSystem::update(double dt)
 {
 	accumulator += dt;
 
-	MouseButtonSystem* mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>("mouseButtonSystem");
+	auto mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>("mouseButtonSystem");
 	int b = 0;
 	if(mouseButtonSystem->isButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
@@ -131,7 +203,7 @@ void PhysicsSystem::update(double dt)
 	if(b != 0)
 	{
 		Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
-		TransformComponent* cameraTransform = cameraEntity->getComponent<TransformComponent>("transformComponent");
+		auto cameraTransform = cameraEntity->getComponent<TransformComponent>("transformComponent");
 		glm::vec3 startGlm = cameraTransform->getPosition();
 		glm::vec3 direction = cameraTransform->getForward();
 		glm::vec3 mDirection = direction*20.0f;
@@ -140,7 +212,7 @@ void PhysicsSystem::update(double dt)
 		rp3d::Vector3 end = start + rp3d::Vector3(mDirection.x,mDirection.y,mDirection.z);
 		rp3d::Ray ray(start,end);
 
-		MyCallbackClass callback(direction*((float)b));
+		MyCallbackClass callback(direction * (float) b);
 		dynamicsWorld->raycast(ray, &callback);
 	}
 
@@ -153,7 +225,7 @@ void PhysicsSystem::update(double dt)
 
 	for(auto entity : getEntities())
 	{
-		TransformComponent* transformComp = entity->getComponent<TransformComponent>("transformComponent");
+		auto transformComp = entity->getComponent<TransformComponent>("transformComponent");
 
 		rp3d::RigidBody* rb = findRigidBody(entity);
 		if(rb)
