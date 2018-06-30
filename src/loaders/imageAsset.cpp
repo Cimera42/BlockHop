@@ -24,7 +24,7 @@ bool ImageAsset::load()
 
 	if(!imageData)
 	{
-		Logger(1) << "Could not load image: " << filename << " - " << stbi_failure_reason();
+		Logger() << "Could not load image: " << filename << " - " << stbi_failure_reason();
 		return false;
 	}
 	return true;

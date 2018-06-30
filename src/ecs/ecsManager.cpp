@@ -26,12 +26,12 @@ Component* ECSManager::createComponent(std::string name, json compData) {
 		try {
 			t->setValues(compData);
 		} catch(...) {
-			Logger(1)<< "Incorrect json object given to " << name << " @ "<<t;
+			Logger()<< "Incorrect json object given to " << name << " @ "<<t;
 		}
 		return t;
 	}
 	catch (...) {
-		Logger(1)<< "Component type " << name << " doesn't exist.";
+		Logger()<< "Component type " << name << " doesn't exist.";
 	}
 	return nullptr;
 }
@@ -48,7 +48,7 @@ System* ECSManager::createSystem(std::string name, std::vector<std::string> comp
 		return t;
 	}
 	catch (...) {
-		Logger(1)<< "System type " << name << " doesn't exist.";
+		Logger()<< "System type " << name << " doesn't exist.";
 	}
 	return nullptr;
 };

@@ -6,7 +6,7 @@
 
 Logger::Logger()
 {
-	endLine = false;
+	endLine = true;
 	between = "";
 }
 Logger::Logger(bool doEndLine)
@@ -14,12 +14,12 @@ Logger::Logger(bool doEndLine)
 	endLine = doEndLine;
 	between = "";
 }
-Logger::Logger(std::string inBetween)
+Logger::Logger(const std::string& inBetween)
 {
 	endLine = false;
 	between = inBetween;
 }
-Logger::Logger(bool doEndLine, std::string inBetween)
+Logger::Logger(bool doEndLine, const std::string& inBetween)
 {
 	endLine = doEndLine;
 	between = inBetween;

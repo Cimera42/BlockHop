@@ -18,9 +18,9 @@ class Logger
 
 public:
 	Logger();
-	Logger(bool doEndLine);
-	Logger(std::string inBetween);
-	Logger(bool doEndLine, std::string inBetween);
+	explicit Logger(bool doEndLine);
+	explicit Logger(const std::string& inBetween);
+	Logger(bool doEndLine, const std::string& inBetween);
 
 	//Print entire string buffer at end of << chain
 	//when logger object is destroyed
@@ -34,14 +34,14 @@ public:
 		buffer << val << between;
 		return *this;
 	}
-	Logger& operator<<(const glm::vec2 val);
-	Logger& operator<<(const glm::vec3 val);
-	Logger& operator<<(const glm::vec4 val);
-	Logger& operator<<(const glm::quat val);
-	Logger& operator<<(const glm::mat4 val);
+	Logger& operator<<(glm::vec2 val);
+	Logger& operator<<(glm::vec3 val);
+	Logger& operator<<(glm::vec4 val);
+	Logger& operator<<(glm::quat val);
+	Logger& operator<<(glm::mat4 val);
 	Logger& operator<<(std::ostream& (*val)(std::ostream &));
-	
-	Logger& operator<<(const rp3d::Vector3 val);
+
+	Logger& operator<<(rp3d::Vector3 val);
 };
 
 #endif // LOGGER_H_INCLUDED

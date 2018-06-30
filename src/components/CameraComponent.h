@@ -12,7 +12,7 @@ using json = nlohmann::json;
 class CameraComponent : public Component
 {
 	static bool exported;
-	
+
 	float fov;
 	float aspectRatio;
 	float nearDist;
@@ -20,7 +20,7 @@ class CameraComponent : public Component
 
 	glm::mat4 viewMatrix;
 	glm::mat4 projectionMatrix;
-	
+
 public:
 	CameraComponent();
 	~CameraComponent();
@@ -28,7 +28,7 @@ public:
 
 	glm::mat4 getViewMatrix() const;
 	glm::mat4 getProjectionMatrix() const;
-	
+
 	void lookAt(glm::vec3 eye, glm::vec3 centre, glm::vec3 up);
 	void perspective();
 

@@ -50,7 +50,7 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 
 	for(auto jointData : physicsComp->jointData)
 	{
-		Logger(1) << "Data";
+		Logger() << "Data";
 		auto otherEntityName = jointData["entity"].get<std::string>();
 		auto typeName = jointData["type"].get<std::string>();
 
@@ -62,15 +62,15 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 		auto otherEntity = ECSManager::i()->findEntity(otherEntityName);
 		if(otherEntity)
 		{
-			Logger(1) << "otherEntity";
+			Logger() << "otherEntity";
 			auto physicsSystem = ECSManager::i()->findSystem<PhysicsSystem>("physicsSystem");
 			auto otherRb = physicsSystem->findRigidBody(otherEntity);
 			if(otherRb)
 			{
-				Logger(1) << "otherRb";
+				Logger() << "otherRb";
 				if(typeName == "BallSocket")
 				{
-					Logger(1) << "BallSocket";
+					Logger() << "BallSocket";
 					rp3d::BallAndSocketJointInfo jointInfo(rigidBody, otherRb, anchorPosition);
 
 					rp3d::BallAndSocketJoint* joint;
@@ -79,7 +79,7 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 				}
 				else if(typeName == "Fixed")
 				{
-					Logger(1) << "Fixed";
+					Logger() << "Fixed";
 					rp3d::FixedJointInfo jointInfo(rigidBody, otherRb, anchorPosition);
 
 					rp3d::FixedJoint* joint;

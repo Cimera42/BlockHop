@@ -63,19 +63,19 @@ void glSetUseProgram(GLuint program) //Handler to stop redundant glUseProgram ca
 
 void errCallback(int inCode, const char* descrip)
 {
-	Logger(1) << inCode << " -- #GLFW ERROR# -- " << descrip;
+	Logger() << inCode << " -- #GLFW ERROR# -- " << descrip;
 }
 
 bool initGLFW()
 {
 	if(!glfwInit())
 	{
-		Logger(1) << "GLFW init failed";
+		Logger() << "GLFW init failed";
 		return false;
 	}
 	else
 	{
-		Logger(1) << "GLFW init successful";
+		Logger() << "GLFW init successful";
 	}
 	glfwSetErrorCallback(errCallback);
 
@@ -88,17 +88,17 @@ bool initGLEW()
 	GLenum err = glewInit();
 	if(err!=GLEW_OK)
 	{
-		Logger(1)<<"GLEW failed to load";
+		Logger()<<"GLEW failed to load";
 		return false;
 	}
 	else
 	{
-		Logger(1) << "GLEW loaded";
-		Logger(1) << "OpenGL info:";
-		Logger(1) << "		  Vendor: " << glGetString(GL_VENDOR);
-		Logger(1) << "		Renderer: " << glGetString(GL_RENDERER);
-		Logger(1) << "		 Version: " << glGetString(GL_VERSION);
-		Logger(1) << "	GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
+		Logger() << "GLEW loaded";
+		Logger() << "OpenGL info:";
+		Logger() << "		  Vendor: " << glGetString(GL_VENDOR);
+		Logger() << "		Renderer: " << glGetString(GL_RENDERER);
+		Logger() << "		 Version: " << glGetString(GL_VERSION);
+		Logger() << "	GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
 
 		//Sets up common OpenGL Functions
 		//glEnable(GL_MULTISAMPLE);

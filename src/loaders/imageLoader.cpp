@@ -90,9 +90,9 @@ GLuint ImageLoader::generateTexture(std::vector<ImageAsset*> images) {
 							images[i]->imageData);
 			GLenum err = glGetError();
 			if (!err) {
-				Logger(1) << "Texture loaded: " << images[i]->getName();
+				Logger() << "Texture loaded: " << images[i]->getName();
 			} else {
-				Logger(1) << "Texture load failed: " << images[i]->getName() << " - " << std::hex << err;
+				Logger() << "Texture load failed: " << images[i]->getName() << " - " << std::hex << err;
 				isLoaded = false;
 				break;
 			}
