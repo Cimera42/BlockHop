@@ -221,6 +221,14 @@
 				{
 					"name": "clickedTrigger",
 					"values": {
+                        "actions": [
+                            {
+                                "name": "applyForceAction",
+                                "values": {
+                                    "force": 60
+                                }
+                            }
+                        ],
 						"force": 30
 					}
 				}

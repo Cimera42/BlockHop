@@ -17,10 +17,12 @@
 typedef Component* (*ComponentFactoryPtr)();
 typedef System* (*SystemFactoryPtr)();
 typedef Trigger* (*TriggerFactoryPtr)();
+typedef Action* (*ActionFactoryPtr)();
 
 #define COMPONENT_EXPORT(type, name) bool type::exported = ECSManager::i()->exportComponent<type>(name);//#type to use <X>Component as a string literal
 #define SYSTEM_EXPORT(type, name) bool type::exported = ECSManager::i()->exportSystem<type>(name);
 #define TRIGGER_EXPORT(type, name) bool type::exported = ECSManager::i()->exportTrigger<type>(name);
+#define ACTION_EXPORT(type, name) bool type::exported = ECSManager::i()->exportAction<type>(name);
 
 class ECSManager {
 public:
@@ -48,6 +50,7 @@ public:
 	 */
 	Component* createComponent(std::string name, json compData);
 	Trigger* createTrigger(std::string name, json trigData);
+	Action* createAction(std::string name, json actData);
 	System* createSystem(std::string name, std::vector<std::string> compsNeeded, std::vector<std::string> attachedTriggers);
 	Entity* createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData, std::vector<std::string> trigsToSub, std::vector<json> trigsData);
 
@@ -80,6 +83,14 @@ public:
 		return true;
 	}
 
+	//Used to generate references to actions, allowing for creation by string
+	template<typename T>
+	bool exportAction(std::string name) {
+		ActionFactoryPtr actFunc = &Action::create<T>;
+		gameActionExports.insert(std::make_pair(name, actFunc));
+		return true;
+	}
+
 	/*
 	 * ECS data accessible to public
 	 * TODO Add getters/settings and force this to be private
@@ -108,6 +119,7 @@ private:
 	std::map<std::string, SystemFactoryPtr> gameSystemExports;
 	std::map<std::string, ComponentFactoryPtr> gameComponentExports;
 	std::map<std::string, TriggerFactoryPtr> gameTriggerExports;
+	std::map<std::string, ActionFactoryPtr > gameActionExports;
 };
 
 #endif //BLOCKHOP_ECSMANAGER_H

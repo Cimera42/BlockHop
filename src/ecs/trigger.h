@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <json.hpp>
+#include "action.h"
 class System;
 class Entity;
 
@@ -41,11 +42,15 @@ public:
 	void setSystemName(std::string inSystemName) {systemName = inSystemName; }
 	std::string getSystemName() {return systemName; };
 
+	void addAction(Action* act);
+	void removeAction(std::string actName);
+
 	//System level
 	virtual void runSystemFunction(System* a) {};
 
 	//Entity level
 	virtual void runEntityCheck(System* s, Entity* e) {}; //TODO figure out a way to extend this to add in more data if needed (ie not repeating things between triggers)
+	void runActions(System* s, Entity* e);
 	bool isInTriggerList(std::vector<Trigger*> triggerList);
 
 private:
@@ -58,6 +63,7 @@ private:
 
 	std::string name;
 	std::string systemName;
+	std::vector<Action*> subbedActions;
 };
 
 #endif //BLOCKHOP_TRIGGER_H

@@ -18,8 +18,7 @@ ClickedTrigger::ClickedTrigger(){}
 ClickedTrigger::~ClickedTrigger(){}
 
 void ClickedTrigger::setValues(json inValues) {
-	int theForce = inValues["force"].get<int>();
-	force = theForce;
+	//int theForce = inValues["force"].get<int>();
 }
 
 // Class WorldRaycastCallback
@@ -78,8 +77,7 @@ void ClickedTrigger::runEntityCheck(System* sys, Entity* ent) {
 	if(rb) {
 		if (rb->getType() == rp3d::DYNAMIC) {
 			if(clicked == rb) {
-				//TODO Here we'd trigger an action but yeah
-				rb->applyForce(rp3d::Vector3(direction.x,direction.y,direction.z)*force, worldPoint);
+				runActions(sys, ent);
 			}
 		}
 	}

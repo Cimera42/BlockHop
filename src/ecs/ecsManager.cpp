@@ -8,6 +8,8 @@ ECSManager *ECSManager::c_instance = 0;
 ECSManager::ECSManager() {}
 ECSManager::~ECSManager() {}
 
+//TODO upon failure of creation, need to actually unsubscribe/deallocate resources!
+
 //Helpers for ECS
 Entity* ECSManager::findEntity(std::string name) {
 	auto it = gameEntities.find(name);
@@ -38,7 +40,7 @@ Component* ECSManager::createComponent(std::string name, json compData) {
 
 Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 	try {
-		//Get component from map and create a new instance
+		//Get trigger from map and create a new instance
 		auto createFunc = gameTriggerExports.at(name);
 		Trigger *t = createFunc();
 		t->setName(name);
@@ -61,7 +63,16 @@ Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 		}
 
 		try {
-			t->setValues(trigData); //TODO load and create actions
+			//Set trigger values
+			t->setValues(trigData);
+
+			//Attach actions to trigger
+			for (auto& act : trigData["actions"]) {
+				Action* newAct = createAction(act["name"], act["values"]);
+				if(newAct) {
+					t->addAction(newAct);
+				}
+			}
 		} catch(...) {
 			Logger(1)<< "Incorrect json object given to " << name << " @ "<<t;
 		}
@@ -69,6 +80,25 @@ Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 	}
 	catch (...) {
 		Logger(1)<< "Trigger type " << name << " doesn't exist.";
+	}
+	return nullptr;
+}
+
+Action* ECSManager::createAction(std::string name, json actData) {
+	try {
+		//Get action from map and create new instance
+		auto createFunc = gameActionExports.at(name);
+		Action *a = createFunc();
+		a->setName(name);
+		try {
+			a->setValues(actData);
+		} catch(...) {
+			Logger(1)<< "Incorrect json object given to " << name << " @ "<<a;
+		}
+		return a;
+	}
+	catch (...) {
+		Logger(1)<< "Action type " << name << " doesn't exist.";
 	}
 	return nullptr;
 }
@@ -104,7 +134,9 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
 	//Get components and create each of them
 	for(int i = 0; i < compsToSub.size(); i++) {
 		Component* newComp = createComponent(compsToSub[i], compsData[i]);
-		e->addComponent(newComp);
+		if(newComp) {
+			e->addComponent(newComp);
+		}
 	}
 
 	for(int i = 0; i < trigsToSub.size(); i++) {

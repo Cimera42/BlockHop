@@ -21,8 +21,6 @@ public:
 	static rp3d::Vector3 worldPoint;
 	static glm::vec3 direction;
 
-	int force;
-
 	void runSystemFunction(System* s);
 	void runEntityCheck(System* s, Entity* e);
 };

@@ -47,6 +47,8 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/PhysicsComponent.cpp src/compone
 
 set(SOURCE_FILES ${SOURCE_FILES} src/triggers/ClickedTrigger.cpp src/triggers/ClickedTrigger.h)
 
+set(SOURCE_FILES ${SOURCE_FILES} src/actions/ApplyForceAction.cpp src/actions/ApplyForceAction.h)
+
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageLoader.cpp src/loaders/imageLoader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetManager.cpp src/loaders/assetManager.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetLoader.cpp src/loaders/assetLoader.h)
