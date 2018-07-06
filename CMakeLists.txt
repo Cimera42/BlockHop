@@ -8,6 +8,7 @@ include_directories(libraries/include)
 # filepaths in header includes for reactphysics3d are based on itself being the root
 # easier to just make it so than go through and fix them all
 include_directories(libraries/include/reactphysics3d)
+include_directories(libraries/include/bullet3)
 
 set(SOURCE_FILES src/main.cpp)
 set(SOURCE_FILES ${SOURCE_FILES} src/logger.cpp src/logger.h)
@@ -60,3 +61,12 @@ target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libassi
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libglfw3.a)
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libreactphysics3d.a)
 target_link_libraries(BlockHop ${OPENGL_LIBRARIES})
+
+#target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libBullet3Dynamics.a)
+#target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libBullet3Collision.a)
+#target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libBullet3Geometry.a)
+#target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libBullet3Common.a)
+
+target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libBulletDynamics.a)
+target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libBulletCollision.a)
+target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libLinearMath.a)

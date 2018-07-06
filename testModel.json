@@ -204,7 +204,7 @@
 						"halfWidth": 20,
 						"halfHeight": 0.5,
 						"halfDepth": 20,
-						"joints": []
+						"mass": 0
 					}
 				}
 			]
@@ -247,23 +247,14 @@
 						"halfWidth": 1,
 						"halfHeight": 1,
 						"halfDepth": 1,
+						"mass": 1,
 						"joints": [
 							{
-								"type": "Hinge",
-								"entity": "PhysicsPlane",
-								"anchor": {
-									"x": 1,
-									"y": 10,
-									"z": 1
-								},
-								"axis": {
+								"type": "BallSocket",
+								"pivotThis": {
 									"x": 0,
-									"y": 1,
+									"y": 3,
 									"z": 0
-								},
-								"motor": {
-									"speed": 1,
-									"maxTorque": 10
 								}
 							}
 						]
@@ -279,7 +270,7 @@
 					"values": {
 						"position": {
 							"x": 0,
-							"y": 5,
+							"y": 4,
 							"z": 0
 						},
 						"rotation": {
@@ -309,16 +300,21 @@
 						"halfWidth": 1,
 						"halfHeight": 1,
 						"halfDepth": 1,
+						"mass": 1,
 						"joints": [
 							{
 								"type": "BallSocket",
-								"entity": "PhysicsEntity",
-								"anchor": {
+								"pivotThis": {
 									"x": 0,
-									"y": 8,
+									"y": 3,
 									"z": 0
 								},
-								"collision": false
+								"entity": "PhysicsEntity",
+								"pivotThat": {
+									"x": 0,
+									"y": 0,
+									"z": 0
+								}
 							}
 						]
 					}
@@ -363,16 +359,21 @@
 						"halfWidth": 1,
 						"halfHeight": 1,
 						"halfDepth": 1,
+						"mass": 1,
 						"joints": [
 							{
 								"type": "BallSocket",
-								"entity": "PhysicsEntity1",
-								"anchor": {
+								"pivotThis": {
 									"x": 0,
-									"y": 5,
+									"y": 3,
 									"z": 0
 								},
-								"collision": false
+								"entity": "PhysicsEntity1",
+								"pivotThat": {
+									"x": 0,
+									"y": 0,
+									"z": 0
+								}
 							}
 						]
 					}
@@ -417,19 +418,19 @@
 						"halfWidth": 1,
 						"halfHeight": 1,
 						"halfDepth": 1,
+						"mass": 1,
 						"joints": [
 							{
 								"type": "Slider",
-								"entity": "PhysicsPlane",
-								"anchor": {
+								"pivotThis": {
 									"x": 0,
-									"y": 5,
-									"z": -7
-								},
-								"axis": {
-									"x": 1,
 									"y": 0,
 									"z": 0
+								},
+								"axisThis": {
+									"x": 0,
+									"y": 0,
+									"z": 1
 								},
 								"limits": [-1, 10],
 								"motor": {
@@ -450,7 +451,7 @@
 					"values": {
 						"position": {
 							"x": -10,
-							"y": 1,
+							"y": 2,
 							"z": -2
 						},
 						"rotation": {
@@ -480,21 +481,20 @@
 						"halfWidth": 0.1,
 						"halfHeight": 2.5,
 						"halfDepth": 2,
+						"mass": 1,
 						"joints": [
 							{
 								"type": "Hinge",
-								"entity": "PhysicsPlane",
-								"anchor": {
-									"x": -10,
-									"y": 1,
-									"z": 0
-								},
-								"axis": {
+								"pivotThis": {
 									"x": 0,
-									"y": 1,
+									"y": 2.5,
 									"z": 0
 								},
-								"limits": [-1.57,1.57]
+								"axisThis": {
+									"x": 0,
+									"y": 0,
+									"z": 1
+								}
 							}
 						]
 					}
