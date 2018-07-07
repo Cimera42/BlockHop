@@ -65,7 +65,7 @@ void KeyboardInputSystem::update(double dt)
 					   {"halfDepth",1}};
 			json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
 			std::vector<json> compData = {tj,pj,aj};
-			json ct = {{"force", rand() % 100 + 1}}; //force between 1 and 100
+			json ct = {{"force", rand() % 100 + 1}};
 			std::vector<json> trigData = {ct};
 			ECSManager::i()->createEntity("projectile", comps, compData, trigs, trigData);
 		}

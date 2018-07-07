@@ -8,6 +8,8 @@ ECSManager *ECSManager::c_instance = 0;
 ECSManager::ECSManager() {}
 ECSManager::~ECSManager() {}
 
+//TODO upon failure of creation, need to actually unsubscribe/deallocate resources!
+
 //Helpers for ECS
 Entity* ECSManager::findEntity(std::string name) {
 	auto it = gameEntities.find(name);
@@ -70,7 +72,7 @@ Component* ECSManager::createComponent(std::string name, json compData) {
 
 Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 	try {
-		//Get component from map and create a new instance
+		//Get trigger from map and create a new instance
 		auto createFunc = gameTriggerExports.at(name);
 		Trigger *t = createFunc();
 		t->setName(name);
@@ -93,7 +95,8 @@ Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 		}
 
 		try {
-			t->setValues(trigData); //TODO load and create actions
+			//Set trigger values
+			t->setValues(trigData);
 		} catch(...) {
 			Logger(1)<< "Incorrect json object given to " << name << " @ "<<t;
 		}
@@ -136,7 +139,9 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
 	//Get components and create each of them
 	for(int i = 0; i < compsToSub.size(); i++) {
 		Component* newComp = createComponent(compsToSub[i], compsData[i]);
-		e->addComponent(newComp);
+		if(newComp) {
+			e->addComponent(newComp);
+		}
 	}
 
 	for(int i = 0; i < trigsToSub.size(); i++) {
