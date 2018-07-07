@@ -42,6 +42,8 @@ public:
 		return nullptr;
 	}
 	Entity* findEntity(std::string name);
+	bool isExactType(Entity* e, std::string identifier);
+	bool isType(Entity* e, std::string identifier);
 
 	/*
 	 * Functions for the generation of game elements
@@ -84,6 +86,7 @@ public:
 	 * ECS data accessible to public
 	 * TODO Add getters/settings and force this to be private
 	 */
+	std::map<std::string, std::vector<std::string> > gameIdentities;
 	std::map<std::string, Entity*> gameEntities;
 	//std::map<std::string, System*> gameSystems;
 	std::vector<std::pair<std::string, System*> > gameSystems;

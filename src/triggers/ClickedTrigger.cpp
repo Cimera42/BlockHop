@@ -71,16 +71,23 @@ void ClickedTrigger::runSystemFunction(System* sys) {
 	}
 }
 
-void ClickedTrigger::runEntityCheck(System* sys, Entity* ent) {
+bool ClickedTrigger::entityCheck(System* sys, Entity* ent) {
 	PhysicsSystem* s = static_cast<PhysicsSystem*>(sys);
 
 	rp3d::RigidBody* rb = s->findRigidBody(ent);
 	if(rb) {
 		if (rb->getType() == rp3d::DYNAMIC) {
 			if(clicked == rb) {
-				//TODO Here we'd trigger an action but yeah
-				rb->applyForce(rp3d::Vector3(direction.x,direction.y,direction.z)*force, worldPoint);
+				//identify object based on components
+
+				if(ent->isExactType("box2")) {
+					rb->applyForce(rp3d::Vector3(-direction.x,-direction.y,-direction.z)*force, worldPoint);
+				} else if (ent->isExactType("box")) {
+					rb->applyForce(rp3d::Vector3(direction.x,direction.y,direction.z)*force, worldPoint);
+				}
+				return true;
 			}
 		}
 	}
+	return false;
 }

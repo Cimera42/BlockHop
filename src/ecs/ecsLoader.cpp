@@ -24,6 +24,15 @@ void ECSLoader::readStream(std::string fileName) {
 
 		//All components should already be exported
 
+		//Identifies for entitiy types
+		for (auto& iden : j["identifiers"]) {
+			std::vector<std::string> componentsNeeded;
+			for(std::string comp : iden["components"]) {
+				componentsNeeded.push_back(comp);
+			}
+			ECSManager::i()->gameIdentities.insert(std::make_pair(iden["type"].get<std::string>(), componentsNeeded));
+		}
+
 		//Just need to sort out our systems that need certain components
 		for (auto& sys : j["systems"]) {
 			std::vector<std::string> compsToSub = sys["compsToSub"];

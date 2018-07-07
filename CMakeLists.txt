@@ -25,7 +25,6 @@ set(SOURCE_FILES ${SOURCE_FILES} src/ecs/ecsManager.cpp src/ecs/ecsManager.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/entity.cpp src/ecs/entity.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/system.cpp src/ecs/system.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/trigger.cpp src/ecs/trigger.h)
-set(SOURCE_FILES ${SOURCE_FILES} src/ecs/action.cpp src/ecs/action.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/TestSystem.cpp src/systems/TestSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/TextSystem.cpp src/systems/TextSystem.h)

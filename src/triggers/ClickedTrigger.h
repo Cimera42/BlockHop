@@ -24,7 +24,7 @@ public:
 	int force;
 
 	void runSystemFunction(System* s);
-	void runEntityCheck(System* s, Entity* e);
+	bool entityCheck(System* s, Entity* e);
 };
 
 #endif //BLOCKHOP_CLICKEDTRIGGER_H

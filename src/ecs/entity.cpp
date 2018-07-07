@@ -88,3 +88,11 @@ std::string Entity::getName() const
 {
 	return name;
 }
+
+bool Entity::isType(std::string identifier) {
+	return ECSManager::i()->isType(this, identifier);
+}
+
+bool Entity::isExactType(std::string identifier) {
+	return ECSManager::i()->isExactType(this, identifier);
+}

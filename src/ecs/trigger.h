@@ -45,7 +45,8 @@ public:
 	virtual void runSystemFunction(System* a) {};
 
 	//Entity level
-	virtual void runEntityCheck(System* s, Entity* e) {}; //TODO figure out a way to extend this to add in more data if needed (ie not repeating things between triggers)
+	void runEntityCheck(System* s, Entity* e);
+	virtual bool entityCheck(System* s, Entity* e) { return false; };
 	bool isInTriggerList(std::vector<Trigger*> triggerList);
 
 private:

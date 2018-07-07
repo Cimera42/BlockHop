@@ -16,6 +16,38 @@ Entity* ECSManager::findEntity(std::string name) {
 	return nullptr;
 }
 
+bool ECSManager::isType(Entity * e, std::string identifier) {
+	auto componentsNeeded = gameIdentities.find(identifier);
+	if(componentsNeeded != gameIdentities.end()) {
+		auto comps = e->getComponents();
+
+		std::sort(comps.begin(), comps.end());
+		std::sort(componentsNeeded->second.begin(), componentsNeeded->second.end());
+
+		//Every in componentsNeeded is in comps
+		if(std::includes(comps.begin(), comps.end(),
+						 componentsNeeded->second.begin(), componentsNeeded->second.end())) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ECSManager::isExactType(Entity *e, std::string identifier) {
+	auto componentsNeeded = gameIdentities.find(identifier);
+	if(componentsNeeded != gameIdentities.end()) {
+		auto comps = e->getComponents();
+
+		std::sort(comps.begin(), comps.end());
+		std::sort(componentsNeeded->second.begin(), componentsNeeded->second.end());
+
+		if(componentsNeeded->second == comps) {
+			return true;
+		}
+	}
+	return false;
+}
+
 //Generation of ESC Classes
 Component* ECSManager::createComponent(std::string name, json compData) {
 	try {

@@ -34,6 +34,9 @@ public:
 	 */
 	std::string getName() const;
 
+	bool isType(std::string identifier);
+	bool isExactType(std::string identifier);
+
 	/*
 	 * Helpers for retrieving components attached to an entity
 	 */
