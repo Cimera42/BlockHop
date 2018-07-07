@@ -20,6 +20,20 @@
 	],
 	"systems": [
 		{
+			"name": "eventSystem",
+			"compsToSub": [
+				"eventComponentSTUB"
+			],
+			"trigsToAttach": []
+		},
+		{
+			"name": "timeSystem",
+			"compsToSub": [
+				"timeoutComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
 			"name": "mouseInputSystem",
 			"compsToSub": [
 				"transformComponent",

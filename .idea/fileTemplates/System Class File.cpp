@@ -13,8 +13,18 @@ ${NAME}::~${NAME}() {}
 
 void ${NAME}::update(double dt) 
 {
+	for(auto trig : getTriggers()) {
+		trig->runSystemFunction(this);
+	}
+	
 	for(auto entity : getEntities())
 	{
+		for(auto entTrig : entity->getTriggers()) {
+			if(entTrig->getSystemName() == "${cmlname}") {
+				entTrig->runEntityCheck(this, entity);
+			}
+		}
+		
 		//XComponent* x = entity->getComponent<XComponent>("xComponent");
 	}
 }

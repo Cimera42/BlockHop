@@ -44,9 +44,18 @@ void AnimatedModelSystem::update(double dt)
 	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>("cameraComponent");
 
 	KeyboardInputSystem* keyInput = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
-	
+
+	for(auto trig : getTriggers()) {
+		trig->runSystemFunction(this);
+	}
+
 	for(auto entity : getEntities())
 	{
+		for(auto entTrig : entity->getTriggers()) {
+			if(entTrig->getSystemName() == "timeSystem") {
+				entTrig->runEntityCheck(this, entity);
+			}
+		}
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
 		AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
 

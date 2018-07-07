@@ -6,6 +6,7 @@
 #include "../ecs/ecsManager.h"
 #include "../systems/MouseButtonSystem.h"
 #include "../components/TransformComponent.h"
+#include "../components/TimeoutComponent.h"
 #include <GLFW/glfw3.h>
 
 TRIGGER_EXPORT(ClickedTrigger, "clickedTrigger");
@@ -71,6 +72,13 @@ void ClickedTrigger::runSystemFunction(System* sys) {
 	}
 }
 
+rp3d::RigidBody* lastClicked; //Just for demo - wont work in real game
+void testCallback(Entity *e) {
+	auto trigger = e->getTrigger<ClickedTrigger>("clickedTrigger");
+	//std::cout << trigger->clicked << std::endl;
+	lastClicked->applyForce(rp3d::Vector3(0,1,0)*trigger->force*10, trigger->worldPoint);
+}
+
 bool ClickedTrigger::entityCheck(System* sys, Entity* ent) {
 	PhysicsSystem* s = static_cast<PhysicsSystem*>(sys);
 
@@ -81,7 +89,12 @@ bool ClickedTrigger::entityCheck(System* sys, Entity* ent) {
 				//identify object based on components
 
 				if(ent->isExactType("box2")) {
-					rb->applyForce(rp3d::Vector3(-direction.x,-direction.y,-direction.z)*force, worldPoint);
+					auto time = static_cast<TimeoutComponent*>(ECSManager::i()->createComponent("timeoutComponent", json {}));
+					time->setDuration(3000);
+					time->setCallback(testCallback);
+					ent->addComponent(time);
+					lastClicked = rb;
+					rb->applyForce(rp3d::Vector3(-direction.x,-direction.y,-direction.z)*force*10, worldPoint);
 				} else if (ent->isExactType("box")) {
 					rb->applyForce(rp3d::Vector3(direction.x,direction.y,direction.z)*force, worldPoint);
 				}

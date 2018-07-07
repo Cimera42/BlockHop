@@ -23,6 +23,8 @@ public:
 
 	int force;
 
+	//void testCallback(Entity* e);
+
 	void runSystemFunction(System* s);
 	bool entityCheck(System* s, Entity* e);
 };

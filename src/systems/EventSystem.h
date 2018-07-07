@@ -14,6 +14,12 @@ public:
 	EventSystem();
 	~EventSystem();
 
+	//TODO - generic event dispatch/recieve for times
+	// when we need cross - entity communication
+	// but we have no real idea what those entities are
+	// Essentially a broadcaster - probably based on
+	// components/triggers that are attached to an entity
+
 	void update(double dt);
 };
 

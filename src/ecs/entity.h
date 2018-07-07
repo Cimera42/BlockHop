@@ -55,6 +55,17 @@ public:
 	std::vector<Trigger*> getTriggers() {
 		return subbedTriggers;
 	}
+
+	template <typename T>
+	T* getTrigger(std::string trigName) {
+		auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](Trigger*& o) {
+			return (o->getName() == trigName);
+		});
+
+		if (it != subbedTriggers.end())
+			return static_cast<T*>(*it);
+		return nullptr;
+	}
 private:
 	/*
 	 * Functions for adding/removing triggers from entities.

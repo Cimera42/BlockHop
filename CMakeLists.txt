@@ -27,6 +27,8 @@ set(SOURCE_FILES ${SOURCE_FILES} src/ecs/system.cpp src/ecs/system.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/trigger.cpp src/ecs/trigger.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/TestSystem.cpp src/systems/TestSystem.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/systems/EventSystem.cpp src/systems/EventSystem.cpp)
+set(SOURCE_FILES ${SOURCE_FILES} src/systems/TimeSystem.cpp src/systems/TimeSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/TextSystem.cpp src/systems/TextSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/AnimatedModelSystem.cpp src/systems/AnimatedModelSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/CameraSystem.cpp src/systems/CameraSystem.h)
@@ -36,6 +38,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/systems/MouseButtonSystem.cpp src/systems/M
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/PhysicsSystem.cpp src/systems/PhysicsSystem.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TestComponent.cpp src/components/TestComponent.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/components/TimeoutComponent.cpp src/components/TimeoutComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TransformComponent.cpp src/components/TransformComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TextComponent.cpp src/components/TextComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/AnimatedModelComponent.cpp src/components/AnimatedModelComponent.h)

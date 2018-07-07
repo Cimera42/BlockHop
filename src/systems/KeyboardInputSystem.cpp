@@ -21,8 +21,18 @@ KeyboardInputSystem::~KeyboardInputSystem() {}
 
 void KeyboardInputSystem::update(double dt) 
 {
+	for(auto trig : getTriggers()) {
+		trig->runSystemFunction(this);
+	}
+
 	for(auto entity : getEntities())
 	{
+		for(auto entTrig : entity->getTriggers()) {
+			if(entTrig->getSystemName() == "timeSystem") {
+				entTrig->runEntityCheck(this, entity);
+			}
+		}
+
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
 		KeyboardControlComponent* keyboardControl = entity->getComponent<KeyboardControlComponent>("keyboardControlComponent");
 

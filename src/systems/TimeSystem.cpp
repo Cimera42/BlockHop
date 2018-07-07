@@ -4,6 +4,7 @@
 
 #include "TimeSystem.h"
 #include "../ecs/ecsManager.h"
+#include "../components/TimeoutComponent.h"
 
 SYSTEM_EXPORT(TimeSystem, "timeSystem")
 
@@ -23,7 +24,12 @@ void TimeSystem::update(double dt)
 				entTrig->runEntityCheck(this, entity);
 			}
 		}
-		
-		//XComponent* x = entity->getComponent<XComponent>("xComponent");
+
+
+		TimeoutComponent* timeout = entity->getComponent<TimeoutComponent>("timeoutComponent");
+		if(timeout->hasTimedout()) {
+			timeout->runCallback(entity);
+			entity->removeComponent("timeoutComponent");
+		}
 	}
 }
