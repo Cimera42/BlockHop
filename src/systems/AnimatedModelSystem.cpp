@@ -52,7 +52,7 @@ void AnimatedModelSystem::update(double dt)
 	for(auto entity : getEntities())
 	{
 		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == "timeSystem") {
+			if(entTrig->getSystemName() == "animatedModelSystem") {
 				entTrig->runEntityCheck(this, entity);
 			}
 		}

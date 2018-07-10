@@ -40,6 +40,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/systems/PhysicsSystem.cpp src/systems/Physi
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TestComponent.cpp src/components/TestComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TimeoutComponent.cpp src/components/TimeoutComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TransformComponent.cpp src/components/TransformComponent.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/components/TeamComponent.cpp src/components/TeamComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TextComponent.cpp src/components/TextComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/AnimatedModelComponent.cpp src/components/AnimatedModelComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/CameraComponent.cpp src/components/CameraComponent.h)
@@ -48,6 +49,9 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/KeyboardControlComponent.cpp src
 set(SOURCE_FILES ${SOURCE_FILES} src/components/PhysicsComponent.cpp src/components/PhysicsComponent.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/triggers/ClickedTrigger.cpp src/triggers/ClickedTrigger.h)
+
+set(SOURCE_FILES ${SOURCE_FILES} src/scenes/Scene.cpp src/scenes/Scene.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/scenes/MainGameScene.cpp src/scenes/MainGameScene.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageLoader.cpp src/loaders/imageLoader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetManager.cpp src/loaders/assetManager.h)

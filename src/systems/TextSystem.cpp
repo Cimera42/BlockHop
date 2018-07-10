@@ -36,7 +36,7 @@ void TextSystem::update(double dt)
 	for(auto entity : getEntities())
 	{
 		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == "timeSystem") {
+			if(entTrig->getSystemName() == "textSystem") {
 				entTrig->runEntityCheck(this, entity);
 			}
 		}

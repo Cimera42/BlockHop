@@ -21,7 +21,7 @@ void CameraSystem::update(double dt)
 	for(auto entity : getEntities())
 	{
 		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == "timeSystem") {
+			if(entTrig->getSystemName() == "cameraSystem") {
 				entTrig->runEntityCheck(this, entity);
 			}
 		}

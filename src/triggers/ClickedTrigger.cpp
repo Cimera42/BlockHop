@@ -80,7 +80,7 @@ rp3d::RigidBody* lastClicked; //Just for demo - wont work in real game
 void testCallback(Entity *e) {
 	auto trigger = e->getTrigger<ClickedTrigger>("clickedTrigger");
 	//std::cout << trigger->clicked << std::endl;
-	lastClicked->applyForce(rp3d::Vector3(0,1,0)*trigger->force*10, trigger->worldPoint);
+	lastClicked->applyForce(rp3d::Vector3(0,1,0)*trigger->force, trigger->worldPoint);
 }
 
 bool ClickedTrigger::entityCheck(System* sys, Entity* ent) {
