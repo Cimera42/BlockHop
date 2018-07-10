@@ -52,16 +52,17 @@ public:
 	void setSystemName(std::string inSystemName) {systemName = inSystemName; }
 	std::string getSystemName() {return systemName; };
 
+	bool isInTriggerList(std::vector<Trigger*> triggerList);
+
 	void subscribeEntityToRunners(Entity* ent);
 	void unsubscribeEntityFromRunners(Entity* ent);
 
-	//System level
+	//System level - called once per system update
 	virtual void runSystemFunction(System* a) {};
 
-	//Entity level
+	//Entity level - called for every entity subscribed to system
 	void runEntityCheck(System* s, Entity* e);
 	virtual bool entityCheck(System* s, Entity* e) { return false; };
-	bool isInTriggerList(std::vector<Trigger*> triggerList);
 
 private:
 	/*
