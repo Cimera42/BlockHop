@@ -27,8 +27,7 @@ void Entity::removeComponent(std::string compName) {
 }
 
 void Entity::addTrigger(Trigger *trig) {
-	//TODO validity checks to ensure given trigger only gets subbed if we have correct components - need to return bool
-	//else we exit
+	//TODO type safety surrounding trigger to system interaction
 
 	subbedTriggers.push_back(trig);
 	trig->subscribeEntityToRunners(this);

@@ -71,8 +71,6 @@ private:
 	 * Functions for adding/removing triggers from entities.
 	 * Called upon attaching a component to a system
 	 */
-	//void subscribeTriggersToEntity(System* subbedSys);
-	//void unsubscribeTriggersToEntity(System* subbedSys);
 
 	void subscribeToTriggerRunners();
 	void unsubscribeToTriggerRunners();

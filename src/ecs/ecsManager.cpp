@@ -140,15 +140,15 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
 	for(int i = 0; i < compsToSub.size(); i++) {
 		Component* newComp = createComponent(compsToSub[i], compsData[i]);
 		if(newComp) {
-			e->addComponent(newComp);
+			e->addComponent(newComp); //TODO wrap in try catch and delete if failure
 		}
 	}
 
 	for(int i = 0; i < trigsToSub.size(); i++) {
 		Trigger* newTrig = createTrigger(trigsToSub[i], trigsData[i]);
-		//TODO check that trigger fufils requirements of system (and actions) - ie. has correct components
-		if(newTrig) { //TODO remove this check - its just if creation fails - do other TODOs instead
-			e->addTrigger(newTrig); // TODO wrap in try catch and delete newTrig if failure
+		//TODO check that trigger fufils requirements of system - ie. has correct components
+		if(newTrig) {
+			e->addTrigger(newTrig); // TODO wrap in try catch and delete if failure
 		}
 	}
 
