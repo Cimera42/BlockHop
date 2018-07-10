@@ -74,6 +74,9 @@ private:
 	//void subscribeTriggersToEntity(System* subbedSys);
 	//void unsubscribeTriggersToEntity(System* subbedSys);
 
+	void subscribeToTriggerRunners();
+	void unsubscribeToTriggerRunners();
+
 	void subscribeToSystems();
 	void unsubscribeFromSystems();
 	std::vector<Component*> subbedComponents;

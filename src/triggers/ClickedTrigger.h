@@ -12,6 +12,9 @@
 class ClickedTrigger : public Trigger {
 	static bool exported;
 
+	void runBox2(System* sys, Entity* ent);
+	void runBox(System* sys, Entity* ent);
+
 public:
 	ClickedTrigger();
 	~ClickedTrigger();
@@ -22,8 +25,6 @@ public:
 	static glm::vec3 direction;
 
 	int force;
-
-	//void testCallback(Entity* e);
 
 	void runSystemFunction(System* s);
 	bool entityCheck(System* s, Entity* e);

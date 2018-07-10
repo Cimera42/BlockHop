@@ -12,7 +12,18 @@ class Entity;
 
 using json = nlohmann::json;
 
+enum runnerMode {
+	EXACT_ONLY, //isExactType and will reject remaining
+	EXACT, //isExactType but will accept reminaing
+	INEXACT_ONLY, //isType and will reject remaining
+	INXACT, //isType but will accept remaining
+};
+
 class Trigger {
+protected:
+	typedef void (Trigger::*RunTrigFunc)(System* s, Entity* e);
+	void addTriggerRunner(std::string identifier, runnerMode mode, RunTrigFunc func);
+
 public:
 	/*
 	 * A trigger is an entity level object that completes checks in a specific system
@@ -41,6 +52,9 @@ public:
 	void setSystemName(std::string inSystemName) {systemName = inSystemName; }
 	std::string getSystemName() {return systemName; };
 
+	void subscribeEntityToRunners(Entity* ent);
+	void unsubscribeEntityFromRunners(Entity* ent);
+
 	//System level
 	virtual void runSystemFunction(System* a) {};
 
@@ -53,12 +67,16 @@ private:
 	/*
 	 * Used to export so that ECSManager can see a specific trigger
 	 * Usage inside triggers's cpp file:
-	 *	  bool Trigger::exported = ECSManager::exportComponent<ComponentClass>("componentName");
+	 *	  bool Trigger::exported = ECSManager::exportComponent<TriggerClass>("triggerName");
 	 */
 	//static bool exported;
 
 	std::string name;
 	std::string systemName;
+	//List of function pointers inside Triggers -
+	std::vector<std::tuple<std::string, runnerMode, RunTrigFunc> > registeredTriggerRunners;
+	//TODO dont even think we need the identity info?
+	std::vector<std::tuple<std::string, runnerMode, RunTrigFunc> > subbedTriggerRunners;
 };
 
 #endif //BLOCKHOP_TRIGGER_H

@@ -15,7 +15,11 @@ rp3d::RigidBody* ClickedTrigger::clicked;
 rp3d::Vector3 ClickedTrigger::worldPoint;
 glm::vec3 ClickedTrigger::direction;
 
-ClickedTrigger::ClickedTrigger(){}
+ClickedTrigger::ClickedTrigger(){
+	// Register all functions that handle actions
+	addTriggerRunner("box2", EXACT, static_cast<RunTrigFunc>(&ClickedTrigger::runBox2));
+	addTriggerRunner("box", EXACT, static_cast<RunTrigFunc>(&ClickedTrigger::runBox));
+}
 ClickedTrigger::~ClickedTrigger(){}
 
 void ClickedTrigger::setValues(json inValues) {
@@ -86,21 +90,22 @@ bool ClickedTrigger::entityCheck(System* sys, Entity* ent) {
 	if(rb) {
 		if (rb->getType() == rp3d::DYNAMIC) {
 			if(clicked == rb) {
-				//identify object based on components
-
-				if(ent->isExactType("box2")) {
-					auto time = static_cast<TimeoutComponent*>(ECSManager::i()->createComponent("timeoutComponent", json {}));
-					time->setDuration(3000);
-					time->setCallback(testCallback);
-					ent->addComponent(time);
-					lastClicked = rb;
-					rb->applyForce(rp3d::Vector3(-direction.x,-direction.y,-direction.z)*force*10, worldPoint);
-				} else if (ent->isExactType("box")) {
-					rb->applyForce(rp3d::Vector3(direction.x,direction.y,direction.z)*force, worldPoint);
-				}
 				return true;
 			}
 		}
 	}
 	return false;
+}
+
+void ClickedTrigger::runBox2(System* sys, Entity* ent) {
+	auto time = static_cast<TimeoutComponent*>(ECSManager::i()->createComponent("timeoutComponent", json {}));
+	time->setDuration(3000);
+	time->setCallback(testCallback);
+	ent->addComponent(time);
+	lastClicked = clicked;
+	clicked->applyForce(rp3d::Vector3(-direction.x,-direction.y,-direction.z)*force, worldPoint);
+}
+
+void ClickedTrigger::runBox(System* sys, Entity* ent) {
+	clicked->applyForce(rp3d::Vector3(direction.x,direction.y,direction.z)*force, worldPoint);
 }
