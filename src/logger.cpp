@@ -93,3 +93,15 @@ Logger &Logger::operator<<(const rp3d::Vector3 val)
 	buffer << val.x << ", " << val.y << ", " << val.z << between;
 	return *this;
 }
+
+Logger &Logger::operator<<(btVector3 val)
+{
+	buffer << val.x() << ", " << val.y() << ", " << val.z() << between;
+	return *this;
+}
+
+Logger &Logger::operator<<(btQuaternion val)
+{
+	buffer << val.x() << ", " << val.y() << ", " << val.z() << "," << val.w() << between;
+	return *this;
+}

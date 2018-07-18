@@ -46,10 +46,10 @@ void ECSLoader::readStream(std::string fileName) {
 
 	}catch (std::invalid_argument invalidArgument) {
 		Logger() << invalidArgument.what();
-		Logger()<<"There's something wrong with the file "+fileName+", cannot read all values. Exiting."<<std::endl;
+		Logger()<<"There's something wrong with the file " << fileName << ", cannot read all values. Exiting.";
 		exit(-5);
 	} catch (...) {
-		Logger()<<"There's something wrong with the file "+fileName+", cannot read all values. Exiting."<<std::endl;
+		Logger()<<"There's something wrong with the file " << fileName << ", cannot read all values. Exiting.";
 		exit(-5);
 	}
 

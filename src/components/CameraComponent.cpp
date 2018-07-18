@@ -14,10 +14,10 @@ CameraComponent::~CameraComponent() {}
 void CameraComponent::setValues(json inValues)
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
-	fov = inValues["fov"].get<float>();
-	aspectRatio = inValues["aspectRatio"].get<float>();
-	nearDist = inValues["nearDist"].get<float>();
-	farDist = inValues["farDist"].get<float>();
+	fov = inValues["fov"];
+	aspectRatio = inValues["aspectRatio"];
+	nearDist = inValues["nearDist"];
+	farDist = inValues["farDist"];
 
 	perspective();
 }

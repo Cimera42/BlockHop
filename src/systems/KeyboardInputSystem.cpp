@@ -40,10 +40,10 @@ void KeyboardInputSystem::update(double dt)
 			displaced -= transform->getRight() * ((float)dt) * 5.0f;
 
 		if(isKeyPressed(keyboardControl->getUpKey()))
-			displaced += glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
+			displaced += transform->getUp() * ((float)dt) * 5.0f;
 
 		if(isKeyPressed(keyboardControl->getDownKey()))
-			displaced -= glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
+			displaced -= transform->getUp() * ((float)dt) * 5.0f;
 
 		transform->setPosition(displaced);
 

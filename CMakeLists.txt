@@ -19,6 +19,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/openGLFunctions.cpp src/openGLFunctions.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loadShader.cpp src/loadShader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/boneMesh.cpp src/boneMesh.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/angle.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/json_utils.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/component.cpp src/ecs/component.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/ecs/ecsLoader.cpp src/ecs/ecsLoader.h)
@@ -50,6 +51,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/loaders/assetLoader.cpp src/loaders/assetLo
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/baseAsset.cpp src/loaders/baseAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelAsset.cpp src/loaders/modelAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageAsset.cpp src/loaders/imageAsset.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelLoader.cpp src/loaders/modelLoader.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelLoader.cpp src/loaders/modelLoader.h)
 
 add_executable(BlockHop ${SOURCE_FILES})

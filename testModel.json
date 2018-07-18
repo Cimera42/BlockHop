@@ -398,16 +398,16 @@
 							"z": 0
 						},
 						"scale": {
-							"x": 1,
-							"y": 1,
-							"z": 1
+							"x": 0.5,
+							"y": 0.5,
+							"z": 0.5
 						}
 					}
 				},
 				{
 					"name": "animatedModelComponent",
 					"values": {
-						"filename": "./assets/models/ColourfulCube/framedCube.fbx"
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
 					}
 				},
 				{
@@ -415,9 +415,9 @@
 					"values": {
 						"mode": "dynamic",
 						"colliderShape": "cube",
-						"halfWidth": 1,
-						"halfHeight": 1,
-						"halfDepth": 1,
+						"halfWidth": 0.5,
+						"halfHeight": 0.5,
+						"halfDepth": 0.5,
 						"mass": 1,
 						"joints": [
 							{
@@ -428,14 +428,169 @@
 									"z": 0
 								},
 								"axisThis": {
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
+								"limits": [-1, 0],
+								"motor": {
+									"speed": -10,
+									"maxForce": 2
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SliderEntity2",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 4,
+							"z": -7
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 0.5,
+							"y": 0.5,
+							"z": 0.5
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mode": "dynamic",
+						"colliderShape": "cube",
+						"halfWidth": 0.5,
+						"halfHeight": 0.5,
+						"halfDepth": 0.5,
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Slider",
+								"pivotThis": {
+									"x": 0,
+									"y": 1.1,
+									"z": 0
+								},
+								"axisThis": {
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
+								"limits": [-1, 0],
+								"entity": "SliderEntity",
+								"pivotThat": {
 									"x": 0,
 									"y": 0,
-									"z": 1
+									"z": 0
 								},
-								"limits": [-1, 10],
+								"axisThat":{
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
 								"motor": {
-									"speed": -3,
-									"maxForce": 1
+									"speed": -10,
+									"maxForce": 2
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SliderEntity3",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 3,
+							"z": -7
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 0.5,
+							"y": 0.5,
+							"z": 0.5
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mode": "dynamic",
+						"colliderShape": "cube",
+						"halfWidth": 0.5,
+						"halfHeight": 0.5,
+						"halfDepth": 0.5,
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Generic",
+								"pivotThis": {
+									"x": 0,
+									"y": 1.1,
+									"z": 0
+								},
+								"axisThis": {
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
+								"limits": {
+									"linear": {
+										"x": [-1,1],
+										"z": [-1,1]
+									}
+								},
+								"entity": "SliderEntity2",
+								"pivotThat": {
+									"x": 0,
+									"y": 0,
+									"z": 0
+								},
+								"axisThat":{
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
+								"motor": {
+									"x": {
+										"speed": -10,
+										"maxForce": 5
+									}
 								}
 							}
 						]
@@ -497,6 +652,38 @@
 								}
 							}
 						]
+					}
+				}
+			]
+		},
+		{
+			"name": "RaycastIndicator",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 0.1,
+							"y": 0.1,
+							"z": 0.1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Sphere/sphere.fbx"
 					}
 				}
 			]

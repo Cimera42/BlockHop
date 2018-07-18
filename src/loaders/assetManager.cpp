@@ -32,7 +32,7 @@ void AssetManager::readConfig(){
 			std::string type = loaderType["loaderType"];
 			auto it = exportedLoaders.find(type);
 			for(json extension : loaderType["extensions"]) {
-				std::string ext = extension.get<std::string>();
+				std::string ext = extension;
 				if(it == exportedLoaders.end()) {
 					Logger() << "Loader for '" << ext
 							  << "' doesn't exist. Assets of this type will not work correctly"<<std::endl;
