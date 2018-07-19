@@ -88,12 +88,6 @@ Logger& Logger::operator<<(std::ostream& (*val)(std::ostream &))
 	return *this;
 }
 
-Logger &Logger::operator<<(const rp3d::Vector3 val)
-{
-	buffer << val.x << ", " << val.y << ", " << val.z << between;
-	return *this;
-}
-
 Logger &Logger::operator<<(btVector3 val)
 {
 	buffer << val.x() << ", " << val.y() << ", " << val.z() << between;

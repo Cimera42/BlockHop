@@ -23,8 +23,8 @@ void KeyboardInputSystem::update(double dt)
 {
 	for(auto entity : getEntities())
 	{
-		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
-		KeyboardControlComponent* keyboardControl = entity->getComponent<KeyboardControlComponent>("keyboardControlComponent");
+		auto transform = entity->getComponent<TransformComponent>("transformComponent");
+		auto keyboardControl = entity->getComponent<KeyboardControlComponent>("keyboardControlComponent");
 
 		glm::vec3 displaced = transform->getPosition();
 		if(isKeyPressed(keyboardControl->getForwardKey()))

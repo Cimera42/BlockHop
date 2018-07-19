@@ -11,6 +11,8 @@
 class TestSystem : public System
 {
 	static bool exported;
+
+
 public:
 	TestSystem();
 	~TestSystem();

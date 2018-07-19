@@ -40,15 +40,15 @@ AnimatedModelSystem::~AnimatedModelSystem()
 
 void AnimatedModelSystem::update(double dt)
 {
-	Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
-	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>("cameraComponent");
+	auto cameraEntity = ECSManager::i()->findEntity("Camera");
+	auto camera = cameraEntity->getComponent<CameraComponent>("cameraComponent");
 
-	KeyboardInputSystem* keyInput = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
-	
+	auto keyInput = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
+
 	for(auto entity : getEntities())
 	{
-		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
-		AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
+		auto transform = entity->getComponent<TransformComponent>("transformComponent");
+		auto animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
 
 		//Temporary test animation switching
 		if(keyInput)
@@ -64,7 +64,7 @@ void AnimatedModelSystem::update(double dt)
 		}
 		//Animate model
 		animatedModel->transformNodes((float) dt);
-		
+
 		for(auto pair : animatedModel->modelAsset->meshParts)
 		{
 			MeshPart *meshPart = pair.second;
@@ -72,7 +72,7 @@ void AnimatedModelSystem::update(double dt)
 			glm::mat4 modelMatrix = transform->getMatrix();
 
 			//If model is animated, use animated transformation
-			if(animatedModel->animated) 
+			if(animatedModel->animated)
 			{
 				NodeChanging *chNode = animatedModel->FindChangingNode(nodePart->name);
 				if(chNode)
@@ -96,7 +96,7 @@ void AnimatedModelSystem::update(double dt)
 				mesh = animatedModel->modelAsset->normalMeshes[meshPart->mesh];
 				shader = genericShader;
 			}
-			
+
 			shader->use();
 			glUniformMatrix4fv(shader->getLoc("viewMat"), 1, GL_FALSE, &camera->getViewMatrix()[0][0]);
 			glUniformMatrix4fv(shader->getLoc("projMat"), 1, GL_FALSE, &camera->getProjectionMatrix()[0][0]);
@@ -109,7 +109,7 @@ void AnimatedModelSystem::update(double dt)
 
 			//Push bone matrices to shader
 			if(isBoned)
-			{				
+			{
 				BoneMeshChanging* chBoneMesh = animatedModel->FindChangingBoneMesh(nodePart->name);
 				unsigned int matsNum = (unsigned int) chBoneMesh->boneMats.size();
 				if(matsNum > 0)

@@ -12,13 +12,13 @@ SYSTEM_EXPORT(CameraSystem, "cameraSystem")
 CameraSystem::CameraSystem() {}
 CameraSystem::~CameraSystem() {}
 
-void CameraSystem::update(double dt) 
+void CameraSystem::update(double dt)
 {
 	for(auto entity : getEntities())
 	{
-		CameraComponent* camera = entity->getComponent<CameraComponent>("cameraComponent");
-		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
-		
+		auto camera = entity->getComponent<CameraComponent>("cameraComponent");
+		auto transform = entity->getComponent<TransformComponent>("transformComponent");
+
 		camera->lookAt(transform->getPosition(),
 					   transform->getPosition() + transform->getForward(),
 					   transform->getUp());

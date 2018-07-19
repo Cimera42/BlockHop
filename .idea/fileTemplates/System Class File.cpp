@@ -15,6 +15,6 @@ void ${NAME}::update(double dt)
 {
 	for(auto entity : getEntities())
 	{
-		//XComponent* x = entity->getComponent<XComponent>("xComponent");
+		//auto x = entity->getComponent<XComponent>("xComponent");
 	}
 }

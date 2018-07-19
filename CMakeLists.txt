@@ -5,9 +5,8 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(libraries/include)
-# filepaths in header includes for reactphysics3d are based on itself being the root
+# filepaths in header includes for bullet3 are based on itself being the root
 # easier to just make it so than go through and fix them all
-include_directories(libraries/include/reactphysics3d)
 include_directories(libraries/include/bullet3)
 
 set(SOURCE_FILES src/main.cpp)
@@ -61,7 +60,6 @@ find_package(OpenGL REQUIRED)
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/glew32.lib)
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libassimp.dll.a)
 target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libglfw3.a)
-target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libreactphysics3d.a)
 target_link_libraries(BlockHop ${OPENGL_LIBRARIES})
 
 #target_link_libraries(BlockHop ${CMAKE_CURRENT_SOURCE_DIR}/libraries/lib/libBullet3Dynamics.a)

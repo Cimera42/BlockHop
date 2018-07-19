@@ -13,6 +13,7 @@
 class TextSystem : public System
 {
 	static bool exported;
+
 public:
 	TextSystem();
 	~TextSystem();

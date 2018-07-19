@@ -17,7 +17,7 @@ void PhysicsComponent::setValues(json inValues)
 	std::string shape = inValues["colliderShape"];
 	if(shape == "cube")
 	{
-		collisionShapeBt = new btBoxShape(
+		collisionShape = new btBoxShape(
 			btVector3(
 				inValues["halfWidth"],
 				inValues["halfHeight"],

@@ -6,13 +6,12 @@
 #define BLOCKHOP_PHYSICSCOMPONENT_H
 
 #include "../ecs/component.h"
-//#include <reactphysics3d.h>
 #include <bullet3/btBulletDynamicsCommon.h>
 
 class PhysicsComponent : public Component
 {
 public:
-	btCollisionShape* collisionShapeBt;
+	btCollisionShape* collisionShape;
 	static bool exported;
 
 	PhysicsComponent();
@@ -22,7 +21,6 @@ public:
 	float mass;
 
 	std::vector<json> jointData;
-//	std::vector<rp3d::Joint*> joints;
 
 	friend std::ostream &operator<< (std::ostream &os, PhysicsComponent const &c) {
 		os << "PhysicsComponent";

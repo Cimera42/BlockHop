@@ -61,27 +61,27 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 	glm::vec3 startPos = transformComp->getPosition();
 	glm::quat rotation = transformComp->getRotation();
 
-	btTransform transformBt;
-	transformBt.setIdentity();
-	transformBt.setOrigin(btVector3(startPos.x, startPos.y, startPos.z));
-	transformBt.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
+	btTransform transform;
+	transform.setIdentity();
+	transform.setOrigin(btVector3(startPos.x, startPos.y, startPos.z));
+	transform.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 
 	btScalar mass(physicsComp->mass);
 	btVector3 localInertia(0,0,0);
-	physicsComp->collisionShapeBt->calculateLocalInertia(mass, localInertia);
+	physicsComp->collisionShape->calculateLocalInertia(mass, localInertia);
 
-	btMotionState* motionState = new btDefaultMotionState(transformBt);
+	btMotionState* motionState = new btDefaultMotionState(transform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(
 			mass,
 			motionState,
-			physicsComp->collisionShapeBt,
+			physicsComp->collisionShape,
 			localInertia
 	);
 
-	auto rigidBodyBt = new btRigidBody(rbInfo);
-	dynamicsWorld->addRigidBody(rigidBodyBt);
+	auto rigidBody = new btRigidBody(rbInfo);
+	dynamicsWorld->addRigidBody(rigidBody);
 
-	rigidBodiesBt[entSubbed] = rigidBodyBt;
+	rigidBodies[entSubbed] = rigidBody;
 
 	for(auto jointData : physicsComp->jointData)
 	{
@@ -137,16 +137,16 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 			{
 				ballSocket = new btPoint2PointConstraint(
 					*otherRigidBody,
-					*rigidBodyBt,
+					*rigidBody,
 					pivotThat,
 					pivotThis
 				);
 			}
 			else
 			{
-				ballSocket = new btPoint2PointConstraint(*rigidBodyBt, pivotThis);
+				ballSocket = new btPoint2PointConstraint(*rigidBody, pivotThis);
 			}
-			new btPoint2PointConstraint{*rigidBodyBt, pivotThis};
+			new btPoint2PointConstraint{*rigidBody, pivotThis};
 			dynamicsWorld->addConstraint(ballSocket);
 		}
 		else if(typeName == "Hinge")
@@ -156,7 +156,7 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 			{
 				hinge = new btHingeConstraint(
 					*otherRigidBody,
-					*rigidBodyBt,
+					*rigidBody,
 					pivotThat,
 					pivotThis,
 					axisThat,
@@ -165,7 +165,7 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 			}
 			else
 			{
-				hinge = new btHingeConstraint(*rigidBodyBt, pivotThis, axisThis);
+				hinge = new btHingeConstraint(*rigidBody, pivotThis, axisThis);
 			}
 			dynamicsWorld->addConstraint(hinge);
 		}
@@ -176,7 +176,7 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 			{
 				genericJoint = new btGeneric6DofConstraint(
 					*otherRigidBody,
-					*rigidBodyBt,
+					*rigidBody,
 					frameInB,
 					frameInA,
 					true // Dunno what this does...
@@ -185,7 +185,7 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 			else
 			{
 				genericJoint = new btGeneric6DofConstraint(
-					*rigidBodyBt,
+					*rigidBody,
 					frameInA,
 					true // Dunno what this does...
 				);
@@ -323,10 +323,10 @@ void PhysicsSystem::update(double dt)
 		Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
 		auto cameraTransform = cameraEntity->getComponent<TransformComponent>("transformComponent");
 		glm::vec3 startGlm = cameraTransform->getPosition();
-		glm::vec3 direction = cameraTransform->getForward();
-		glm::vec3 endGlm = startGlm + direction*50.0f;
+		glm::vec3 directionGlm = cameraTransform->getForward();
+		glm::vec3 endGlm = startGlm + directionGlm*50.0f;
 
-		btVector3 directionBt(direction.x, direction.y, direction.z);
+		btVector3 directionBt(directionGlm.x, directionGlm.y, directionGlm.z);
 		btVector3 startBt(startGlm.x, startGlm.y, startGlm.z);
 		btVector3 endBt(endGlm.x, endGlm.y, endGlm.z);
 		btCollisionWorld::ClosestRayResultCallback closestResult(startBt, endBt);
@@ -335,7 +335,7 @@ void PhysicsSystem::update(double dt)
 
 		if(closestResult.hasHit())
 		{
-			btRigidBody *rigidBody = (btRigidBody *) btRigidBody::upcast(closestResult.m_collisionObject);
+			auto rigidBody = (btRigidBody *) btRigidBody::upcast(closestResult.m_collisionObject);
 			rigidBody->activate();
 			btVector3 worldHit = closestResult.m_hitPointWorld;
 			btVector3 localHit = worldHit - rigidBody->getCenterOfMassTransform().getOrigin();
@@ -375,8 +375,8 @@ void PhysicsSystem::update(double dt)
 
 btRigidBody* PhysicsSystem::findRigidBody(Entity* toFind)
 {
-	auto t = rigidBodiesBt.find(toFind);
-	if(t != rigidBodiesBt.end())
+	auto t = rigidBodies.find(toFind);
+	if(t != rigidBodies.end())
 		return t->second;
 	return nullptr;
 }

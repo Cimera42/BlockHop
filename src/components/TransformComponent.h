@@ -13,24 +13,24 @@
 class TransformComponent : public Component
 {
 	static bool exported;
-	
+
 	glm::mat4 matrix;
 	glm::vec3 position;
 	glm::quat rotation;
 	glm::vec3 scale;
-	
+
 	glm::vec3 forward;
 	glm::vec3 right;
 	glm::vec3 up;
 
 	void genMatrix();
 	void genVectors();
-	
+
 public:
 	TransformComponent();
 	~TransformComponent();
 	void setValues(json inValues);
-	
+
 	glm::mat4 getMatrix() const;
 	glm::vec3 getPosition() const;
 	void setPosition(glm::vec3 inPosition);

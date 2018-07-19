@@ -10,20 +10,20 @@ COMPONENT_EXPORT(KeyboardControlComponent, "keyboardControlComponent")
 KeyboardControlComponent::KeyboardControlComponent() {}
 KeyboardControlComponent::~KeyboardControlComponent() {}
 
-void KeyboardControlComponent::setValues(json inValues) 
+void KeyboardControlComponent::setValues(json inValues)
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
-	forwardKey 	= convertStringCode(inValues["forward"].get<std::string>());
-	backKey 	= convertStringCode(inValues["back"].get<std::string>());
-	leftKey 	= convertStringCode(inValues["left"].get<std::string>());
-	rightKey 	= convertStringCode(inValues["right"].get<std::string>());
-	upKey 		= convertStringCode(inValues["up"].get<std::string>());
-	downKey 	= convertStringCode(inValues["down"].get<std::string>());
+	forwardKey 	= convertStringCode(inValues["forward"]);
+	backKey 	= convertStringCode(inValues["back"]);
+	leftKey 	= convertStringCode(inValues["left"]);
+	rightKey 	= convertStringCode(inValues["right"]);
+	upKey 		= convertStringCode(inValues["up"]);
+	downKey 	= convertStringCode(inValues["down"]);
 }
 
 int KeyboardControlComponent::convertStringCode(std::string val)
 {
-	if(val.size() > 0)
+	if(!val.empty())
 	{
 		if(val.size() > 1)
 			return std::stoi(val);
@@ -37,6 +37,6 @@ int KeyboardControlComponent::convertStringCode(std::string val)
 int KeyboardControlComponent::getForwardKey() const { return forwardKey; }
 int KeyboardControlComponent::getBackKey() const { return backKey; }
 int KeyboardControlComponent::getLeftKey() const { return leftKey; }
-int KeyboardControlComponent::getRightKey() const {	return rightKey; }
+int KeyboardControlComponent::getRightKey() const { return rightKey; }
 int KeyboardControlComponent::getUpKey() const { return upKey; }
 int KeyboardControlComponent::getDownKey() const { return downKey; }

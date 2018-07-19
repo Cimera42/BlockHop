@@ -8,7 +8,6 @@
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include <reactphysics3d.h>
 #include <bullet3/btBulletCollisionCommon.h>
 
 class Logger
@@ -41,8 +40,6 @@ public:
 	Logger& operator<<(glm::quat val);
 	Logger& operator<<(glm::mat4 val);
 	Logger& operator<<(std::ostream& (*val)(std::ostream &));
-
-	Logger& operator<<(rp3d::Vector3 val);
 
 	Logger& operator<<(btVector3 val);
 	Logger& operator<<(btQuaternion val);

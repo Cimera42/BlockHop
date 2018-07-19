@@ -7,13 +7,14 @@
 
 #include "../ecs/system.h"
 
-class KeyboardInputSystem : public System 
+class KeyboardInputSystem : public System
 {
 	static bool exported;
+
 public:
 	KeyboardInputSystem();
 	~KeyboardInputSystem();
-	
+
 	std::map<int, int> keyList;
 
 	bool isKeyPressed(int keyCode);

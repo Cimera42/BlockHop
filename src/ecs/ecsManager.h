@@ -16,8 +16,8 @@
 typedef Component* (*ComponentFactoryPtr)();
 typedef System* (*SystemFactoryPtr)();
 
-#define COMPONENT_EXPORT(type, name) bool type::exported = ECSManager::i()->exportComponent<type>(name);//#type to use <X>Component as a string literal
-#define SYSTEM_EXPORT(type, name) bool type::exported = ECSManager::i()->exportSystem<type>(name);
+#define COMPONENT_EXPORT(type, componentName) bool type::exported = ECSManager::i()->exportComponent<type>(componentName);
+#define SYSTEM_EXPORT(type, systemName) bool type::exported = ECSManager::i()->exportSystem<type>(systemName);
 
 class ECSManager {
 public:
