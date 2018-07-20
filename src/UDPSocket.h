@@ -12,7 +12,7 @@
 	typedef SOCKET socket_type;
 	typedef int socket_length_type;
 #else
-#include <sys/socket.h>
+	#include <sys/socket.h>
 	#include <netinet/in.h> /* sockaddr_in */
 	#include <arpa/inet.h>
 	#include <unistd.h> /* close() */
@@ -28,9 +28,15 @@
 
 #define DEFAULT_BUFLEN 512
 
+// TODO: Implement NAT Punchthrough
+
 class UDPSocket
 {
 public:
+
+	// TODO: Implement loose reliability
+	// TODO: Change packet payload to more abstract data + size paradigm
+
 	socket_type s{};
 	sockaddr_in serverInfo{}, otherInfo{}, natInfo{};
 	socket_length_type slen = 0;
