@@ -21,6 +21,14 @@ namespace nlohmann {
 	};
 
 	template <>
+	struct adl_serializer<btQuaternion> {
+		static void from_json(const json& j, btQuaternion &quat)
+		{
+			quat = btQuaternion(j["x"], j["y"], j["z"], j["w"]);
+		}
+	};
+
+	template <>
 	struct adl_serializer<glm::vec3> {
 		static void from_json(const json& j, glm::vec3 &vec)
 		{
