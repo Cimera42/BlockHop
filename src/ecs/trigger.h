@@ -16,12 +16,14 @@ enum runnerMode {
 	EXACT_ONLY, //isExactType and will reject remaining
 	EXACT, //isExactType but will accept reminaing
 	INEXACT_ONLY, //isType and will reject remaining
-	INXACT, //isType but will accept remaining
+	INEXACT, //isType but will accept remaining
 };
 
 class Trigger {
 protected:
 	typedef void (Trigger::*RunTrigFunc)(System* s, Entity* e);
+	// Essentially a callback function that's attached on a per trigger basis that
+	// will run for a specific identity type.
 	void addTriggerRunner(std::string identifier, runnerMode mode, RunTrigFunc func);
 
 public:

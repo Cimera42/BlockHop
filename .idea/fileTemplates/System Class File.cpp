@@ -20,7 +20,7 @@ void ${NAME}::update(double dt)
 	for(auto entity : getEntities())
 	{
 		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == "${cmlname}") {
+			if(entTrig->getSystemName() == getName()) {
 				entTrig->runEntityCheck(this, entity);
 			}
 		}

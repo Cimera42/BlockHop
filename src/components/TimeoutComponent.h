@@ -11,6 +11,7 @@
 
 //TODO - can only have one timeout at a time per entity, allow for more!
 //TODO - also need to have a way of preserving variables at time of calling...
+//TODO - also make more dynamic with slow mo?
 class TimeoutComponent : public Component
 {
 	static bool exported;
@@ -22,15 +23,16 @@ public:
 	~TimeoutComponent();
 	void setValues(json inValues);
 
-	void setDuration(long milliseconds); //TODO, in setValues
+	void setDuration(long milliseconds);
 	void reset();
-	bool hasTimedout();
+	bool hasTimedOut();
 
 	void setCallback(std::function<void(Entity* e)> func);
 	void runCallback(Entity* e);
 
 	friend std::ostream &operator<< (std::ostream &os, TimeoutComponent const &c) {
-		os << "TimeoutComponent";
+		os << "TimeoutComponent: ";
+		os << "(" << c.duration << ")";
 		return os;
 	}
 };

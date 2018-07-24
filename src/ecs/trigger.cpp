@@ -38,7 +38,7 @@ void Trigger::subscribeEntityToRunners(Entity *ent) {
 				subbedTriggerRunners.push_back(runner);
 				break;
 			}
-		} else if(mode == INXACT) {
+		} else if(mode == INEXACT) {
 			if(ECSManager::i()->isType(ent, identity)) {
 				//Subscribe but dont break
 				subbedTriggerRunners.push_back(runner);

@@ -69,7 +69,7 @@ void PhysicsSystem::update(double dt)
 	{
 		//Check if entity has triggers that are in this system
 		for(Trigger* entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == "physicsSystem") {
+			if(entTrig->getSystemName() == getName()) {
 				//Do something
 				entTrig->runEntityCheck(this, entity);
 			}

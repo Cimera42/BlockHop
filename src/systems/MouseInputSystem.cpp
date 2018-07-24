@@ -29,7 +29,7 @@ void MouseInputSystem::update(double dt)
 	for(auto entity : getEntities())
 	{
 		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == "mouseInputSystem") {
+			if(entTrig->getSystemName() == getName()) {
 				entTrig->runEntityCheck(this, entity);
 			}
 		}

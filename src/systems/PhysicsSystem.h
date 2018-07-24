@@ -12,8 +12,7 @@
 class PhysicsSystem : public System 
 {
 	static bool exported;
-	
-	rp3d::DynamicsWorld* dynamicsWorld;
+
 	const float idealTimestep = 1.0f/60.0f;
 	double accumulator;
 	
@@ -28,7 +27,7 @@ public:
 	void update(double dt);
 	
 	rp3d::RigidBody *findRigidBody(Entity *toFind);
-	rp3d::DynamicsWorld* getDyanmicWorld() { return dynamicsWorld; };
+	rp3d::DynamicsWorld* dynamicsWorld;
 };
 
 #endif //BLOCKHOP_PHYSICSSYSTEM_H

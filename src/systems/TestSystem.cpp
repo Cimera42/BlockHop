@@ -21,7 +21,7 @@ void TestSystem::update(double dt) {
 	for(auto entity : getEntities())
 	{
 		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == "testSystem") {
+			if(entTrig->getSystemName() == getName()) {
 				entTrig->runEntityCheck(this, entity);
 			}
 		}

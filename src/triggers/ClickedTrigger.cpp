@@ -70,7 +70,7 @@ void ClickedTrigger::runSystemFunction(System* sys) {
 
 		direction = camDirection*(float)b;
 		MyCallbackClass callback;
-		s->getDyanmicWorld()->raycast(ray, &callback);
+		s->dynamicsWorld->raycast(ray, &callback);
 	} else {
 		clicked = nullptr;
 	}

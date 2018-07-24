@@ -113,6 +113,7 @@ System* ECSManager::createSystem(std::string name, std::vector<std::string> comp
 		//Get system from map and instantiate with a list of required components
 		auto createFunc = gameSystemExports.at(name);
 		System *t = createFunc();
+		t->setName(name);
 		//Add to list of required components for this system
 		t->setRequiredComponents(compsNeeded);
 		//Add triggers that will be attached to this system

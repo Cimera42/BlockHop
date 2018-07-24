@@ -23,7 +23,8 @@ public:
 	int team;
 
 	friend std::ostream &operator<< (std::ostream &os, TeamComponent const &c) {
-		os << "TeamComponent";
+		os << "TeamComponent: ";
+		os << "Team: " << c.team;
 		return os;
 	}
 };

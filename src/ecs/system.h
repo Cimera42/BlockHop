@@ -27,6 +27,8 @@ public:
 	 */
 	template<typename T>
 		static System* create() {return new T; };
+	void setName(std::string inName) {name = inName; };
+	std::string getName() {return name; };
 	void setRequiredComponents(std::vector<std::string> inComps);
 	std::vector<std::string> getRequiredComponents();
 	void setAttachedTriggers(std::vector<std::string> inTrigs);
@@ -92,6 +94,7 @@ private:
 	 *	  bool System::exported = ECSManager::exportSystem<SystemClass>("systemName");
 	 */
 	//static bool exported;
+	std::string name;
 };
 
 #endif // SYSTEM_H_INCLUDED

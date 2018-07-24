@@ -15,7 +15,9 @@ TimeoutComponent::~TimeoutComponent() {}
 void TimeoutComponent::setValues(json inValues) 
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
-
+	if(inValues.find("duration") != inValues.end()) {
+		duration = inValues["duration"].get<long>();
+	}
 }
 
 void TimeoutComponent::setDuration(long milliseconds) {
@@ -28,7 +30,7 @@ void TimeoutComponent::reset() {
 	end = start + std::chrono::milliseconds(duration);
 }
 
-bool TimeoutComponent::hasTimedout() {
+bool TimeoutComponent::hasTimedOut() {
 	return std::chrono::steady_clock::now() > end;
 }
 

@@ -28,7 +28,7 @@ void KeyboardInputSystem::update(double dt)
 	for(auto entity : getEntities())
 	{
 		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == "keyboardInputSystem") {
+			if(entTrig->getSystemName() == getName()) {
 				entTrig->runEntityCheck(this, entity);
 			}
 		}

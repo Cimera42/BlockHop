@@ -79,7 +79,6 @@ void Entity::subscribeToSystems() {
 		//or doesn't meet the requirements
 		if(sysPtr->subscribeEntity(this)) {
 			sysPtr->subscribeCallback(this);
-			//subscribeTriggersToEntity(sysPtr);
 			Logger(1) << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
 		}
 	}
