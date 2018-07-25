@@ -8,18 +8,17 @@
 #include "../ecs/component.h"
 #include <reactphysics3d.h>
 
-class PhysicsComponent : public Component
+class PhysicsComponent : public ComponentStatics<PhysicsComponent>
 {
 	rp3d::CollisionShape* collisionShape;
 	rp3d::ProxyShape* collisionShapeInstance;
 	rp3d::BodyType collisionMode;
 
-	static bool exported;
 public:
 	PhysicsComponent();
 	~PhysicsComponent();
 	void setValues(json inValues);
-	
+
 	rp3d::CollisionShape *getCollisionShape() const;
 	void setCollisionShapeInstance(rp3d::ProxyShape *collisionShapeInstance);
 	rp3d::ProxyShape *getCollisionShapeInstance() const;

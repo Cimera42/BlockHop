@@ -12,9 +12,8 @@ enum teams {
 	TEAM_TWO = 1
 };
 
-class TeamComponent : public Component
+class TeamComponent : public ComponentStatics<TeamComponent>
 {
-	static bool exported;
 public:
 	TeamComponent();
 	~TeamComponent();

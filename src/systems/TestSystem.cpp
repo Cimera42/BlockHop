@@ -3,6 +3,7 @@
 //
 
 #include "TestSystem.h"
+#include "../ecs/ecsManager.h"
 
 SYSTEM_EXPORT(TestSystem, "testSystem")
 

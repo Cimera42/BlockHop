@@ -18,9 +18,15 @@ typedef Component* (*ComponentFactoryPtr)();
 typedef System* (*SystemFactoryPtr)();
 typedef Trigger* (*TriggerFactoryPtr)();
 
-#define COMPONENT_EXPORT(type, name) bool type::exported = ECSManager::i()->exportComponent<type>(name);//#type to use <X>Component as a string literal
-#define SYSTEM_EXPORT(type, name) bool type::exported = ECSManager::i()->exportSystem<type>(name);
-#define TRIGGER_EXPORT(type, name) bool type::exported = ECSManager::i()->exportTrigger<type>(name);
+#define COMPONENT_EXPORT(type, componentName) \
+template<> const bool ComponentStatics<type>::exported = ECSManager::i()->exportComponent<type>(componentName); \
+template<> const std::string ComponentStatics<type>::name = componentName;
+#define SYSTEM_EXPORT(type, systemName) \
+template<> const bool SystemStatics<type>::exported = ECSManager::i()->exportSystem<type>(systemName); \
+template<> const std::string SystemStatics<type>::name = systemName;
+#define TRIGGER_EXPORT(type, triggerName) \
+template<> const bool TriggerStatics<type>::exported = ECSManager::i()->exportTrigger<type>(triggerName); \
+template<> const std::string TriggerStatics<type>::name = triggerName;
 
 class ECSManager {
 public:
@@ -77,7 +83,6 @@ public:
 		gameTriggerExports.insert(std::make_pair(name, trigFunc));
 
 		Trigger *t = trigFunc();
-		t->setName(name);
 		gameTriggers.insert(std::make_pair(name, t));
 		return true;
 	}

@@ -49,8 +49,9 @@ public:
 	template<typename T>
 	static Trigger* create() {return new T; };
 	virtual void setValues(json inValues) = 0;
-	void setName(std::string inName) {name = inName; };
-	std::string getName() {return name; };
+
+	virtual const std::string getName() = 0;
+
 	void setSystemName(std::string inSystemName) {systemName = inSystemName; }
 	std::string getSystemName() {return systemName; };
 
@@ -67,19 +68,26 @@ public:
 	virtual bool entityCheck(System* s, Entity* e) { return false; };
 
 private:
-	/*
-	 * Used to export so that ECSManager can see a specific trigger
-	 * Usage inside triggers's cpp file:
-	 *	  bool Trigger::exported = ECSManager::exportComponent<TriggerClass>("triggerName");
-	 */
-	//static bool exported;
-
-	std::string name;
 	std::string systemName;
 	//List of function pointers inside Triggers -
 	std::vector<std::tuple<std::string, actionMode, RunTrigFunc> > registeredActions;
 	//TODO dont even think we need the identity info?
 	std::vector<std::tuple<std::string, actionMode, RunTrigFunc> > subbedActions;
+};
+
+template <typename T>
+class TriggerStatics : public Trigger
+{
+public:
+	static const std::string name;
+	const std::string getName() { return name; }
+
+	/*
+	 * Used to export so that ECSManager can see a specific component
+	 * Usage inside components's cpp file:
+	 *	  bool Component::exported = ECSManager::exportComponent<ComponentClass>("componentName");
+	 */
+	static const bool exported;
 };
 
 #endif //BLOCKHOP_TRIGGER_H

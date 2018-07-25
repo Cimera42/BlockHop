@@ -9,9 +9,7 @@
 #include "../systems/PhysicsSystem.h"
 #include <glm/glm.hpp>
 
-class ClickedTrigger : public Trigger {
-	static bool exported;
-
+class ClickedTrigger : public TriggerStatics<ClickedTrigger> {
 	void runBox2(System* sys, Entity* ent);
 	void runBox(System* sys, Entity* ent);
 

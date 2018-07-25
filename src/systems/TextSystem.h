@@ -10,9 +10,8 @@
 #include "../components/TextComponent.h"
 #include "../components/TransformComponent.h"
 
-class TextSystem : public System
+class TextSystem : public SystemStatics<TextSystem>
 {
-	static bool exported;
 public:
 	TextSystem();
 	~TextSystem();

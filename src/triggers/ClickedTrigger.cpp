@@ -59,7 +59,7 @@ void ClickedTrigger::runSystemFunction(System* sys) {
 	if(b != 0)
 	{
 		Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
-		TransformComponent* cameraTransform = cameraEntity->getComponent<TransformComponent>("transformComponent");
+		TransformComponent* cameraTransform = cameraEntity->getComponent<TransformComponent>();
 		glm::vec3 startGlm = cameraTransform->getPosition();
 		glm::vec3 camDirection = cameraTransform->getForward();
 		glm::vec3 mDirection = camDirection*20.0f;

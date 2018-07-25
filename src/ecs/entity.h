@@ -42,9 +42,10 @@ public:
 	 */
 	std::vector<std::string> getComponents() const;
 	template <typename T>
-	T* getComponent(std::string compName) {
-		auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
-			return (o->getName() == compName);
+	T *getComponent()
+	{
+		auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [](Component*& o) {
+			return (o->getName() == ComponentStatics<T>::name);
 		});
 
 		if (it != subbedComponents.end())

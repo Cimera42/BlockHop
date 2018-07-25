@@ -13,13 +13,13 @@ SYSTEM_EXPORT(KeyboardInputSystem, "keyboardInputSystem")
 extern Window* window;
 void keyboardInputEvent(GLFWwindow* inWindow, int keyCode, int scanCode, int action, int modifiers);
 
-KeyboardInputSystem::KeyboardInputSystem() 
+KeyboardInputSystem::KeyboardInputSystem()
 {
 	glfwSetKeyCallback(window->glfwWindow, keyboardInputEvent);
 }
 KeyboardInputSystem::~KeyboardInputSystem() {}
 
-void KeyboardInputSystem::update(double dt) 
+void KeyboardInputSystem::update(double dt)
 {
 	updateSystemTriggers();
 
@@ -27,31 +27,31 @@ void KeyboardInputSystem::update(double dt)
 	{
 		updateEntityTriggers(entity);
 
-		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
-		KeyboardControlComponent* keyboardControl = entity->getComponent<KeyboardControlComponent>("keyboardControlComponent");
+		TransformComponent* transform = entity->getComponent<TransformComponent>();
+		KeyboardControlComponent* keyboardControl = entity->getComponent<KeyboardControlComponent>();
 
 		glm::vec3 displaced = transform->getPosition();
 		if(isKeyPressed(keyboardControl->getForwardKey()))
 			displaced += transform->getForward() * ((float)dt) * 5.0f;
-		
+
 		if(isKeyPressed(keyboardControl->getBackKey()))
 			displaced -= transform->getForward() * ((float)dt) * 5.0f;
-		
+
 		if(isKeyPressed(keyboardControl->getLeftKey()))
 			displaced += transform->getRight() * ((float)dt) * 5.0f;
-		
+
 		if(isKeyPressed(keyboardControl->getRightKey()))
 			displaced -= transform->getRight() * ((float)dt) * 5.0f;
-		
+
 		if(isKeyPressed(keyboardControl->getUpKey()))
 			displaced += glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
-		
+
 		if(isKeyPressed(keyboardControl->getDownKey()))
 			displaced -= glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
-		
+
 		transform->setPosition(displaced);
-		
-		
+
+
 		if(isKeyPressed(GLFW_KEY_R))
 		{
 			std::vector<std::string> comps = {"transformComponent",

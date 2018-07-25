@@ -30,18 +30,23 @@ public:
 	template<typename T>
 		static Component* create() {return new T; };
 	virtual void setValues(json inValues) = 0;
-	void setName(std::string inName) {name = inName; };
-	std::string getName() {return name; };
 
-private:
+	virtual const std::string getName() = 0;
+};
+
+template <typename T>
+class ComponentStatics : public Component
+{
+public:
+	static const std::string name;
+	const std::string getName() { return name; }
+
 	/*
 	 * Used to export so that ECSManager can see a specific component
 	 * Usage inside components's cpp file:
 	 *	  bool Component::exported = ECSManager::exportComponent<ComponentClass>("componentName");
 	 */
-	//static bool exported;
-
-	std::string name;
+	static const bool exported;
 };
 
 #endif // COMPONENT_H_INCLUDED

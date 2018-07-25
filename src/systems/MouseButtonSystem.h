@@ -7,13 +7,12 @@
 
 #include "../ecs/system.h"
 
-class MouseButtonSystem : public System 
+class MouseButtonSystem : public SystemStatics<MouseButtonSystem>
 {
-	static bool exported;
 public:
 	MouseButtonSystem();
 	~MouseButtonSystem();
-	
+
 	std::map<int, int> buttonList;
 	bool isButtonPressed(int buttonCode);
 

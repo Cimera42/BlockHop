@@ -7,14 +7,12 @@
 
 #include "../ecs/component.h"
 
-class KeyboardControlComponent : public Component
+class KeyboardControlComponent : public ComponentStatics<KeyboardControlComponent>
 {
-	static bool exported;
-
 	int forwardKey, backKey, leftKey, rightKey, upKey, downKey;
-	
+
 	int convertStringCode(std::string val);
-	
+
 public:
 	KeyboardControlComponent();
 	~KeyboardControlComponent();

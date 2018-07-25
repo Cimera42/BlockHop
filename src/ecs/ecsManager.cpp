@@ -56,16 +56,15 @@ Component* ECSManager::createComponent(std::string name, json compData) {
 		//Get component from map and create a new instance
 		auto createFunc = gameComponentExports.at(name);
 		Component *t = createFunc();
-		t->setName(name);
 		try {
 			t->setValues(compData);
 		} catch(...) {
-			Logger(1)<< "Incorrect json object given to " << name << " @ "<<t;
+			Logger()<< "Incorrect json object given to " << name << " @ "<<t;
 		}
 		return t;
 	}
 	catch (...) {
-		Logger(1)<< "Component type " << name << " doesn't exist.";
+		Logger()<< "Component type " << name << " doesn't exist.";
 	}
 	return nullptr;
 }
@@ -75,7 +74,6 @@ Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 		//Get trigger from map and create a new instance
 		auto createFunc = gameTriggerExports.at(name);
 		Trigger *t = createFunc();
-		t->setName(name);
 
 		//Get the system this trigger is to be attached to
 		bool foundSystem = false;
@@ -114,7 +112,6 @@ System* ECSManager::createSystem(std::string name, std::vector<std::string> comp
 		//Get system from map and instantiate with a list of required components
 		auto createFunc = gameSystemExports.at(name);
 		System *t = createFunc();
-		t->setName(name);
 		//Add to list of required components for this system
 		t->setRequiredComponents(compsNeeded);
 		//Add triggers that will be attached to this system
@@ -124,7 +121,7 @@ System* ECSManager::createSystem(std::string name, std::vector<std::string> comp
 		return t;
 	}
 	catch (...) {
-		Logger(1)<< "System type " << name << " doesn't exist.";
+		Logger()<< "System type " << name << " doesn't exist.";
 	}
 	return nullptr;
 };

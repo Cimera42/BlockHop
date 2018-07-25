@@ -39,7 +39,7 @@ void MainGameScene::run(std::chrono::duration<double> dt) {
 	int team1Count = 0;
 	int team2Count = 0;
 	for(auto mine : mines) {
-		TeamComponent* teamComponent = mine->getComponent<TeamComponent>("teamComponent");
+		TeamComponent* teamComponent = mine->getComponent<TeamComponent>();
 		if(teamComponent) {
 			if(teamComponent->team == TEAM_ONE) {
 				team1Count++;

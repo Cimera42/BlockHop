@@ -11,15 +11,15 @@ SYSTEM_EXPORT(TimeSystem, "timeSystem")
 TimeSystem::TimeSystem() {}
 TimeSystem::~TimeSystem() {}
 
-void TimeSystem::update(double dt) 
+void TimeSystem::update(double dt)
 {
 	updateSystemTriggers();
-	
+
 	for(auto entity : getEntities())
 	{
 		updateEntityTriggers(entity);
 
-		TimeoutComponent* timeout = entity->getComponent<TimeoutComponent>("timeoutComponent");
+		TimeoutComponent* timeout = entity->getComponent<TimeoutComponent>();
 		if(timeout->hasTimedOut()) {
 			timeout->runCallback(entity);
 			entity->removeComponent("timeoutComponent");

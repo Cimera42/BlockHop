@@ -8,9 +8,8 @@
 #include "../ecs/component.h"
 #include "../ecs/ecsManager.h"
 
-class TestComponent : public Component
+class TestComponent : public ComponentStatics<TestComponent>
 {
-	static bool exported;
 public:
 	TestComponent();
 	~TestComponent();

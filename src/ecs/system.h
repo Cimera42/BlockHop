@@ -27,8 +27,6 @@ public:
 	 */
 	template<typename T>
 		static System* create() {return new T; };
-	void setName(std::string inName) {name = inName; };
-	std::string getName() {return name; };
 	void setRequiredComponents(std::vector<std::string> inComps);
 	std::vector<std::string> getRequiredComponents();
 	void setAttachedTriggers(std::vector<std::string> inTrigs);
@@ -37,7 +35,7 @@ public:
 	 * Check if entity has all required components
 	 */
 	bool hasRequired(Entity *ent);
-	
+
 	/*
 	 * Check if an entity is subscribed to the system
 	 */
@@ -77,6 +75,8 @@ public:
 	 */
 	virtual void update(double dt) = 0;
 
+	virtual const std::string getName() = 0;
+
 private:
 	/*
 	 * Store of the components that are needed to subscribe an
@@ -93,13 +93,20 @@ private:
 	 * running the system only for entities that need it.
 	 */
 	std::vector<Entity*> subbedEntities;
+};
+
+template <typename T>
+class SystemStatics : public System
+{
+	static const std::string name;
+	const std::string getName() final { return name; }
+
 	/*
 	 * Used to export so that ECSManager can see a specific system
 	 * Usage inside systems's cpp file:
 	 *	  bool System::exported = ECSManager::exportSystem<SystemClass>("systemName");
 	 */
-	//static bool exported;
-	std::string name;
+	static const bool exported;
 };
 
 #endif // SYSTEM_H_INCLUDED
