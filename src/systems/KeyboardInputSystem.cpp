@@ -21,17 +21,11 @@ KeyboardInputSystem::~KeyboardInputSystem() {}
 
 void KeyboardInputSystem::update(double dt) 
 {
-	for(auto trig : getTriggers()) {
-		trig->runSystemFunction(this);
-	}
+	updateSystemTriggers();
 
 	for(auto entity : getEntities())
 	{
-		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == getName()) {
-				entTrig->runEntityCheck(this, entity);
-			}
-		}
+		updateEntityTriggers(entity);
 
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
 		KeyboardControlComponent* keyboardControl = entity->getComponent<KeyboardControlComponent>("keyboardControlComponent");

@@ -66,6 +66,11 @@ public:
 	 */
 	std::vector<Trigger*> getTriggers() const;
 
+	/*
+	 * Updates for triggers called within derived updates
+	 */
+	void updateSystemTriggers();
+	void updateEntityTriggers(Entity *ent);
 
 	/*
 	 * Updates are called by the engine to run the system.

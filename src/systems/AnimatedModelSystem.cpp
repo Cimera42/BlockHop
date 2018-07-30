@@ -45,17 +45,12 @@ void AnimatedModelSystem::update(double dt)
 
 	KeyboardInputSystem* keyInput = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
 
-	for(auto trig : getTriggers()) {
-		trig->runSystemFunction(this);
-	}
+	updateSystemTriggers();
 
 	for(auto entity : getEntities())
 	{
-		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == getName()) {
-				entTrig->runEntityCheck(this, entity);
-			}
-		}
+		updateEntityTriggers(entity);
+
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
 		AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
 

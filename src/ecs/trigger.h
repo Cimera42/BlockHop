@@ -12,7 +12,7 @@ class Entity;
 
 using json = nlohmann::json;
 
-enum runnerMode {
+enum actionMode {
 	EXACT_ONLY, //isExactType and will reject remaining
 	EXACT, //isExactType but will accept reminaing
 	INEXACT_ONLY, //isType and will reject remaining
@@ -24,7 +24,7 @@ protected:
 	typedef void (Trigger::*RunTrigFunc)(System* s, Entity* e);
 	// Essentially a callback function that's attached on a per trigger basis that
 	// will run for a specific identity type.
-	void addTriggerRunner(std::string identifier, runnerMode mode, RunTrigFunc func);
+	void addAction(std::string identifier, actionMode mode, RunTrigFunc func);
 
 public:
 	/*
@@ -56,8 +56,8 @@ public:
 
 	bool isInTriggerList(std::vector<Trigger*> triggerList);
 
-	void subscribeEntityToRunners(Entity* ent);
-	void unsubscribeEntityFromRunners(Entity* ent);
+	void subscribeEntityToActions(Entity* ent);
+	void unsubscribeEntityFromActions(Entity* ent);
 
 	//System level - called once per system update
 	virtual void runSystemFunction(System* a) {};
@@ -77,9 +77,9 @@ private:
 	std::string name;
 	std::string systemName;
 	//List of function pointers inside Triggers -
-	std::vector<std::tuple<std::string, runnerMode, RunTrigFunc> > registeredTriggerRunners;
+	std::vector<std::tuple<std::string, actionMode, RunTrigFunc> > registeredActions;
 	//TODO dont even think we need the identity info?
-	std::vector<std::tuple<std::string, runnerMode, RunTrigFunc> > subbedTriggerRunners;
+	std::vector<std::tuple<std::string, actionMode, RunTrigFunc> > subbedActions;
 };
 
 #endif //BLOCKHOP_TRIGGER_H

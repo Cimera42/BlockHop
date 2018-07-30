@@ -11,7 +11,7 @@ void Entity::addComponent(Component* comp) {
 	subbedComponents.push_back(comp);
 	//After updating our subscribed components, redo system subscription
 	subscribeToSystems();
-	subscribeToTriggerRunners();
+	subscribeToActions();
 }
 
 void Entity::removeComponent(std::string compName) {
@@ -23,14 +23,14 @@ void Entity::removeComponent(std::string compName) {
 		subbedComponents.erase(it);
 	//After updating our subscribed components, do system unsubscription
 	unsubscribeFromSystems();
-	unsubscribeToTriggerRunners();
+	unsubscribeToActions();
 }
 
 void Entity::addTrigger(Trigger *trig) {
 	//TODO type safety surrounding trigger to system interaction
 
 	subbedTriggers.push_back(trig);
-	trig->subscribeEntityToRunners(this);
+	trig->subscribeEntityToActions(this);
 }
 
 void Entity::removeTrigger(std::string trigName) {
@@ -50,22 +50,22 @@ std::vector<std::string> Entity::getComponents() const {
 	return compNames;
 }
 
-void Entity::subscribeToTriggerRunners() {
+void Entity::subscribeToActions() {
 	//Get each attached triggers
 	for(auto &trig : subbedTriggers) {
 
 		//Pass entity to trigger to let it figure out which
-		// runners it meets requirements for
-		trig->subscribeEntityToRunners(this);
+		// actions it meets requirements for
+		trig->subscribeEntityToActions(this);
 	}
 }
 
-void Entity::unsubscribeToTriggerRunners() {
+void Entity::unsubscribeToActions() {
 	//Get each attached triggers
 	for(auto &trig : subbedTriggers) {
 		//Pass entity to trigger to let it figure out which
-		// runners it meets requirements for
-		trig->unsubscribeEntityFromRunners(this);
+		// actions it meets requirements for
+		trig->unsubscribeEntityFromActions(this);
 	}
 }
 

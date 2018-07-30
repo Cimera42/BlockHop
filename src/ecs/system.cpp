@@ -76,5 +76,19 @@ std::vector<Trigger*> System::getTriggers() const {
 	return attachedTriggers;
 }
 
+void System::updateSystemTriggers() {
+	for(auto trig : getTriggers()) {
+		trig->runSystemFunction(this);
+	}
+}
+
+void System::updateEntityTriggers(Entity *ent) {
+	for(auto entTrig : ent->getTriggers()) {
+		if(entTrig->getSystemName() == getName()) {
+			entTrig->runEntityCheck(this, ent);
+		}
+	}
+}
+
 void System::subscribeCallback(Entity *entSubbed) {}
 void System::unsubscribeCallback(Entity *entUnsubbed) {}

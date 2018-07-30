@@ -17,8 +17,8 @@ glm::vec3 ClickedTrigger::direction;
 
 ClickedTrigger::ClickedTrigger(){
 	// Register all functions that handle actions
-	addTriggerRunner("box2", EXACT, static_cast<RunTrigFunc>(&ClickedTrigger::runBox2));
-	addTriggerRunner("box", EXACT, static_cast<RunTrigFunc>(&ClickedTrigger::runBox));
+	addAction("box2", EXACT, static_cast<RunTrigFunc>(&ClickedTrigger::runBox2));
+	addAction("box", EXACT, static_cast<RunTrigFunc>(&ClickedTrigger::runBox));
 }
 ClickedTrigger::~ClickedTrigger(){}
 

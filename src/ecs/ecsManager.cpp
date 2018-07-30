@@ -88,6 +88,7 @@ Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 				//Set name in trigger
 				t->setSystemName(o.first);
 				foundSystem = true;
+				break;
 			}
 		}
 		if(!foundSystem) {

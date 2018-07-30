@@ -61,20 +61,12 @@ void PhysicsSystem::update(double dt)
 	}
 
 	//Run triggers
-	for(auto trig : getTriggers()) {
-		trig->runSystemFunction(this);
-	}
+	updateSystemTriggers();
 
 	for(auto entity : getEntities())
 	{
 		//Check if entity has triggers that are in this system
-		for(Trigger* entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == getName()) {
-				//Do something
-				entTrig->runEntityCheck(this, entity);
-			}
-		}
-
+        updateEntityTriggers(entity);
 
 		TransformComponent* transformComp = entity->getComponent<TransformComponent>("transformComponent");
 		 

@@ -22,17 +22,12 @@ MouseInputSystem::~MouseInputSystem() {}
 
 void MouseInputSystem::update(double dt) 
 {
-	/*for(auto trig : getTriggers()) {
-		trig->runSystemFunction(this);
-	}
+	/*
+	updateSystemTriggers();
 
 	for(auto entity : getEntities())
 	{
-		for(auto entTrig : entity->getTriggers()) {
-			if(entTrig->getSystemName() == getName()) {
-				entTrig->runEntityCheck(this, entity);
-			}
-		}
+		updateEntityTriggers(entity);
 
 		//XComponent* x = entity->getComponent<XComponent>("xComponent");
 	}*/

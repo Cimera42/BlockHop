@@ -72,8 +72,8 @@ private:
 	 * Called upon attaching a component to a system
 	 */
 
-	void subscribeToTriggerRunners();
-	void unsubscribeToTriggerRunners();
+	void subscribeToActions();
+	void unsubscribeToActions();
 
 	void subscribeToSystems();
 	void unsubscribeFromSystems();
