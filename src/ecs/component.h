@@ -39,7 +39,7 @@ class ComponentStatics : public Component
 {
 public:
 	static const std::string name;
-	const std::string getName() { return name; }
+	const std::string getName() final { return name; }
 
 	/*
 	 * Used to export so that ECSManager can see a specific component
