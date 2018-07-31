@@ -10,14 +10,14 @@ SYSTEM_EXPORT(EventSystem, "eventSystem")
 EventSystem::EventSystem() {}
 EventSystem::~EventSystem() {}
 
-void EventSystem::update(double dt) 
+void EventSystem::update(double dt)
 {
 	updateSystemTriggers();
-	
+
 	for(auto entity : getEntities())
 	{
 		updateEntityTriggers(entity);
-		
-		//XComponent* x = entity->getComponent<XComponent>("xComponent");
+
+		//XComponent* x = entity->getComponent<XComponent>();
 	}
 }

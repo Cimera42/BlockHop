@@ -26,7 +26,7 @@ struct NodeChanging
 		NodeChanging::collectiveMatrix = glm::mat4();
 		NodeChanging::nodeChParent = nullptr;
 	}
-	
+
 	NodePart* node;
 	glm::mat4 localMatrix;
 	glm::mat4 collectiveMatrix;
@@ -42,7 +42,7 @@ struct BoneChanging
 		BoneChanging::bone = bone;
 		BoneChanging::node = node;
 	}
-	
+
 	Bone* bone;
 	NodeChanging* node;
 };
@@ -52,9 +52,9 @@ struct BoneMeshChanging
 		BoneMeshChanging::boneMesh = boneMesh;
 		BoneMeshChanging::node = node;
 	}
-	
+
 	NodeChanging* node;
-	
+
 	BoneMesh* boneMesh;
 	std::vector<BoneChanging*> changingBones;
 	std::vector<glm::mat4> boneMats;
@@ -63,9 +63,8 @@ struct BoneMeshChanging
 };
 
 class ModelAsset;
-class AnimatedModelComponent : public Component
+class AnimatedModelComponent : public Component<AnimatedModelComponent>
 {
-	static bool exported;
 public:
 	AnimatedModelComponent();
 	~AnimatedModelComponent();
@@ -91,7 +90,7 @@ public:
 	NodeChanging* FindChangingNode(std::string findThis);
 	BoneMeshChanging* FindChangingBoneMesh(std::string findThis);
 	bool playAnimation(std::string name);
-	
+
 	void nodeFamilySetup();
 };
 

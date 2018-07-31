@@ -12,7 +12,7 @@ SYSTEM_EXPORT(CameraSystem, "cameraSystem")
 CameraSystem::CameraSystem() {}
 CameraSystem::~CameraSystem() {}
 
-void CameraSystem::update(double dt) 
+void CameraSystem::update(double dt)
 {
 	updateSystemTriggers();
 
@@ -20,9 +20,9 @@ void CameraSystem::update(double dt)
 	{
 		updateEntityTriggers(entity);
 
-		CameraComponent* camera = entity->getComponent<CameraComponent>("cameraComponent");
-		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
-		
+		CameraComponent* camera = entity->getComponent<CameraComponent>();
+		TransformComponent* transform = entity->getComponent<TransformComponent>();
+
 		camera->lookAt(transform->getPosition(),
 					   transform->getPosition() + transform->getForward(),
 					   transform->getUp());

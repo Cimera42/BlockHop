@@ -51,37 +51,35 @@ bool ECSManager::isExactType(Entity *e, std::string identifier) {
 }
 
 //Generation of ESC Classes
-Component* ECSManager::createComponent(std::string name, json compData) {
+ComponentBase* ECSManager::createComponent(std::string name, json compData) {
 	try {
 		//Get component from map and create a new instance
 		auto createFunc = gameComponentExports.at(name);
-		Component *t = createFunc();
-		t->setName(name);
+		ComponentBase *t = createFunc();
 		try {
 			t->setValues(compData);
 		} catch(...) {
-			Logger(1)<< "Incorrect json object given to " << name << " @ "<<t;
+			Logger()<< "Incorrect json object given to " << name << " @ "<<t;
 		}
 		return t;
 	}
 	catch (...) {
-		Logger(1)<< "Component type " << name << " doesn't exist.";
+		Logger()<< "Component type " << name << " doesn't exist.";
 	}
 	return nullptr;
 }
 
-Trigger* ECSManager::createTrigger(std::string name, json trigData) {
+TriggerBase* ECSManager::createTrigger(std::string name, json trigData) {
 	try {
 		//Get trigger from map and create a new instance
 		auto createFunc = gameTriggerExports.at(name);
-		Trigger *t = createFunc();
-		t->setName(name);
+		TriggerBase *t = createFunc();
 
 		//Get the system this trigger is to be attached to
 		bool foundSystem = false;
-		for(std::pair<std::string, System*> o : gameSystems) {
-			std::vector<Trigger*> triggers = o.second->getTriggers();
-			auto it = std::find_if(triggers.begin(), triggers.end(), [name](Trigger *t) {
+		for(std::pair<std::string, SystemBase*> o : gameSystems) {
+			std::vector<TriggerBase*> triggers = o.second->getTriggers();
+			auto it = std::find_if(triggers.begin(), triggers.end(), [name](TriggerBase *t) {
 				return t->getName() == name;
 			});
 			if (it != triggers.end()) {
@@ -99,22 +97,21 @@ Trigger* ECSManager::createTrigger(std::string name, json trigData) {
 			//Set trigger values
 			t->setValues(trigData);
 		} catch(...) {
-			Logger(1)<< "Incorrect json object given to " << name << " @ "<<t;
+			Logger()<< "Incorrect json object given to " << name << " @ "<<t;
 		}
 		return t;
 	}
 	catch (...) {
-		Logger(1)<< "Trigger type " << name << " doesn't exist.";
+		Logger()<< "Trigger type " << name << " doesn't exist.";
 	}
 	return nullptr;
 }
 
-System* ECSManager::createSystem(std::string name, std::vector<std::string> compsNeeded, std::vector<std::string> attachedTriggers){
+SystemBase* ECSManager::createSystem(std::string name, std::vector<std::string> compsNeeded, std::vector<std::string> attachedTriggers){
 	try {
 		//Get system from map and instantiate with a list of required components
 		auto createFunc = gameSystemExports.at(name);
-		System *t = createFunc();
-		t->setName(name);
+		SystemBase *t = createFunc();
 		//Add to list of required components for this system
 		t->setRequiredComponents(compsNeeded);
 		//Add triggers that will be attached to this system
@@ -124,7 +121,7 @@ System* ECSManager::createSystem(std::string name, std::vector<std::string> comp
 		return t;
 	}
 	catch (...) {
-		Logger(1)<< "System type " << name << " doesn't exist.";
+		Logger()<< "SystemBase type " << name << " doesn't exist.";
 	}
 	return nullptr;
 };
@@ -140,14 +137,14 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
 	Entity* e = new Entity(name);
 	//Get components and create each of them
 	for(int i = 0; i < compsToSub.size(); i++) {
-		Component* newComp = createComponent(compsToSub[i], compsData[i]);
+		ComponentBase* newComp = createComponent(compsToSub[i], compsData[i]);
 		if(newComp) {
 			e->addComponent(newComp); //TODO wrap in try catch and delete if failure
 		}
 	}
 
 	for(int i = 0; i < trigsToSub.size(); i++) {
-		Trigger* newTrig = createTrigger(trigsToSub[i], trigsData[i]);
+		TriggerBase* newTrig = createTrigger(trigsToSub[i], trigsData[i]);
 		//TODO check that trigger fufils requirements of system - ie. has correct components
 		if(newTrig) {
 			e->addTrigger(newTrig); // TODO wrap in try catch and delete if failure

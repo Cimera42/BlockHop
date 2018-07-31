@@ -7,7 +7,7 @@ Entity::Entity(std::string inName)
 }
 Entity::~Entity(){}
 
-void Entity::addComponent(Component* comp) {
+void Entity::addComponent(ComponentBase* comp) {
 	subbedComponents.push_back(comp);
 	//After updating our subscribed components, redo system subscription
 	subscribeToSystems();
@@ -15,7 +15,7 @@ void Entity::addComponent(Component* comp) {
 }
 
 void Entity::removeComponent(std::string compName) {
-	auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
+	auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](ComponentBase*& o) {
 		return (o->getName() == compName);
 	});
 
@@ -26,7 +26,7 @@ void Entity::removeComponent(std::string compName) {
 	unsubscribeToActions();
 }
 
-void Entity::addTrigger(Trigger *trig) {
+void Entity::addTrigger(TriggerBase *trig) {
 	//TODO type safety surrounding trigger to system interaction
 
 	subbedTriggers.push_back(trig);
@@ -34,7 +34,7 @@ void Entity::addTrigger(Trigger *trig) {
 }
 
 void Entity::removeTrigger(std::string trigName) {
-	auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](Trigger*& o) {
+	auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](TriggerBase*& o) {
 		return (o->getName() == trigName);
 	});
 
@@ -79,7 +79,7 @@ void Entity::subscribeToSystems() {
 		//or doesn't meet the requirements
 		if(sysPtr->subscribeEntity(this)) {
 			sysPtr->subscribeCallback(this);
-			Logger(1) << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
+			Logger() << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
 		}
 	}
 }
@@ -95,7 +95,7 @@ void Entity::unsubscribeFromSystems() {
 			//A false return type means that the entity is not subbed
 			if(sysPtr->unsubscribeEntity(this)) {
 				sysPtr->unsubscribeCallback(this);
-				Logger(1) << "Entity \"" << this->getName() << "\" successfully unsubscribed from "<<sys.first;
+				Logger() << "Entity \"" << this->getName() << "\" successfully unsubscribed from "<<sys.first;
 			}
 		}
 	}

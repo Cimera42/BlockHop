@@ -10,9 +10,8 @@
 
 #[[#include]]# "../ecs/system.h"
 
-class ${NAME} : public System 
+class ${NAME} : public System<${NAME}>
 {
-	static bool exported;
 public:
 	${NAME}();
 	~${NAME}();

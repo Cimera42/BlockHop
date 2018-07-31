@@ -6,14 +6,14 @@
 #include "entity.h"
 #include "ecsManager.h"
 
-Trigger::Trigger() {}
-Trigger::~Trigger() {}
+TriggerBase::TriggerBase() {}
+TriggerBase::~TriggerBase() {}
 
-void Trigger::addAction(std::string identifier, actionMode mode, RunTrigFunc func) {
+void TriggerBase::addAction(std::string identifier, actionMode mode, RunTrigFunc func) {
 	registeredActions.push_back(std::make_tuple(identifier, mode, func));
 }
 
-void Trigger::subscribeEntityToActions(Entity *ent) {
+void TriggerBase::subscribeEntityToActions(Entity *ent) {
 	auto compNames = ent->getComponents();
 
 	//Move through registered trigger actions and sub to valid ones
@@ -47,14 +47,14 @@ void Trigger::subscribeEntityToActions(Entity *ent) {
 	}
 }
 
-void Trigger::unsubscribeEntityFromActions(Entity *ent) {
+void TriggerBase::unsubscribeEntityFromActions(Entity *ent) {
 	//Easiest way, erase vector and redo from ground up (avoid complications)
 	//TODO efficiency if a lot of component switching on the entity!
 	subbedActions.clear();
 	subscribeEntityToActions(ent);
 }
 
-void Trigger::runEntityCheck(System *s, Entity *e) {
+void TriggerBase::runEntityCheck(SystemBase *s, Entity *e) {
 	//Run override
 	if(entityCheck(s,e)) {
 		//Run trigger actions
@@ -65,9 +65,9 @@ void Trigger::runEntityCheck(System *s, Entity *e) {
 	};
 }
 
-bool Trigger::isInTriggerList(std::vector<Trigger*> triggerList) {
+bool TriggerBase::isInTriggerList(std::vector<TriggerBase*> triggerList) {
 	std::string ourTrigName = getName();
-	auto it = std::find_if(triggerList.begin(), triggerList.end(), [ourTrigName](Trigger*& t) {
+	auto it = std::find_if(triggerList.begin(), triggerList.end(), [ourTrigName](TriggerBase*& t) {
 		return t->getName() == ourTrigName;
 	});
 

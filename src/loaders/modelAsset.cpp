@@ -215,7 +215,7 @@ ModelAsset::~ModelAsset()
 bool ModelAsset::load()
 {
 	Assimp::Importer importer;
-	Logger(1) << "Loading model: " << filename;
+	Logger() << "Loading model: " << filename;
 	const aiScene* scene = importer.ReadFile(filename,
 											 aiProcess_CalcTangentSpace |
 											 aiProcess_Triangulate |
@@ -228,18 +228,18 @@ bool ModelAsset::load()
 
 	if(!scene)
 	{
-		Logger(1) << importer.GetErrorString();
-		Logger(1) << "Could not load Mesh. Error importing";
+		Logger() << importer.GetErrorString();
+		Logger() << "Could not load Mesh. Error importing";
 		return false;
 	}
 
-	Logger(1) << "Animations: " << scene->mNumAnimations;
+	Logger() << "Animations: " << scene->mNumAnimations;
 	for(unsigned int i = 0; i < scene->mNumAnimations; i++)
 	{
 		aiAnimation* assimpAnimation = scene->mAnimations[i];
-		Logger(1) << "Animation name: " << assimpAnimation->mName.C_Str();
-		Logger(1) << "Animation channels: " << assimpAnimation->mNumChannels;
-		Logger(1) << "TPS: " << assimpAnimation->mTicksPerSecond;
+		Logger() << "Animation name: " << assimpAnimation->mName.C_Str();
+		Logger() << "Animation channels: " << assimpAnimation->mNumChannels;
+		Logger() << "TPS: " << assimpAnimation->mTicksPerSecond;
 
 		//Convert into own class layout
 		//Actually using vectors instead of array+size
@@ -259,7 +259,7 @@ bool ModelAsset::load()
 		//Add to map of animations
 		animations[anim->name] = anim;
 	}
-	
+
 	for(unsigned int i = 0; i < scene->mNumMaterials; i++)
 	{
 		aiMaterial* assimpMaterial = scene->mMaterials[i];
@@ -331,7 +331,7 @@ NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
 	NodePart* nodePart = new NodePart();
 	nodePart->name = assimpNode->mName.C_Str();
 	assimpNodes[nodePart->name] = assimpNode;
-	
+
 	nodePart->nodeParent = parent;
 	//Link assimpNode to animation nodes
 	for(std::pair<const std::string, Animation*> pair : animations)
@@ -361,12 +361,12 @@ NodePart* ModelAsset::nodeLoop(aiNode *assimpNode, int indent, NodePart *parent)
 	nodePart->defaultTransform = glm::translate(position) * glm::mat4_cast(rotation) * glm::scale(scale);
 
 	/*std::string indentS = [indent](){std::string c; for(int i = 0; i < indent;i++){c+="	";} return c;}();
-	Logger(1) << indentS << "Node: \"" << nodePart->name << "\"";
-	Logger(1) << indentS << "	Position: " << position;
-	Logger(1) << indentS << "	Rotation: " << rotation;
-	Logger(1) << indentS << "	RotationA: " << glm::axis(rotation);
-	Logger(1) << indentS << "	RotationE: " << glm::eulerAngles(rotation);
-	Logger(1) << indentS << "	Scale: " << scale;*/
+	Logger() << indentS << "Node: \"" << nodePart->name << "\"";
+	Logger() << indentS << "	Position: " << position;
+	Logger() << indentS << "	Rotation: " << rotation;
+	Logger() << indentS << "	RotationA: " << glm::axis(rotation);
+	Logger() << indentS << "	RotationE: " << glm::eulerAngles(rotation);
+	Logger() << indentS << "	Scale: " << scale;*/
 
 	//Add node to map
 	nodeParts[nodePart->name] = nodePart;

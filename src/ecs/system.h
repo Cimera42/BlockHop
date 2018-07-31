@@ -5,15 +5,15 @@
 #include <string>
 #include "entity.h"
 
-class System {
+class SystemBase {
 public:
 	/*
 	 * A system is what does the processing for a specific part
 	 * of the engine. A system is first exported via the ECSManager
 	 * and then created through the ECSManager.
 	 */
-	System();
-	virtual ~System();
+	SystemBase();
+	virtual ~SystemBase();
 
 	/*
 	 * create() is used during the creation process of the system
@@ -26,9 +26,7 @@ public:
 	 * Do not use either of these outside of ECSManager!
 	 */
 	template<typename T>
-		static System* create() {return new T; };
-	void setName(std::string inName) {name = inName; };
-	std::string getName() {return name; };
+		static SystemBase* create() {return new T; };
 	void setRequiredComponents(std::vector<std::string> inComps);
 	std::vector<std::string> getRequiredComponents();
 	void setAttachedTriggers(std::vector<std::string> inTrigs);
@@ -37,7 +35,7 @@ public:
 	 * Check if entity has all required components
 	 */
 	bool hasRequired(Entity *ent);
-	
+
 	/*
 	 * Check if an entity is subscribed to the system
 	 */
@@ -64,7 +62,7 @@ public:
 	/*
 	 * Helper to retrieve attached triggers by name
 	 */
-	std::vector<Trigger*> getTriggers() const;
+	std::vector<TriggerBase*> getTriggers() const;
 
 	/*
 	 * Updates for triggers called within derived updates
@@ -77,6 +75,8 @@ public:
 	 */
 	virtual void update(double dt) = 0;
 
+	virtual const std::string getName() = 0;
+
 private:
 	/*
 	 * Store of the components that are needed to subscribe an
@@ -87,19 +87,24 @@ private:
 	 * TODO is there a better way to do this?
 	 * Store a single instance triggers that would run inside a system.
 	 */
-	std::vector<Trigger*> attachedTriggers;
+	std::vector<TriggerBase*> attachedTriggers;
 	/*
 	 * List of entities that are subscribed to a system. Used for
 	 * running the system only for entities that need it.
 	 */
 	std::vector<Entity*> subbedEntities;
+};
+
+template <typename T>
+class System : public SystemBase
+{
+	static const std::string name;
+	const std::string getName() final { return name; }
+
 	/*
 	 * Used to export so that ECSManager can see a specific system
-	 * Usage inside systems's cpp file:
-	 *	  bool System::exported = ECSManager::exportSystem<SystemClass>("systemName");
 	 */
-	//static bool exported;
-	std::string name;
+	static const bool exported;
 };
 
 #endif // SYSTEM_H_INCLUDED

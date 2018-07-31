@@ -7,9 +7,8 @@
 
 #include "../ecs/system.h"
 
-class EventSystem : public System 
+class EventSystem : public System<EventSystem>
 {
-	static bool exported;
 public:
 	EventSystem();
 	~EventSystem();

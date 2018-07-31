@@ -6,7 +6,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
-BoneMesh::BoneMesh(std::string inName, aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes) 
+BoneMesh::BoneMesh(std::string inName, aiMesh *assimpMesh, std::map<std::string, aiNode *> nodes)
 		: Mesh(inName)
 {
 	load(assimpMesh);
@@ -112,7 +112,7 @@ void BoneMesh::load(aiMesh *assimpMesh)
 	{
 		aiBone* assimpBone = assimpMesh->mBones[i];
 
-		//Logger(1) << assimpBone->mName.C_Str();
+		//Logger() << assimpBone->mName.C_Str();
 		Bone* bone = new Bone();
 		bone->id = i;
 		bone->name = assimpBone->mName.C_Str();
@@ -123,19 +123,19 @@ void BoneMesh::load(aiMesh *assimpMesh)
 		glm::vec3 skewb;
 		glm::vec4 perspectiveb;
 		glm::decompose(bone->offsetMatrix, scaleb, rotationb, positionb, skewb, perspectiveb);
-		Logger(1) << "Bone: " << bone->name << " - Mesh: " << this->name;
-		Logger(1) << "	Position: " << positionb;
-		Logger(1) << "	Rotation: " << rotationb;
-		Logger(1) << "	Scale: " << scaleb;*/
+		Logger() << "Bone: " << bone->name << " - Mesh: " << this->name;
+		Logger() << "	Position: " << positionb;
+		Logger() << "	Rotation: " << rotationb;
+		Logger() << "	Scale: " << scaleb;*/
 		bones.push_back(bone);
 
-		//Logger(1) << "Bone " << bone->id << ": \"" << assimpBone->mName.C_Str() << "\"";
+		//Logger() << "Bone " << bone->id << ": \"" << assimpBone->mName.C_Str() << "\"";
 		for(unsigned int j = 0; j < assimpBone->mNumWeights; j++)
 		{
 			aiVertexWeight assimpWeight = assimpBone->mWeights[j];
 
 			BoneVertex vert = collatedVertices[assimpWeight.mVertexId];
-			//Logger(1) << "	Vertex: " << assimpWeight.mVertexId << ", Weight: " << assimpWeight.mWeight;
+			//Logger() << "	Vertex: " << assimpWeight.mVertexId << ", Weight: " << assimpWeight.mWeight;
 			for(unsigned int k = 0; k < 4; k++)
 			{
 				if(vert.BoneWeights[k] <= 0.0f)
@@ -151,14 +151,14 @@ void BoneMesh::load(aiMesh *assimpMesh)
 
 	/*int k = 0;
 	std::for_each(collatedVertices.begin(), collatedVertices.end(), [&k](const BoneVertex vert) {
-		
-		Logger(1) << "Vertex " << k++ << ": ";
-		Logger(1) << "	Position: " << vert.pos;
-		Logger(1) << "	UV: " << vert.uv;
-		Logger(1) << "	Normal: " << vert.normal;
-		Logger(1) << "	Material: " << vert.materialIndex;
-		Logger(1) << "	BoneIds: " << vert.BoneIds[0] << "," << vert.BoneIds[1] << "," << vert.BoneIds[2] << "," << vert.BoneIds[3];
-		Logger(1) << "	BoneWeights: " << vert.BoneWeights[0] << "," << vert.BoneWeights[1] << "," << vert.BoneWeights[2] << "," << vert.BoneWeights[3];
+
+		Logger() << "Vertex " << k++ << ": ";
+		Logger() << "	Position: " << vert.pos;
+		Logger() << "	UV: " << vert.uv;
+		Logger() << "	Normal: " << vert.normal;
+		Logger() << "	Material: " << vert.materialIndex;
+		Logger() << "	BoneIds: " << vert.BoneIds[0] << "," << vert.BoneIds[1] << "," << vert.BoneIds[2] << "," << vert.BoneIds[3];
+		Logger() << "	BoneWeights: " << vert.BoneWeights[0] << "," << vert.BoneWeights[1] << "," << vert.BoneWeights[2] << "," << vert.BoneWeights[3];
 	});*/
 
 	genBuffers();

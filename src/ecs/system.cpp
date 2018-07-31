@@ -1,20 +1,20 @@
 #include "system.h"
 #include "ecsManager.h"
 
-System::System() {}
-System::~System() {}
+SystemBase::SystemBase() {}
+SystemBase::~SystemBase() {}
 
-void System::setRequiredComponents(std::vector<std::string> inComps) {
+void SystemBase::setRequiredComponents(std::vector<std::string> inComps) {
 	requiredComps = inComps;
 }
 
-std::vector<std::string> System::getRequiredComponents() {
+std::vector<std::string> SystemBase::getRequiredComponents() {
 	return requiredComps;
 }
 
-void System::setAttachedTriggers(std::vector<std::string> inTrigs) {
+void SystemBase::setAttachedTriggers(std::vector<std::string> inTrigs) {
 	//Get all triggers and store a single instance to allow us to use static functions
-	std::vector<Trigger*> trigInstances;
+	std::vector<TriggerBase*> trigInstances;
 
 	for(auto trigName : inTrigs) {
 		auto it = ECSManager::i()->gameTriggers.find(trigName);
@@ -25,7 +25,7 @@ void System::setAttachedTriggers(std::vector<std::string> inTrigs) {
 	attachedTriggers = trigInstances;
 }
 
-bool System::hasRequired(Entity* ent)
+bool SystemBase::hasRequired(Entity* ent)
 {
 	auto compNames = ent->getComponents();
 	//Check existence of all required components
@@ -39,12 +39,12 @@ bool System::hasRequired(Entity* ent)
 	return isInside;
 }
 
-bool System::hasEntity(Entity* entToCheck)
+bool SystemBase::hasEntity(Entity* entToCheck)
 {
 	return std::find(subbedEntities.begin(), subbedEntities.end(), entToCheck) != subbedEntities.end();
 }
 
-bool System::subscribeEntity(Entity* entToSub) {
+bool SystemBase::subscribeEntity(Entity* entToSub) {
 	//Check if in subbedEntities
 	if(!hasEntity(entToSub)) {
 		bool hasReq = hasRequired(entToSub);
@@ -57,7 +57,7 @@ bool System::subscribeEntity(Entity* entToSub) {
 	return false;
 }
 
-bool System::unsubscribeEntity(Entity *entToUnSub) {
+bool SystemBase::unsubscribeEntity(Entity *entToUnSub) {
 	//Check if in subbedEntities
 	auto it = std::find(subbedEntities.begin(), subbedEntities.end(), entToUnSub);
 	if(it != subbedEntities.end()) {
@@ -68,21 +68,21 @@ bool System::unsubscribeEntity(Entity *entToUnSub) {
 	return false;
 }
 
-std::vector<Entity*> System::getEntities() const {
+std::vector<Entity*> SystemBase::getEntities() const {
 	return subbedEntities;
 }
 
-std::vector<Trigger*> System::getTriggers() const {
+std::vector<TriggerBase*> SystemBase::getTriggers() const {
 	return attachedTriggers;
 }
 
-void System::updateSystemTriggers() {
+void SystemBase::updateSystemTriggers() {
 	for(auto trig : getTriggers()) {
 		trig->runSystemFunction(this);
 	}
 }
 
-void System::updateEntityTriggers(Entity *ent) {
+void SystemBase::updateEntityTriggers(Entity *ent) {
 	for(auto entTrig : ent->getTriggers()) {
 		if(entTrig->getSystemName() == getName()) {
 			entTrig->runEntityCheck(this, ent);
@@ -90,5 +90,5 @@ void System::updateEntityTriggers(Entity *ent) {
 	}
 }
 
-void System::subscribeCallback(Entity *entSubbed) {}
-void System::unsubscribeCallback(Entity *entUnsubbed) {}
+void SystemBase::subscribeCallback(Entity *entSubbed) {}
+void SystemBase::unsubscribeCallback(Entity *entUnsubbed) {}

@@ -10,9 +10,8 @@
 
 #[[#include]]# "../ecs/component.h"
 
-class ${NAME} : public Component
+class ${NAME} : public Component<${NAME}>
 {
-	static bool exported;
 public:
 	${NAME}();
 	~${NAME}();

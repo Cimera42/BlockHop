@@ -7,9 +7,8 @@
 
 #include "../ecs/system.h"
 
-class TimeSystem : public System 
+class TimeSystem : public System<TimeSystem>
 {
-	static bool exported;
 public:
 	TimeSystem();
 	~TimeSystem();

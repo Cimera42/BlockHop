@@ -34,7 +34,7 @@ void AssetManager::readConfig(){
 			for(json extension : loaderType["extensions"]) {
 				std::string ext = extension.get<std::string>();
 				if(it == exportedLoaders.end()) {
-					Logger(1) << "Loader for '" << ext
+					Logger() << "Loader for '" << ext
 							  << "' doesn't exist. Assets of this type will not work correctly"<<std::endl;
 				}
 				else {
@@ -46,11 +46,11 @@ void AssetManager::readConfig(){
 			}
 		}
 	}catch (std::invalid_argument invalidArgument) {
-		Logger(1) << invalidArgument.what();
-		Logger(1)<<"Cannot read config file, "+config+". AssetLoader will not function correctly."<<std::endl;
+		Logger() << invalidArgument.what();
+		Logger()<<"Cannot read config file, "+config+". AssetLoader will not function correctly."<<std::endl;
 		exit(-6);
 	}catch (...) {
-		Logger(1)<<"Cannot read config file, "+config+". AssetLoader will not function correctly."<<std::endl;
+		Logger()<<"Cannot read config file, "+config+". AssetLoader will not function correctly."<<std::endl;
 		exit(-6);
 	}
 
@@ -80,7 +80,7 @@ BaseAsset* AssetManager::loadSync(std::string filename) {
 		}
 		return asset;
 	} else {
-		Logger(1)<<"Could not find a loader for the file '"<<filename<<"'."<<std::endl;
+		Logger()<<"Could not find a loader for the file '"<<filename<<"'."<<std::endl;
 	}
 	return nullptr;
 }
@@ -92,7 +92,7 @@ AssetLoader* AssetManager::getLoader(std::string loaderName) {
 	if(it != exportedLoaders.end()) {
 		return it->second;
 	} else {
-		Logger(1)<<"Cannot find loader with given name '"<<loaderName<<"', ensure loader exists"
+		Logger()<<"Cannot find loader with given name '"<<loaderName<<"', ensure loader exists"
 				"inside asset configuration file."<<std::endl;
 	}
 	return nullptr;

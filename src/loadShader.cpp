@@ -26,7 +26,7 @@
 	std::vector<char> compileLog(compileLogLength);
 	glGetShaderInfoLog(partID, compileLogLength, nullptr, &compileLog[0]);
 	if (compileLog.size() > 1)
-		Logger(1) << compileLog.data();
+		Logger() << compileLog.data();
 
 	std::vector<char>().swap(compileLog);
 }*/
@@ -55,7 +55,7 @@ void loadShaderPart(GLuint partID, const char * path)
 	std::vector<char> compileLog((unsigned long long int) compileLogLength);
 	glGetShaderInfoLog(partID, compileLogLength, nullptr, &compileLog[0]);
 	if (compileLog.size() > 1)
-		Logger(1) << compileLog.data();
+		Logger() << compileLog.data();
 
 	std::vector<char>().swap(compileLog);
 }
@@ -73,7 +73,7 @@ void createProgram(GLuint progID)
 		std::vector<char> compileLog((unsigned long long int) compileLogLength);
 		glGetProgramInfoLog(progID, compileLogLength, nullptr, &compileLog[0]);
 		if (compileLog.size() > 1)
-			Logger(1) << compileLog.data();
+			Logger() << compileLog.data();
 
 		std::vector<char>().swap(compileLog);
 	}
@@ -85,12 +85,12 @@ void createProgram(GLuint progID)
 
 GLuint loadShader(const char * vertPath, const char * fragPath)
 {
-	Logger(1) << "Creating Shader";
-	Logger(1) << "Vertex: " << vertPath;
+	Logger() << "Creating Shader";
+	Logger() << "Vertex: " << vertPath;
 	GLuint vertID = glCreateShader(GL_VERTEX_SHADER);
 		loadShaderPart(vertID, vertPath);
 
-	Logger(1) << "Fragment: " << fragPath;
+	Logger() << "Fragment: " << fragPath;
 	GLuint fragID = glCreateShader(GL_FRAGMENT_SHADER);
 		loadShaderPart(fragID, fragPath);
 
@@ -108,16 +108,16 @@ GLuint loadShader(const char * vertPath, const char * fragPath)
 
 GLuint loadShaderG(const char * vertPath, const char * fragPath, const char * geoPath)
 {
-	Logger(1) << "Creating Shader";
-	Logger(1) << "Vertex: " << vertPath;
+	Logger() << "Creating Shader";
+	Logger() << "Vertex: " << vertPath;
 	GLuint vertID = glCreateShader(GL_VERTEX_SHADER);
 		loadShaderPart(vertID, vertPath);
 
-	Logger(1) << "Fragment: " << fragPath;
+	Logger() << "Fragment: " << fragPath;
 	GLuint fragID = glCreateShader(GL_FRAGMENT_SHADER);
 		loadShaderPart(fragID, fragPath);
 
-	Logger(1) << "Geometry: " << geoPath;
+	Logger() << "Geometry: " << geoPath;
 	GLuint geoID = glCreateShader(GL_GEOMETRY_SHADER);
 		loadShaderPart(geoID, geoPath);
 
