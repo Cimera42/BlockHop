@@ -7,7 +7,7 @@
 
 #include "../ecs/system.h"
 
-class EventSystem : public SystemStatics<EventSystem>
+class EventSystem : public System<EventSystem>
 {
 public:
 	EventSystem();

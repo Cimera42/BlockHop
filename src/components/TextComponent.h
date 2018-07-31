@@ -33,7 +33,7 @@ struct Vertex2D
 	glm::vec2 uv;
 };
 
-class TextComponent : public ComponentStatics<TextComponent>
+class TextComponent : public Component<TextComponent>
 {
 	Font* font;
 	std::vector<Vertex2D> vertices;

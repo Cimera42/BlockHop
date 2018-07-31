@@ -7,7 +7,7 @@
 
 #include "../ecs/system.h"
 
-class KeyboardInputSystem : public SystemStatics<KeyboardInputSystem>
+class KeyboardInputSystem : public System<KeyboardInputSystem>
 {
 public:
 	KeyboardInputSystem();

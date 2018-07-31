@@ -10,7 +10,7 @@
 #include "../components/TextComponent.h"
 #include "../components/TransformComponent.h"
 
-class TextSystem : public SystemStatics<TextSystem>
+class TextSystem : public System<TextSystem>
 {
 public:
 	TextSystem();

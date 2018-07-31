@@ -7,7 +7,7 @@
 
 #include "../ecs/system.h"
 
-class TestSystem : public SystemStatics<TestSystem>
+class TestSystem : public System<TestSystem>
 {
 public:
 	TestSystem();

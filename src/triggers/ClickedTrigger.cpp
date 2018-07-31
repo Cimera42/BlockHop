@@ -47,7 +47,7 @@ public:
 	}
 };
 
-void ClickedTrigger::runSystemFunction(System* sys) {
+void ClickedTrigger::runSystemFunction(SystemBase* sys) {
 	PhysicsSystem* s = static_cast<PhysicsSystem*>(sys);
 
 	MouseButtonSystem* mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>("mouseButtonSystem");
@@ -83,7 +83,7 @@ void testCallback(Entity *e) {
 	lastClicked->applyForce(rp3d::Vector3(0,1,0)*trigger->force, trigger->worldPoint);
 }
 
-bool ClickedTrigger::entityCheck(System* sys, Entity* ent) {
+bool ClickedTrigger::entityCheck(SystemBase* sys, Entity* ent) {
 	PhysicsSystem* s = static_cast<PhysicsSystem*>(sys);
 
 	rp3d::RigidBody* rb = s->findRigidBody(ent);
@@ -97,7 +97,7 @@ bool ClickedTrigger::entityCheck(System* sys, Entity* ent) {
 	return false;
 }
 
-void ClickedTrigger::runBox2(System* sys, Entity* ent) {
+void ClickedTrigger::runBox2(SystemBase* sys, Entity* ent) {
 	auto time = static_cast<TimeoutComponent*>(ECSManager::i()->createComponent("timeoutComponent", json {}));
 	time->setDuration(3000);
 	time->setCallback(testCallback);
@@ -106,6 +106,6 @@ void ClickedTrigger::runBox2(System* sys, Entity* ent) {
 	clicked->applyForce(rp3d::Vector3(-direction.x,-direction.y,-direction.z)*force, worldPoint);
 }
 
-void ClickedTrigger::runBox(System* sys, Entity* ent) {
+void ClickedTrigger::runBox(SystemBase* sys, Entity* ent) {
 	clicked->applyForce(rp3d::Vector3(direction.x,direction.y,direction.z)*force, worldPoint);
 }

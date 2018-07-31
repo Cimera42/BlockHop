@@ -63,7 +63,7 @@ struct BoneMeshChanging
 };
 
 class ModelAsset;
-class AnimatedModelComponent : public ComponentStatics<AnimatedModelComponent>
+class AnimatedModelComponent : public Component<AnimatedModelComponent>
 {
 public:
 	AnimatedModelComponent();

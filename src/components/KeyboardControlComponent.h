@@ -7,7 +7,7 @@
 
 #include "../ecs/component.h"
 
-class KeyboardControlComponent : public ComponentStatics<KeyboardControlComponent>
+class KeyboardControlComponent : public Component<KeyboardControlComponent>
 {
 	int forwardKey, backKey, leftKey, rightKey, upKey, downKey;
 

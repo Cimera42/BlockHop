@@ -9,9 +9,9 @@
 #include "../systems/PhysicsSystem.h"
 #include <glm/glm.hpp>
 
-class ClickedTrigger : public TriggerStatics<ClickedTrigger> {
-	void runBox2(System* sys, Entity* ent);
-	void runBox(System* sys, Entity* ent);
+class ClickedTrigger : public Trigger<ClickedTrigger> {
+	void runBox2(SystemBase* sys, Entity* ent);
+	void runBox(SystemBase* sys, Entity* ent);
 
 public:
 	ClickedTrigger();
@@ -24,8 +24,8 @@ public:
 
 	int force;
 
-	void runSystemFunction(System* s);
-	bool entityCheck(System* s, Entity* e);
+	void runSystemFunction(SystemBase* s);
+	bool entityCheck(SystemBase* s, Entity* e);
 };
 
 #endif //BLOCKHOP_CLICKEDTRIGGER_H

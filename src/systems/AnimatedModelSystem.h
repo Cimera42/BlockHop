@@ -8,7 +8,7 @@
 #include "../ecs/system.h"
 #include "../shader.h"
 
-class AnimatedModelSystem : public SystemStatics<AnimatedModelSystem>
+class AnimatedModelSystem : public System<AnimatedModelSystem>
 {
 public:
 	AnimatedModelSystem();

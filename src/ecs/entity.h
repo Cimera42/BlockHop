@@ -23,10 +23,10 @@ public:
 	 * Should be used to enable/disable functionality of an
 	 * entity.
 	 */
-	void addComponent(Component* comp);
+	void addComponent(ComponentBase* comp);
 	void removeComponent(std::string compName);
 
-	void addTrigger(Trigger* trig);
+	void addTrigger(TriggerBase* trig);
 	void removeTrigger(std::string trigName);
 
 	/*
@@ -44,8 +44,8 @@ public:
 	template <typename T>
 	T *getComponent()
 	{
-		auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [](Component*& o) {
-			return (o->getName() == ComponentStatics<T>::name);
+		auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [](ComponentBase*& o) {
+			return (o->getName() == Component<T>::name);
 		});
 
 		if (it != subbedComponents.end())
@@ -53,13 +53,13 @@ public:
 		return nullptr;
 	}
 
-	std::vector<Trigger*> getTriggers() {
+	std::vector<TriggerBase*> getTriggers() {
 		return subbedTriggers;
 	}
 
 	template <typename T>
 	T* getTrigger(std::string trigName) {
-		auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](Trigger*& o) {
+		auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](TriggerBase*& o) {
 			return (o->getName() == trigName);
 		});
 
@@ -78,8 +78,8 @@ private:
 
 	void subscribeToSystems();
 	void unsubscribeFromSystems();
-	std::vector<Component*> subbedComponents;
-	std::vector<Trigger*> subbedTriggers;
+	std::vector<ComponentBase*> subbedComponents;
+	std::vector<TriggerBase*> subbedTriggers;
 
 	std::string name;
 };

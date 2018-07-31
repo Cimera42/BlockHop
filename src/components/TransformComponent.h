@@ -10,7 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-class TransformComponent : public ComponentStatics<TransformComponent>
+class TransformComponent : public Component<TransformComponent>
 {
 	glm::mat4 matrix;
 	glm::vec3 position;

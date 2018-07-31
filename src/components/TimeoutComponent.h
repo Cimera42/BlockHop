@@ -12,7 +12,7 @@
 //TODO - can only have one timeout at a time per entity, allow for more!
 //TODO - also need to have a way of preserving variables at time of calling...
 //TODO - also make more dynamic with slow mo?
-class TimeoutComponent : public ComponentStatics<TimeoutComponent>
+class TimeoutComponent : public Component<TimeoutComponent>
 {
 	std::function<void(Entity* e)> boundFunc;
 	long duration;

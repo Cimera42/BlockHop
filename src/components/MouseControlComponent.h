@@ -7,7 +7,7 @@
 
 #include "../ecs/component.h"
 
-class MouseControlComponent : public ComponentStatics<MouseControlComponent>
+class MouseControlComponent : public Component<MouseControlComponent>
 {
 	double xSensitivity, ySensitivity;
 

@@ -9,7 +9,7 @@
 #include <json.hpp>
 using json = nlohmann::json;
 
-class CameraComponent : public ComponentStatics<CameraComponent>
+class CameraComponent : public Component<CameraComponent>
 {
 	float fov;
 	float aspectRatio;

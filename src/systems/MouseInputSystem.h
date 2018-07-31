@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include "../ecs/system.h"
 
-class MouseInputSystem : public SystemStatics<MouseInputSystem>
+class MouseInputSystem : public System<MouseInputSystem>
 {
 	glm::vec2 lastPos;
 

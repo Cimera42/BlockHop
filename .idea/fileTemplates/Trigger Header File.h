@@ -10,10 +10,8 @@
 
 #[[#include]]# "../ecs/trigger.h"
 
-class ${NAME} : public Trigger
+class ${NAME} : public Trigger<${NAME}>
 {
-	static bool exported;
-	
 	// egRunnerFunction(System* s, Entity e);
 public:
 	${NAME}();

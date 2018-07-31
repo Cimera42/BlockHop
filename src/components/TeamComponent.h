@@ -12,7 +12,7 @@ enum teams {
 	TEAM_TWO = 1
 };
 
-class TeamComponent : public ComponentStatics<TeamComponent>
+class TeamComponent : public Component<TeamComponent>
 {
 public:
 	TeamComponent();

@@ -7,7 +7,7 @@
 
 #include "../ecs/system.h"
 
-class CameraSystem : public SystemStatics<CameraSystem>
+class CameraSystem : public System<CameraSystem>
 {
 public:
 	CameraSystem();

@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <json.hpp>
-class System;
+class SystemBase;
 class Entity;
 
 using json = nlohmann::json;
@@ -19,9 +19,9 @@ enum actionMode {
 	INEXACT, //isType but will accept remaining
 };
 
-class Trigger {
+class TriggerBase {
 protected:
-	typedef void (Trigger::*RunTrigFunc)(System* s, Entity* e);
+	typedef void (TriggerBase::*RunTrigFunc)(SystemBase* s, Entity* e);
 	// Essentially a callback function that's attached on a per trigger basis that
 	// will run for a specific identity type.
 	void addAction(std::string identifier, actionMode mode, RunTrigFunc func);
@@ -32,8 +32,8 @@ public:
 	 * and causes flow on action effects. A trigger is first exported via the ECSManager
 	 * and then created through the ECSManager.
 	 */
-	Trigger();
-	virtual ~Trigger();
+	TriggerBase();
+	virtual ~TriggerBase();
 
 	/*
 	 * create() is used during the creation process of the trigger
@@ -47,7 +47,7 @@ public:
 	 * Do not use either of these outside of ECSManager!
 	 */
 	template<typename T>
-	static Trigger* create() {return new T; };
+	static TriggerBase* create() {return new T; };
 	virtual void setValues(json inValues) = 0;
 
 	virtual const std::string getName() = 0;
@@ -55,17 +55,17 @@ public:
 	void setSystemName(std::string inSystemName) {systemName = inSystemName; }
 	std::string getSystemName() {return systemName; };
 
-	bool isInTriggerList(std::vector<Trigger*> triggerList);
+	bool isInTriggerList(std::vector<TriggerBase*> triggerList);
 
 	void subscribeEntityToActions(Entity* ent);
 	void unsubscribeEntityFromActions(Entity* ent);
 
-	//System level - called once per system update
-	virtual void runSystemFunction(System* a) {};
+	//SystemBase level - called once per system update
+	virtual void runSystemFunction(SystemBase* a) {};
 
 	//Entity level - called for every entity subscribed to system
-	void runEntityCheck(System* s, Entity* e);
-	virtual bool entityCheck(System* s, Entity* e) { return false; };
+	void runEntityCheck(SystemBase* s, Entity* e);
+	virtual bool entityCheck(SystemBase* s, Entity* e) { return false; };
 
 private:
 	std::string systemName;
@@ -76,16 +76,14 @@ private:
 };
 
 template <typename T>
-class TriggerStatics : public Trigger
+class Trigger : public TriggerBase
 {
 public:
 	static const std::string name;
-	const std::string getName() { return name; }
+	const std::string getName() final { return name; }
 
 	/*
 	 * Used to export so that ECSManager can see a specific component
-	 * Usage inside components's cpp file:
-	 *	  bool Component::exported = ECSManager::exportComponent<ComponentClass>("componentName");
 	 */
 	static const bool exported;
 };

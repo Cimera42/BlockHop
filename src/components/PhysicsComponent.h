@@ -8,7 +8,7 @@
 #include "../ecs/component.h"
 #include <reactphysics3d.h>
 
-class PhysicsComponent : public ComponentStatics<PhysicsComponent>
+class PhysicsComponent : public Component<PhysicsComponent>
 {
 	rp3d::CollisionShape* collisionShape;
 	rp3d::ProxyShape* collisionShapeInstance;

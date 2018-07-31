@@ -7,7 +7,7 @@
 
 #include "../ecs/system.h"
 
-class TimeSystem : public SystemStatics<TimeSystem>
+class TimeSystem : public System<TimeSystem>
 {
 public:
 	TimeSystem();

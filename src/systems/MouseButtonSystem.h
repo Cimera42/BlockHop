@@ -7,7 +7,7 @@
 
 #include "../ecs/system.h"
 
-class MouseButtonSystem : public SystemStatics<MouseButtonSystem>
+class MouseButtonSystem : public System<MouseButtonSystem>
 {
 public:
 	MouseButtonSystem();

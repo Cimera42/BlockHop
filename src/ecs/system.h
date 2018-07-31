@@ -5,15 +5,15 @@
 #include <string>
 #include "entity.h"
 
-class System {
+class SystemBase {
 public:
 	/*
 	 * A system is what does the processing for a specific part
 	 * of the engine. A system is first exported via the ECSManager
 	 * and then created through the ECSManager.
 	 */
-	System();
-	virtual ~System();
+	SystemBase();
+	virtual ~SystemBase();
 
 	/*
 	 * create() is used during the creation process of the system
@@ -26,7 +26,7 @@ public:
 	 * Do not use either of these outside of ECSManager!
 	 */
 	template<typename T>
-		static System* create() {return new T; };
+		static SystemBase* create() {return new T; };
 	void setRequiredComponents(std::vector<std::string> inComps);
 	std::vector<std::string> getRequiredComponents();
 	void setAttachedTriggers(std::vector<std::string> inTrigs);
@@ -62,7 +62,7 @@ public:
 	/*
 	 * Helper to retrieve attached triggers by name
 	 */
-	std::vector<Trigger*> getTriggers() const;
+	std::vector<TriggerBase*> getTriggers() const;
 
 	/*
 	 * Updates for triggers called within derived updates
@@ -87,7 +87,7 @@ private:
 	 * TODO is there a better way to do this?
 	 * Store a single instance triggers that would run inside a system.
 	 */
-	std::vector<Trigger*> attachedTriggers;
+	std::vector<TriggerBase*> attachedTriggers;
 	/*
 	 * List of entities that are subscribed to a system. Used for
 	 * running the system only for entities that need it.
@@ -96,15 +96,13 @@ private:
 };
 
 template <typename T>
-class SystemStatics : public System
+class System : public SystemBase
 {
 	static const std::string name;
 	const std::string getName() final { return name; }
 
 	/*
 	 * Used to export so that ECSManager can see a specific system
-	 * Usage inside systems's cpp file:
-	 *	  bool System::exported = ECSManager::exportSystem<SystemClass>("systemName");
 	 */
 	static const bool exported;
 };

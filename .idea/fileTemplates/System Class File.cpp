@@ -11,14 +11,14 @@ SYSTEM_EXPORT(${NAME}, "${cmlname}")
 ${NAME}::${NAME}() {}
 ${NAME}::~${NAME}() {}
 
-void ${NAME}::update(double dt) 
+void ${NAME}::update(double dt)
 {
 	updateSystemTriggers();
-	
+
 	for(auto entity : getEntities())
 	{
 		updateEntityTriggers(entity);
-		
-		//XComponent* x = entity->getComponent<XComponent>("xComponent");
+
+		//XComponent* x = entity->getComponent<XComponent>();
 	}
 }

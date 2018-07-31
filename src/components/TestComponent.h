@@ -8,7 +8,7 @@
 #include "../ecs/component.h"
 #include "../ecs/ecsManager.h"
 
-class TestComponent : public ComponentStatics<TestComponent>
+class TestComponent : public Component<TestComponent>
 {
 public:
 	TestComponent();

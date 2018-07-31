@@ -6,15 +6,15 @@
 
 using json = nlohmann::json;
 
-class Component {
+class ComponentBase {
 public:
 	/*
 	 * A component holds the data/state of an entity for use in specific
 	 * systems. A component is first exported via the ECSManager
 	 * and then created through the ECSManager.
 	 */
-	Component();
-	virtual ~Component();
+	ComponentBase();
+	virtual ~ComponentBase();
 
 	/*
 	 * create() is used during the creation process of the component
@@ -28,14 +28,14 @@ public:
 	 * Do not use either of these outside of ECSManager!
 	 */
 	template<typename T>
-		static Component* create() {return new T; };
+		static ComponentBase* create() {return new T; };
 	virtual void setValues(json inValues) = 0;
 
 	virtual const std::string getName() = 0;
 };
 
 template <typename T>
-class ComponentStatics : public Component
+class Component : public ComponentBase
 {
 public:
 	static const std::string name;
@@ -43,8 +43,6 @@ public:
 
 	/*
 	 * Used to export so that ECSManager can see a specific component
-	 * Usage inside components's cpp file:
-	 *	  bool Component::exported = ECSManager::exportComponent<ComponentClass>("componentName");
 	 */
 	static const bool exported;
 };

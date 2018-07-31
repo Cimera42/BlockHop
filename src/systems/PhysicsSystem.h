@@ -9,7 +9,7 @@
 
 #include <reactphysics3d.h>
 
-class PhysicsSystem : public SystemStatics<PhysicsSystem>
+class PhysicsSystem : public System<PhysicsSystem>
 {
 	const float idealTimestep = 1.0f/60.0f;
 	double accumulator;
