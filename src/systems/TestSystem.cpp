@@ -13,8 +13,12 @@ TestSystem::~TestSystem() {}
 
 void TestSystem::update(double dt) {
 	//Logger(1)<<"Virtual inheritance test works!";
+
+	updateSystemTriggers();
+
 	for(auto entity : getEntities())
 	{
+		updateEntityTriggers(entity);
 
 	}
 }

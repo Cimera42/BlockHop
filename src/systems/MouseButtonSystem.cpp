@@ -20,10 +20,15 @@ MouseButtonSystem::~MouseButtonSystem() {}
 
 void MouseButtonSystem::update(double dt) 
 {
+	/*
+	updateSystemTriggers();
+
 	for(auto entity : getEntities())
 	{
+		updateEntityTriggers(entity);
+
 		//XComponent* x = entity->getComponent<XComponent>("xComponent");
-	}
+	}*/
 }
 
 bool MouseButtonSystem::isButtonPressed(int buttonCode)

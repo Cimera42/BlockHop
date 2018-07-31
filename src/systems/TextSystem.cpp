@@ -29,8 +29,12 @@ TextSystem::~TextSystem()
 
 void TextSystem::update(double dt)
 {
+	updateSystemTriggers();
+
 	for(auto entity : getEntities())
 	{
+		updateEntityTriggers(entity);
+
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
 		TextComponent* text = entity->getComponent<TextComponent>("textComponent");
 

@@ -14,8 +14,12 @@ CameraSystem::~CameraSystem() {}
 
 void CameraSystem::update(double dt) 
 {
+	updateSystemTriggers();
+
 	for(auto entity : getEntities())
 	{
+		updateEntityTriggers(entity);
+
 		CameraComponent* camera = entity->getComponent<CameraComponent>("cameraComponent");
 		TransformComponent* transform = entity->getComponent<TransformComponent>("transformComponent");
 		

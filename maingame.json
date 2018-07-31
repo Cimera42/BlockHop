@@ -178,15 +178,57 @@
 			]
 		},
 		{
-			"name": "ModelEntity",
+			"name": "Map",
 			"components": [
 				{
 					"name": "transformComponent",
 					"values": {
 						"position": {
 							"x": 0,
+							"y": -2,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
 							"y": 0,
-							"z": 5
+							"z": 0
+						},
+						"scale": {
+							"x": 20,
+							"y": 0.5,
+							"z": 20
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/framedCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mode": "static",
+						"colliderShape": "cube",
+						"halfWidth": 20,
+						"halfHeight": 0.5,
+						"halfDepth": 20
+					}
+				}
+			]
+		},
+		{
+			"name": "Mine1",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 10,
+							"y": 0,
+							"z": 10
 						},
 						"rotation": {
 							"w": 1,
@@ -204,7 +246,83 @@
 				{
 					"name": "animatedModelComponent",
 					"values": {
-						"filename": "./assets/models/Org/org3.fbx"
+						"filename": "./assets/models/Mushroom/mushroom.fbx"
+					}
+				},
+				{
+					"name": "teamComponent",
+					"values": {
+						"team": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "Mine2",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": -10,
+							"y": 0,
+							"z": -10
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Mushroom/mushroom.fbx"
+					}
+				},
+				{
+					"name": "teamComponent",
+					"values": {
+						"team": 1
+					}
+				}
+			]
+		},
+		{
+			"name": "Mine3",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": -0.7676,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Mushroom/mushroom.fbx"
 					}
 				}
 			]
@@ -261,48 +379,6 @@
 					"name": "clickedTrigger",
 					"values": {
 						"force": 30
-					}
-				}
-			]
-		},
-		{
-			"name": "PhysicsPlane",
-			"components": [
-				{
-					"name": "transformComponent",
-					"values": {
-						"position": {
-							"x": 0,
-							"y": -2,
-							"z": 0
-						},
-						"rotation": {
-							"w": 1,
-							"x": 0,
-							"y": 0,
-							"z": 0
-						},
-						"scale": {
-							"x": 20,
-							"y": 0.5,
-							"z": 20
-						}
-					}
-				},
-				{
-					"name": "animatedModelComponent",
-					"values": {
-						"filename": "./assets/models/ColourfulCube/framedCube.fbx"
-					}
-				},
-				{
-					"name": "physicsComponent",
-					"values": {
-						"mode": "static",
-						"colliderShape": "cube",
-						"halfWidth": 20,
-						"halfHeight": 0.5,
-						"halfDepth": 20
 					}
 				}
 			]

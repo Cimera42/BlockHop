@@ -13,8 +13,12 @@ ${NAME}::~${NAME}() {}
 
 void ${NAME}::update(double dt) 
 {
+	updateSystemTriggers();
+	
 	for(auto entity : getEntities())
 	{
+		updateEntityTriggers(entity);
+		
 		//XComponent* x = entity->getComponent<XComponent>("xComponent");
 	}
 }
