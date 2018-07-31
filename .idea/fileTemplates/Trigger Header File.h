@@ -8,19 +8,18 @@
 #[[#ifndef]]# ${INCLUDE_GUARD}
 #[[#define]]# ${INCLUDE_GUARD}
 
-#[[#include]]# "../ecs/component.h"
+#[[#include]]# "../ecs/trigger.h"
 
-class ${NAME} : public Component<${NAME}>
+class ${NAME} : public Trigger<${NAME}>
 {
+	// egRunnerFunction(System* s, Entity e);
 public:
 	${NAME}();
 	~${NAME}();
 	void setValues(json inValues);
 
-	friend std::ostream &operator<< (std::ostream &os, ${NAME} const &c) {
-		os << "${NAME}";
-		return os;
-	}
+	void runSystemFunction(System* s);
+	bool entityCheck(System* s, Entity* e);
 };
 
 #[[#endif]]# //${INCLUDE_GUARD}

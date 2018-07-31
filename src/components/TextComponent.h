@@ -33,10 +33,8 @@ struct Vertex2D
 	glm::vec2 uv;
 };
 
-class TextComponent : public Component
+class TextComponent : public Component<TextComponent>
 {
-	static bool exported;
-
 	Font* font;
 	std::vector<Vertex2D> vertices;
 

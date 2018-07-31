@@ -1,4 +1,4 @@
 #include "component.h"
 
-Component::Component() {}
-Component::~Component() {}
+ComponentBase::ComponentBase() {}
+ComponentBase::~ComponentBase() {}

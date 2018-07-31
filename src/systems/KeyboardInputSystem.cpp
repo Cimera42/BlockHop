@@ -21,10 +21,14 @@ KeyboardInputSystem::~KeyboardInputSystem() {}
 
 void KeyboardInputSystem::update(double dt)
 {
+	updateSystemTriggers();
+
 	for(auto entity : getEntities())
 	{
-		auto transform = entity->getComponent<TransformComponent>("transformComponent");
-		auto keyboardControl = entity->getComponent<KeyboardControlComponent>("keyboardControlComponent");
+		updateEntityTriggers(entity);
+
+		auto transform = entity->getComponent<TransformComponent>();
+		auto keyboardControl = entity->getComponent<KeyboardControlComponent>();
 
 		glm::vec3 displaced = transform->getPosition();
 		if(isKeyPressed(keyboardControl->getForwardKey()))
@@ -53,21 +57,24 @@ void KeyboardInputSystem::update(double dt)
 			std::vector<std::string> comps = {"transformComponent",
 											  "physicsComponent",
 											  "animatedModelComponent"};
+			std::vector<std::string> trigs = {"clickedTrigger"};
 
 			json tj = {{"position",{{"x",2.5},{"y",10},{"z",0}}},
 					   {"rotation",{{"w",1},{"x",0},{"y",0},{"z",0}}},
 					   {"scale",{{"x",1},{"y",1},{"z",1}}}};
 			json pj = {
 				{"mode","dynamic"},
-		  		{"colliderShape","cube"},
+				{"colliderShape","cube"},
 				{"halfWidth",1},
 				{"halfHeight",1},
-				{"halfDepth",1},
-				{"mass",5}
+				{"halfDepth",1}
+				{"mass", 5}
 			};
 			json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
 			std::vector<json> compData = {tj,pj,aj};
-			ECSManager::i()->createEntity("projectile", comps, compData);
+			json ct = {{"force", rand() % 100 + 1}};
+			std::vector<json> trigData = {ct};
+			ECSManager::i()->createEntity("projectile", comps, compData, trigs, trigData);
 		}
 	}
 }

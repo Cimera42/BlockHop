@@ -3,6 +3,7 @@
 //
 
 #include "TestSystem.h"
+#include "../ecs/ecsManager.h"
 
 SYSTEM_EXPORT(TestSystem, "testSystem")
 
@@ -13,8 +14,12 @@ TestSystem::~TestSystem() {}
 
 void TestSystem::update(double dt) {
 	//Logger()<<"Virtual inheritance test works!";
+
+	updateSystemTriggers();
+
 	for(auto entity : getEntities())
 	{
+		updateEntityTriggers(entity);
 
 	}
 }

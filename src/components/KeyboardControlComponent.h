@@ -7,10 +7,8 @@
 
 #include "../ecs/component.h"
 
-class KeyboardControlComponent : public Component
+class KeyboardControlComponent : public Component<KeyboardControlComponent>
 {
-	static bool exported;
-
 	int forwardKey, backKey, leftKey, rightKey, upKey, downKey;
 
 	int convertStringCode(std::string val);

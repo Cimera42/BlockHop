@@ -40,15 +40,19 @@ AnimatedModelSystem::~AnimatedModelSystem()
 
 void AnimatedModelSystem::update(double dt)
 {
-	auto cameraEntity = ECSManager::i()->findEntity("Camera");
-	auto camera = cameraEntity->getComponent<CameraComponent>("cameraComponent");
+	Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
+	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>();
 
-	auto keyInput = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
+	KeyboardInputSystem* keyInput = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
+
+	updateSystemTriggers();
 
 	for(auto entity : getEntities())
 	{
-		auto transform = entity->getComponent<TransformComponent>("transformComponent");
-		auto animatedModel = entity->getComponent<AnimatedModelComponent>("animatedModelComponent");
+		updateEntityTriggers(entity);
+
+		TransformComponent* transform = entity->getComponent<TransformComponent>();
+		AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>();
 
 		//Temporary test animation switching
 		if(keyInput)

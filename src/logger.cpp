@@ -16,7 +16,7 @@ Logger::Logger(bool doEndLine)
 }
 Logger::Logger(const std::string& inBetween)
 {
-	endLine = false;
+	endLine = true;
 	between = inBetween;
 }
 Logger::Logger(bool doEndLine, const std::string& inBetween)

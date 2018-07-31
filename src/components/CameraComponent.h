@@ -9,10 +9,8 @@
 #include <json.hpp>
 using json = nlohmann::json;
 
-class CameraComponent : public Component
+class CameraComponent : public Component<CameraComponent>
 {
-	static bool exported;
-
 	float fov;
 	float aspectRatio;
 	float nearDist;

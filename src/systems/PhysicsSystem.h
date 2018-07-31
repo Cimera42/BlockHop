@@ -10,11 +10,8 @@
 #include <bullet3/btBulletCollisionCommon.h>
 #include <bullet3/btBulletDynamicsCommon.h>
 
-class PhysicsSystem : public System
+class PhysicsSystem : public System<PhysicsSystem>
 {
-	static bool exported;
-
-
 	const float idealTimestep = 1.0f/60.0f;
 	double accumulator;
 

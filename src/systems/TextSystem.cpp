@@ -29,10 +29,14 @@ TextSystem::~TextSystem()
 
 void TextSystem::update(double dt)
 {
+	updateSystemTriggers();
+
 	for(auto entity : getEntities())
 	{
-		auto transform = entity->getComponent<TransformComponent>("transformComponent");
-		auto text = entity->getComponent<TextComponent>("textComponent");
+		updateEntityTriggers(entity);
+
+		auto transform = entity->getComponent<TransformComponent>();
+		auto text = entity->getComponent<TextComponent>();
 
 		//Default data setting for now, just set to delta time
 		text->set(std::to_string(dt));

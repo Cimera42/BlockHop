@@ -1,29 +1,69 @@
 {
+	"identifiers": [
+		{
+			"type": "box",
+			"components": [
+				"transformComponent",
+				"animatedModelComponent",
+				"physicsComponent"
+			]
+		},
+		{
+			"type": "box2",
+			"components": [
+				"transformComponent",
+				"animatedModelComponent",
+				"physicsComponent",
+				"testComponent"
+			]
+		}
+	],
 	"systems": [
+		{
+			"name": "eventSystem",
+			"compsToSub": [
+				"eventComponentSTUB"
+			],
+			"trigsToAttach": []
+		},
+		{
+			"name": "timeSystem",
+			"compsToSub": [
+				"timeoutComponent"
+			],
+			"trigsToAttach": []
+		},
 		{
 			"name": "mouseInputSystem",
 			"compsToSub": [
 				"transformComponent",
 				"mouseControlComponent"
-			]
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "keyboardInputSystem",
 			"compsToSub": [
 				"transformComponent",
 				"keyboardControlComponent"
-			]
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "mouseButtonSystem",
 			"compsToSub": [
-			]
+				"mouseControlComponent"
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "physicsSystem",
 			"compsToSub": [
 				"transformComponent",
 				"physicsComponent"
+			],
+			"trigsToAttach": [
+				"clickedTrigger"
 			]
 		},
 		{
@@ -31,21 +71,24 @@
 			"compsToSub": [
 				"transformComponent",
 				"cameraComponent"
-			]
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "animatedModelSystem",
 			"compsToSub": [
 				"transformComponent",
 				"animatedModelComponent"
-			]
+			],
+			"trigsToAttach": []
 		},
 		{
 			"name": "textSystem",
 			"compsToSub": [
 				"transformComponent",
 				"textComponent"
-			]
+			],
+			"trigsToAttach": []
 		}
 	],
 	"entities": [
@@ -317,6 +360,20 @@
 								}
 							}
 						]
+					}
+				},
+				{
+					"name": "testComponent",
+					"values": {
+						"test": false
+					}
+				}
+			],
+			"triggers": [
+				{
+					"name": "clickedTrigger",
+					"values": {
+						"force": 30
 					}
 				}
 			]

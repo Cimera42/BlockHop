@@ -7,9 +7,8 @@
 
 #include "../ecs/component.h"
 
-class MouseControlComponent : public Component
+class MouseControlComponent : public Component<MouseControlComponent>
 {
-	static bool exported;
 	double xSensitivity, ySensitivity;
 
 public:

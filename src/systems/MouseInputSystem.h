@@ -8,10 +8,8 @@
 #include <glm/glm.hpp>
 #include "../ecs/system.h"
 
-class MouseInputSystem : public System
+class MouseInputSystem : public System<MouseInputSystem>
 {
-	static bool exported;
-
 	glm::vec2 lastPos;
 
 public:

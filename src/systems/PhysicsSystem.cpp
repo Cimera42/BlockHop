@@ -56,8 +56,8 @@ PhysicsSystem::~PhysicsSystem()
 
 void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 {
-	auto transformComp = entSubbed->getComponent<TransformComponent>("transformComponent");
-	auto physicsComp = entSubbed->getComponent<PhysicsComponent>("physicsComponent");
+	auto transformComp = entSubbed->getComponent<TransformComponent>();
+	auto physicsComp = entSubbed->getComponent<PhysicsComponent>();
 	glm::vec3 startPos = transformComp->getPosition();
 	glm::quat rotation = transformComp->getRotation();
 
@@ -321,7 +321,7 @@ void PhysicsSystem::update(double dt)
 	if(b != 0)
 	{
 		Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
-		auto cameraTransform = cameraEntity->getComponent<TransformComponent>("transformComponent");
+		auto cameraTransform = cameraEntity->getComponent<TransformComponent>();
 		glm::vec3 startGlm = cameraTransform->getPosition();
 		glm::vec3 directionGlm = cameraTransform->getForward();
 		glm::vec3 endGlm = startGlm + directionGlm*50.0f;
@@ -344,7 +344,7 @@ void PhysicsSystem::update(double dt)
 			// Get Entity "PickPos"
 			// Set position worldHit
 			auto indicator = ECSManager::i()->findEntity("RaycastIndicator");
-			auto indicatorTransform = indicator->getComponent<TransformComponent>("transformComponent");
+			auto indicatorTransform = indicator->getComponent<TransformComponent>();
 			indicatorTransform->setPosition(glm::vec3(worldHit.x(),worldHit.y(),worldHit.z()));
 		}
 	}
@@ -356,9 +356,15 @@ void PhysicsSystem::update(double dt)
 		accumulator -= idealTimestep;
 	}
 
+	//Run triggers
+	updateSystemTriggers();
+
 	for(auto entity : getEntities())
 	{
-		auto transformComp = entity->getComponent<TransformComponent>("transformComponent");
+		//Check if entity has triggers that are in this system
+        updateEntityTriggers(entity);
+
+		auto transformComp = entity->getComponent<TransformComponent>();
 
 		btRigidBody* rb = findRigidBody(entity);
 		if(rb)

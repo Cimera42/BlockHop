@@ -7,14 +7,15 @@ Entity::Entity(std::string inName)
 }
 Entity::~Entity(){}
 
-void Entity::addComponent(Component* comp) {
+void Entity::addComponent(ComponentBase* comp) {
 	subbedComponents.push_back(comp);
 	//After updating our subscribed components, redo system subscription
 	subscribeToSystems();
+	subscribeToActions();
 }
 
 void Entity::removeComponent(std::string compName) {
-	auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
+	auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](ComponentBase*& o) {
 		return (o->getName() == compName);
 	});
 
@@ -22,6 +23,23 @@ void Entity::removeComponent(std::string compName) {
 		subbedComponents.erase(it);
 	//After updating our subscribed components, do system unsubscription
 	unsubscribeFromSystems();
+	unsubscribeToActions();
+}
+
+void Entity::addTrigger(TriggerBase *trig) {
+	//TODO type safety surrounding trigger to system interaction
+
+	subbedTriggers.push_back(trig);
+	trig->subscribeEntityToActions(this);
+}
+
+void Entity::removeTrigger(std::string trigName) {
+	auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](TriggerBase*& o) {
+		return (o->getName() == trigName);
+	});
+
+	if (it != subbedTriggers.end())
+		subbedTriggers.erase(it);
 }
 
 std::vector<std::string> Entity::getComponents() const {
@@ -30,6 +48,25 @@ std::vector<std::string> Entity::getComponents() const {
 		compNames.push_back(comp->getName());
 	}
 	return compNames;
+}
+
+void Entity::subscribeToActions() {
+	//Get each attached triggers
+	for(auto &trig : subbedTriggers) {
+
+		//Pass entity to trigger to let it figure out which
+		// actions it meets requirements for
+		trig->subscribeEntityToActions(this);
+	}
+}
+
+void Entity::unsubscribeToActions() {
+	//Get each attached triggers
+	for(auto &trig : subbedTriggers) {
+		//Pass entity to trigger to let it figure out which
+		// actions it meets requirements for
+		trig->unsubscribeEntityFromActions(this);
+	}
 }
 
 void Entity::subscribeToSystems() {
@@ -67,4 +104,12 @@ void Entity::unsubscribeFromSystems() {
 std::string Entity::getName() const
 {
 	return name;
+}
+
+bool Entity::isType(std::string identifier) {
+	return ECSManager::i()->isType(this, identifier);
+}
+
+bool Entity::isExactType(std::string identifier) {
+	return ECSManager::i()->isExactType(this, identifier);
 }

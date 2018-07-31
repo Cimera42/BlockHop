@@ -10,10 +10,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-class TransformComponent : public Component
+class TransformComponent : public Component<TransformComponent>
 {
-	static bool exported;
-
 	glm::mat4 matrix;
 	glm::vec3 position;
 	glm::quat rotation;

@@ -22,9 +22,14 @@ MouseInputSystem::~MouseInputSystem() {}
 
 void MouseInputSystem::update(double dt)
 {
-	/*for(auto entity : getEntities())
+	/*
+	updateSystemTriggers();
+
+	for(auto entity : getEntities())
 	{
-		//XComponent* x = entity->getComponent<XComponent>("xComponent");
+		updateEntityTriggers(entity);
+
+		//XComponent* x = entity->getComponent<XComponent>();
 	}*/
 }
 
@@ -50,8 +55,8 @@ void mouseMoveInputEvent(GLFWwindow *window, double xpos, double ypos)
 
 	for(auto entity : mouseSystem->getEntities())
 	{
-		auto transform = entity->getComponent<TransformComponent>("transformComponent");
-		auto mouseControl = entity->getComponent<MouseControlComponent>("mouseControlComponent");
+		auto transform = entity->getComponent<TransformComponent>();
+		auto mouseControl = entity->getComponent<MouseControlComponent>();
 
 		glm::quat rotation = transform->getRotation();
 		glm::quat y = glm::angleAxis((float) (-yaw*(mouseControl->getXSensitivity()/100)), glm::vec3(0,1,0));

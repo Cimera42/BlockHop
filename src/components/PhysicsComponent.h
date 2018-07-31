@@ -8,7 +8,7 @@
 #include "../ecs/component.h"
 #include <bullet3/btBulletDynamicsCommon.h>
 
-class PhysicsComponent : public Component
+class PhysicsComponent : public Component<PhysicsComponent>
 {
 public:
 	btCollisionShape* collisionShape;

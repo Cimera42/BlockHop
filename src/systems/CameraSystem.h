@@ -7,10 +7,8 @@
 
 #include "../ecs/system.h"
 
-class CameraSystem : public System
+class CameraSystem : public System<CameraSystem>
 {
-	static bool exported;
-
 public:
 	CameraSystem();
 	~CameraSystem();

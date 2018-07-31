@@ -6,13 +6,9 @@
 #define BLOCKHOP_TESTSYSTEM_H
 
 #include "../ecs/system.h"
-#include "../ecs/ecsManager.h"
 
-class TestSystem : public System
+class TestSystem : public System<TestSystem>
 {
-	static bool exported;
-
-
 public:
 	TestSystem();
 	~TestSystem();

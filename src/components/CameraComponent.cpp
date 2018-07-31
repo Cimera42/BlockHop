@@ -14,7 +14,7 @@ CameraComponent::~CameraComponent() {}
 void CameraComponent::setValues(json inValues)
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
-	fov = inValues["fov"];
+	fov = inValues["fov"]; //degrees
 	aspectRatio = inValues["aspectRatio"];
 	nearDist = inValues["nearDist"];
 	farDist = inValues["farDist"];
@@ -29,7 +29,7 @@ void CameraComponent::lookAt(glm::vec3 eye, glm::vec3 centre, glm::vec3 up)
 
 void CameraComponent::perspective()
 {
-	projectionMatrix = glm::perspective(fov, aspectRatio, nearDist, farDist);
+	projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearDist, farDist);
 }
 
 glm::mat4 CameraComponent::getViewMatrix() const { return viewMatrix; }

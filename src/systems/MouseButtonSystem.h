@@ -7,10 +7,8 @@
 
 #include "../ecs/system.h"
 
-class MouseButtonSystem : public System
+class MouseButtonSystem : public System<MouseButtonSystem>
 {
-	static bool exported;
-
 public:
 	MouseButtonSystem();
 	~MouseButtonSystem();

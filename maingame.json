@@ -1,0 +1,387 @@
+{
+	"identifiers": [
+		{
+			"type": "box",
+			"components": [
+				"transformComponent",
+				"animatedModelComponent",
+				"physicsComponent"
+			]
+		},
+		{
+			"type": "box2",
+			"components": [
+				"transformComponent",
+				"animatedModelComponent",
+				"physicsComponent",
+				"testComponent"
+			]
+		}
+	],
+	"systems": [
+		{
+			"name": "eventSystem",
+			"compsToSub": [
+				"eventComponentSTUB"
+			],
+			"trigsToAttach": []
+		},
+		{
+			"name": "timeSystem",
+			"compsToSub": [
+				"timeoutComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
+			"name": "mouseInputSystem",
+			"compsToSub": [
+				"transformComponent",
+				"mouseControlComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
+			"name": "keyboardInputSystem",
+			"compsToSub": [
+				"transformComponent",
+				"keyboardControlComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
+			"name": "mouseButtonSystem",
+			"compsToSub": [
+				"mouseControlComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
+			"name": "physicsSystem",
+			"compsToSub": [
+				"transformComponent",
+				"physicsComponent"
+			],
+			"trigsToAttach": [
+				"clickedTrigger"
+			]
+		},
+		{
+			"name": "cameraSystem",
+			"compsToSub": [
+				"transformComponent",
+				"cameraComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
+			"name": "animatedModelSystem",
+			"compsToSub": [
+				"transformComponent",
+				"animatedModelComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
+			"name": "textSystem",
+			"compsToSub": [
+				"transformComponent",
+				"textComponent"
+			],
+			"trigsToAttach": []
+		}
+	],
+	"entities": [
+		{
+			"name": "Camera",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "cameraComponent",
+					"values": {
+						"fov": 90,
+						"aspectRatio": 1.3333,
+						"nearDist": 0.001,
+						"farDist": 100
+					}
+				},
+				{
+					"name": "mouseControlComponent",
+					"values": {
+						"xSensitivity": 50,
+						"ySensitivity": 50
+					}
+				},
+				{
+					"name": "keyboardControlComponent",
+					"values": {
+						"forward": "W",
+						"back": "S",
+						"left": "A",
+						"right": "D",
+						"up": " ",
+						"down": "340"
+					}
+				}
+			]
+		},
+		{
+			"name": "TextEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": -310,
+							"y": 100,
+							"z": 0
+						},
+						"rotation": {
+							"w": 0.924,
+							"x": 0,
+							"y": 0,
+							"z": 0.383
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "textComponent",
+					"values": {
+						"text": "${dt}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Map",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": -2,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 20,
+							"y": 0.5,
+							"z": 20
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/framedCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mode": "static",
+						"colliderShape": "cube",
+						"halfWidth": 20,
+						"halfHeight": 0.5,
+						"halfDepth": 20
+					}
+				}
+			]
+		},
+		{
+			"name": "Mine1",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 10,
+							"y": 0,
+							"z": 10
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Mushroom/mushroom.fbx"
+					}
+				},
+				{
+					"name": "teamComponent",
+					"values": {
+						"team": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "Mine2",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": -10,
+							"y": 0,
+							"z": -10
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Mushroom/mushroom.fbx"
+					}
+				},
+				{
+					"name": "teamComponent",
+					"values": {
+						"team": 1
+					}
+				}
+			]
+		},
+		{
+			"name": "Mine3",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": -0.7676,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Mushroom/mushroom.fbx"
+					}
+				}
+			]
+		},
+		{
+			"name": "PhysicsEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 10,
+							"y": 0,
+							"z": 5
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mode": "dynamic",
+						"colliderShape": "cube",
+						"halfWidth": 1,
+						"halfHeight": 1,
+						"halfDepth": 1
+					}
+				},
+				{
+					"name": "testComponent",
+					"values": {
+						"test": false
+					}
+				}
+			],
+			"triggers": [
+				{
+					"name": "clickedTrigger",
+					"values": {
+						"force": 30
+					}
+				}
+			]
+		}
+	]
+}

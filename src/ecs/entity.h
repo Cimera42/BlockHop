@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "component.h"
+#include "trigger.h"
 
 class Entity {
 public:
@@ -22,32 +23,63 @@ public:
 	 * Should be used to enable/disable functionality of an
 	 * entity.
 	 */
-	void addComponent(Component* comp);
+	void addComponent(ComponentBase* comp);
 	void removeComponent(std::string compName);
+
+	void addTrigger(TriggerBase* trig);
+	void removeTrigger(std::string trigName);
 
 	/*
 	 * Simple getter for entity name
 	 */
 	std::string getName() const;
 
+	bool isType(std::string identifier);
+	bool isExactType(std::string identifier);
+
 	/*
 	 * Helpers for retrieving components attached to an entity
 	 */
 	std::vector<std::string> getComponents() const;
 	template <typename T>
-	T* getComponent(std::string compName) {
-		auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [&compName](Component*& o) {
-			return (o->getName() == compName);
+	T *getComponent()
+	{
+		auto it = std::find_if(subbedComponents.begin(), subbedComponents.end(), [](ComponentBase*& o) {
+			return (o->getName() == Component<T>::name);
 		});
 
 		if (it != subbedComponents.end())
 			return static_cast<T*>(*it);
 		return nullptr;
 	}
+
+	std::vector<TriggerBase*> getTriggers() {
+		return subbedTriggers;
+	}
+
+	template <typename T>
+	T* getTrigger(std::string trigName) {
+		auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](TriggerBase*& o) {
+			return (o->getName() == trigName);
+		});
+
+		if (it != subbedTriggers.end())
+			return static_cast<T*>(*it);
+		return nullptr;
+	}
 private:
+	/*
+	 * Functions for adding/removing triggers from entities.
+	 * Called upon attaching a component to a system
+	 */
+
+	void subscribeToActions();
+	void unsubscribeToActions();
+
 	void subscribeToSystems();
 	void unsubscribeFromSystems();
-	std::vector<Component*> subbedComponents;
+	std::vector<ComponentBase*> subbedComponents;
+	std::vector<TriggerBase*> subbedTriggers;
 
 	std::string name;
 };
