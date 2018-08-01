@@ -151,6 +151,25 @@
 				}
 			]
 		},
+        {
+            "name": "ModelEntity",
+            "components": [
+                {
+                    "name": "transformComponent",
+                    "values": {
+                        "position": [0,0,5],
+                        "rotation": [1,0,0,0],
+                        "scale": [1,1,1]
+                    }
+                },
+                {
+                    "name": "animatedModelComponent",
+                    "values": {
+                        "filename": "./assets/models/Org/org3.fbx"
+                    }
+                }
+            ]
+        },
 		{
 			"name": "Map",
 			"components": [
@@ -200,7 +219,23 @@
 					"values": {
 						"team": 0
 					}
-				}
+				},
+                {
+                    "name": "physicsComponent",
+                    "values": {
+                        "mass": 0,
+                        "colliderShape": "compound",
+                        "shapes": [
+                            {
+                                "colliderShape": "cone",
+                                "radius": 1,
+                                "height": 1,
+                                "position": [0,0,0],
+                                "rotation": [1,0,0,0]
+                            }
+                        ]
+                    }
+                }
 			]
 		},
 		{
