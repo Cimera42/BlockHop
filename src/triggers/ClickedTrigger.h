@@ -9,18 +9,12 @@
 #include "../systems/PhysicsSystem.h"
 #include <glm/glm.hpp>
 
-class ClickedTrigger : public Trigger<ClickedTrigger> {
-	void runBox2(SystemBase* sys, Entity* ent);
-	void runBox(SystemBase* sys, Entity* ent);
-
+class ClickedTrigger : public Trigger<ClickedTrigger>
+{
 public:
 	ClickedTrigger();
 	~ClickedTrigger();
 	void setValues(json inValues);
-
-	static rp3d::RigidBody* clicked;
-	static rp3d::Vector3 worldPoint;
-	static glm::vec3 direction;
 
 	int force;
 

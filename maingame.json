@@ -98,22 +98,9 @@
 				{
 					"name": "transformComponent",
 					"values": {
-						"position": {
-							"x": 0,
-							"y": 0,
-							"z": 0
-						},
-						"rotation": {
-							"w": 1,
-							"x": 0,
-							"y": 0,
-							"z": 0
-						},
-						"scale": {
-							"x": 1,
-							"y": 1,
-							"z": 1
-						}
+						"position": [0, 0, 0],
+						"rotation": [1, 0 , 0, 0],
+						"scale": [1, 1, 1]
 					}
 				},
 				{
@@ -151,22 +138,9 @@
 				{
 					"name": "transformComponent",
 					"values": {
-						"position": {
-							"x": -310,
-							"y": 100,
-							"z": 0
-						},
-						"rotation": {
-							"w": 0.924,
-							"x": 0,
-							"y": 0,
-							"z": 0.383
-						},
-						"scale": {
-							"x": 1,
-							"y": 1,
-							"z": 1
-						}
+						"position": [-310, 100, 0],
+						"rotation": [0.924, 0, 0, 0.383],
+						"scale": [1, 1, 1]
 					}
 				},
 				{
@@ -183,22 +157,9 @@
 				{
 					"name": "transformComponent",
 					"values": {
-						"position": {
-							"x": 0,
-							"y": -2,
-							"z": 0
-						},
-						"rotation": {
-							"w": 1,
-							"x": 0,
-							"y": 0,
-							"z": 0
-						},
-						"scale": {
-							"x": 20,
-							"y": 0.5,
-							"z": 20
-						}
+						"position": [0, -2, 0],
+						"rotation": [1, 0, 0, 0],
+						"scale": [20, 0.5, 20]
 					}
 				},
 				{
@@ -210,11 +171,9 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "static",
 						"colliderShape": "cube",
-						"halfWidth": 20,
-						"halfHeight": 0.5,
-						"halfDepth": 20
+						"halfDimensions": [20, 0.5, 20],
+						"mass": 0
 					}
 				}
 			]
@@ -225,22 +184,9 @@
 				{
 					"name": "transformComponent",
 					"values": {
-						"position": {
-							"x": 10,
-							"y": 0,
-							"z": 10
-						},
-						"rotation": {
-							"w": 1,
-							"x": 0,
-							"y": 0,
-							"z": 0
-						},
-						"scale": {
-							"x": 1,
-							"y": 1,
-							"z": 1
-						}
+						"position": [10, 0, 10],
+						"rotation": [1, 0, 0, 0],
+						"scale": [1, 1, 1]
 					}
 				},
 				{
@@ -263,22 +209,9 @@
 				{
 					"name": "transformComponent",
 					"values": {
-						"position": {
-							"x": -10,
-							"y": 0,
-							"z": -10
-						},
-						"rotation": {
-							"w": 1,
-							"x": 0,
-							"y": 0,
-							"z": 0
-						},
-						"scale": {
-							"x": 1,
-							"y": 1,
-							"z": 1
-						}
+						"position": [-10, 0, -10],
+						"rotation": [1, 0, 0, 0],
+						"scale": [1, 1, 1]
 					}
 				},
 				{
@@ -301,22 +234,9 @@
 				{
 					"name": "transformComponent",
 					"values": {
-						"position": {
-							"x": 0,
-							"y": 0,
-							"z": 0
-						},
-						"rotation": {
-							"w": 1,
-							"x": -0.7676,
-							"y": 0,
-							"z": 0
-						},
-						"scale": {
-							"x": 1,
-							"y": 1,
-							"z": 1
-						}
+						"position": [0, 0, 5],
+						"rotation": [0.707, -0.707, 0, 0],
+						"scale": [1, 1, 1]
 					}
 				},
 				{
@@ -333,22 +253,9 @@
 				{
 					"name": "transformComponent",
 					"values": {
-						"position": {
-							"x": 10,
-							"y": 0,
-							"z": 5
-						},
-						"rotation": {
-							"w": 1,
-							"x": 0,
-							"y": 0,
-							"z": 0
-						},
-						"scale": {
-							"x": 1,
-							"y": 1,
-							"z": 1
-						}
+						"position": [0, 8, 0],
+						"rotation": [1, 0, 0, 0],
+						"scale": [1, 1, 1]
 					}
 				},
 				{
@@ -360,11 +267,50 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "dynamic",
 						"colliderShape": "cube",
-						"halfWidth": 1,
-						"halfHeight": 1,
-						"halfDepth": 1
+						"halfDimensions": [1, 1, 1],
+						"mass": 1,
+						"joints": [
+							{
+								"type": "BallSocket",
+								"pivotThis": [0, 3, 0]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "PhysicsEntity1",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0, 4, 0],
+						"rotation": [1, 0, 0, 0],
+						"scale": [1, 1, 1]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfDimensions": [1, 1, 1],
+						"mass": 1,
+						"joints": [
+							{
+								"type": "BallSocket",
+								"pivotThis": [0, 3, 0],
+								"entity": "PhysicsEntity",
+								"pivotThat": [0, 0, 0]
+							}
+						]
 					}
 				},
 				{
@@ -379,6 +325,224 @@
 					"name": "clickedTrigger",
 					"values": {
 						"force": 30
+					}
+				}
+			]
+		},
+		{
+			"name": "PhysicsEntity2",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0, 2, 0],
+						"rotation": [1, 0, 0, 0],
+						"scale": [1, 1, 1]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfDimensions": [1, 1, 1],
+						"mass": 1,
+						"joints": [
+							{
+								"type": "BallSocket",
+								"pivotThis": [0, 3, 0],
+								"entity": "PhysicsEntity1",
+								"pivotThat": [0, 0, 0]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SliderEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0, 5, -7],
+						"rotation": [1, 0, 0, 0],
+						"scale": [0.5, 0.5, 0.5]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfDimensions": [0.5, 0.5, 0.5],
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Slider",
+								"pivotThis": [0, 0, 0],
+								"axisThis": [1, 0, 0],
+								"limits": [-1, 0],
+								"motor": {
+									"speed": -10,
+									"maxForce": 2
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SliderEntity2",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0, 4, -7],
+						"rotation": [1, 0, 0, 0],
+						"scale": [0.5, 0.5, 0.5]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfDimensions": [0.5, 0.5, 0.5],
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Slider",
+								"pivotThis": [0, 1.1, 0],
+								"axisThis": [1, 0, 0],
+								"limits": [-1, 0],
+								"entity": "SliderEntity",
+								"pivotThat": [0, 0, 0],
+								"axisThat": [1, 0, 0],
+								"motor": {
+									"speed": -10,
+									"maxForce": 2
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SliderEntity3",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0, 3, -7],
+						"rotation": [1, 0, 0, 0],
+						"scale": [0.5, 0.5, 0.5]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfDimensions": [0.5, 0.5, 0.5],
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Generic",
+								"pivotThis": [0, 1.1, 0],
+								"axisThis": [1, 0, 0],
+								"limits": {
+									"linear": {
+										"x": [-1, 1],
+										"z": [-1, 1]
+									}
+								},
+								"entity": "SliderEntity2",
+								"pivotThat": [0, 0, 0],
+								"axisThat": [1, 0, 0],
+								"motor": {
+									"x": {
+										"speed": -10,
+										"maxForce": 5
+									}
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Door",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [-10, 2, -2],
+						"rotation": [1, 0, 0, 0],
+						"scale": [0.1, 2.5, 2]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/framedCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfDimensions": [0.1, 2.5, 2],
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Hinge",
+								"pivotThis": [0, 2.5, 0],
+								"axisThis": [0, 0, 1]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "RaycastIndicator",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0, 0, 0],
+						"rotation": [1, 0, 0, 0],
+						"scale": [0.1, 0.1, 0.1]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Sphere/sphere.fbx"
 					}
 				}
 			]

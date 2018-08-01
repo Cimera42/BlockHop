@@ -242,7 +242,6 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "static",
 						"colliderShape": "cube",
 						"halfWidth": 20,
 						"halfHeight": 0.5,
@@ -285,7 +284,6 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "dynamic",
 						"colliderShape": "cube",
 						"halfWidth": 1,
 						"halfHeight": 1,
@@ -338,7 +336,6 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "dynamic",
 						"colliderShape": "cube",
 						"halfWidth": 1,
 						"halfHeight": 1,
@@ -411,7 +408,6 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "dynamic",
 						"colliderShape": "cube",
 						"halfWidth": 1,
 						"halfHeight": 1,
@@ -470,7 +466,6 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "dynamic",
 						"colliderShape": "cube",
 						"halfWidth": 0.5,
 						"halfHeight": 0.5,
@@ -533,7 +528,6 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "dynamic",
 						"colliderShape": "cube",
 						"halfWidth": 0.5,
 						"halfHeight": 0.5,
@@ -607,7 +601,6 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "dynamic",
 						"colliderShape": "cube",
 						"halfWidth": 0.5,
 						"halfHeight": 0.5,
@@ -688,7 +681,6 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "dynamic",
 						"colliderShape": "cube",
 						"halfWidth": 0.1,
 						"halfHeight": 2.5,

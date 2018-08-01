@@ -40,13 +40,7 @@ btCollisionShape* loadShape(json inValues)
 	// Primitives
 	if(shapeName == "cube")
 	{
-		return new btBoxShape(
-			btVector3(
-				inValues["halfWidth"],
-				inValues["halfHeight"],
-				inValues["halfDepth"]
-			)
-		);
+		return new btBoxShape(inValues["halfDimensions"].get<btVector3>());
 	}
 	else if(shapeName == "sphere")
 	{

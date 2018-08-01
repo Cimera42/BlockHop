@@ -12,13 +12,13 @@ SYSTEM_EXPORT(MouseButtonSystem, "mouseButtonSystem")
 extern Window* window;
 void mouseButtonEvent(GLFWwindow* inWindow, int buttonCode, int action, int modifiers);
 
-MouseButtonSystem::MouseButtonSystem() 
+MouseButtonSystem::MouseButtonSystem()
 {
 	glfwSetMouseButtonCallback(window->glfwWindow, mouseButtonEvent);
 }
 MouseButtonSystem::~MouseButtonSystem() {}
 
-void MouseButtonSystem::update(double dt) 
+void MouseButtonSystem::update(double dt)
 {
 	/*
 	updateSystemTriggers();
@@ -27,7 +27,7 @@ void MouseButtonSystem::update(double dt)
 	{
 		updateEntityTriggers(entity);
 
-		//XComponent* x = entity->getComponent<XComponent>("xComponent");
+		//XComponent* x = entity->getComponent<XComponent>();
 	}*/
 }
 

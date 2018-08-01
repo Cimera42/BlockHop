@@ -59,21 +59,22 @@ void KeyboardInputSystem::update(double dt)
 											  "animatedModelComponent"};
 			std::vector<std::string> trigs = {"clickedTrigger"};
 
-			json tj = {{"position",{{"x",2.5},{"y",10},{"z",0}}},
-					   {"rotation",{{"w",1},{"x",0},{"y",0},{"z",0}}},
-					   {"scale",{{"x",1},{"y",1},{"z",1}}}};
+			json tj = {
+				{"position",{2.5, 10, 0}},
+	 			{"rotation",{1, 0, 0, 0}},
+   				{"scale",{1, 1, 1}}
+	 		};
 			json pj = {
-				{"mode","dynamic"},
 				{"colliderShape","cube"},
-				{"halfWidth",1},
-				{"halfHeight",1},
-				{"halfDepth",1}
+				{"halfDimensions", {1, 1, 1}},
 				{"mass", 5}
 			};
 			json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
 			std::vector<json> compData = {tj,pj,aj};
+
 			json ct = {{"force", rand() % 100 + 1}};
 			std::vector<json> trigData = {ct};
+
 			ECSManager::i()->createEntity("projectile", comps, compData, trigs, trigData);
 		}
 	}

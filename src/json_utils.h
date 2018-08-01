@@ -16,7 +16,7 @@ namespace nlohmann {
 	struct adl_serializer<btVector3> {
 		static void from_json(const json& j, btVector3 &vec)
 		{
-			vec = btVector3(j["x"], j["y"], j["z"]);
+			vec = btVector3(j[0], j[1], j[2]);
 		}
 	};
 
@@ -24,7 +24,8 @@ namespace nlohmann {
 	struct adl_serializer<btQuaternion> {
 		static void from_json(const json& j, btQuaternion &quat)
 		{
-			quat = btQuaternion(j["x"], j["y"], j["z"], j["w"]);
+			// W is last in bullet quaternions
+			quat = btQuaternion(j[1], j[2], j[3], j[0]);
 		}
 	};
 
@@ -32,7 +33,7 @@ namespace nlohmann {
 	struct adl_serializer<glm::vec3> {
 		static void from_json(const json& j, glm::vec3 &vec)
 		{
-			vec = glm::vec3(j["x"], j["y"], j["z"]);
+			vec = glm::vec3(j[0], j[1], j[2]);
 		}
 	};
 
@@ -40,7 +41,8 @@ namespace nlohmann {
 	struct adl_serializer<glm::quat> {
 		static void from_json(const json& j, glm::quat &quat)
 		{
-			quat = glm::quat(j["w"], j["x"], j["y"], j["z"]);
+			// W is first in glm quaternions
+			quat = glm::quat(j[0], j[1], j[2], j[3]);
 		}
 	};
 }
