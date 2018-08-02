@@ -84,6 +84,10 @@ void AnimatedModelSystem::update(double dt)
 					modelMatrix *= chNode->collectiveMatrix;
 				}
 			}
+			else
+			{
+				modelMatrix *= nodePart->defaultTransform;
+			}
 
 			//Check if mesh has bones
 			bool isBoned = animatedModel->modelAsset->normalMeshes.find(meshPart->mesh) == animatedModel->modelAsset->normalMeshes.end();
