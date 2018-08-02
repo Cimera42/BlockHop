@@ -226,13 +226,20 @@
                         "mass": 0,
                         "colliderShape": "compound",
                         "shapes": [
-                            {
-                                "colliderShape": "cone",
-                                "radius": 1,
-                                "height": 1,
-                                "position": [0,0,0],
-                                "rotation": [1,0,0,0]
-                            }
+							{
+								"colliderShape": "cone",
+								"radius": 2,
+								"height": 1.27,
+								"position": [0,2.6,0],
+								"rotation": [1,0,0,0]
+							},
+							{
+								"colliderShape": "cylinder",
+								"radius": 0.45,
+								"height": 2.35,
+								"position": [0,1.17,0],
+								"rotation": [1,0,0,0]
+							}
                         ]
                     }
                 }
