@@ -6,6 +6,7 @@
 #define BLOCKHOP_PHYSICSSYSTEM_H
 
 #include "../ecs/system.h"
+#include "../components/PhysicsComponent.h"
 
 #include <bullet3/btBulletCollisionCommon.h>
 #include <bullet3/btBulletDynamicsCommon.h>
@@ -31,6 +32,8 @@ public:
 
 	void update(double dt) override;
 
+	btTypedConstraint *
+	makeJoint(json jointData, btRigidBody *rigidBody, Entity *entSubbed, PhysicsComponent *physicsComp);
 	btRigidBody *findRigidBody(Entity *toFind);
 };
 

@@ -11,6 +11,10 @@
 
 #include <bullet3/btBulletCollisionCommon.h>
 
+#define IF_FIND(name, source, lookFor) \
+	auto (name) = (source).find(lookFor); \
+	if((name) != (source).end()) \
+
 SYSTEM_EXPORT(PhysicsSystem, "physicsSystem")
 
 btQuaternion fromVecToVecQuat(btVector3 from, btVector3 to)
@@ -54,6 +58,203 @@ PhysicsSystem::~PhysicsSystem()
 	delete collisionConfiguration;
 }
 
+btTypedConstraint * PhysicsSystem::makeJoint(json jointData, btRigidBody *rigidBody, Entity *entSubbed, PhysicsComponent *physicsComp)
+{
+	std::string typeName = jointData["type"];
+
+	Entity* otherEntity = nullptr;
+	btRigidBody *otherRigidBody = nullptr;
+	IF_FIND(otherEntityName, jointData, "entity")
+	{
+		otherEntity = ECSManager::i()->findEntity(*otherEntityName);
+		otherRigidBody = findRigidBody(otherEntity);
+	}
+
+	btVector3 pivotThis = jointData["pivotThis"];
+
+	btVector3 axisThis;
+	if(typeName == "Hinge" || typeName == "Slider" || typeName == "Generic")
+	{
+		axisThis = jointData["axisThis"];
+	}
+
+	btVector3 pivotThat;
+	btVector3 axisThat;
+	if(otherRigidBody)
+	{
+		pivotThat = jointData["pivotThat"];
+
+		if(typeName == "Hinge" || typeName == "Slider" || typeName == "Generic")
+		{
+			axisThat = jointData["axisThat"];
+		}
+	}
+
+	btTransform frameInA = btTransform::getIdentity();
+	btTransform frameInB = btTransform::getIdentity();
+	if(typeName == "Slider" || typeName == "Generic")
+	{
+		frameInA.setOrigin(pivotThis);
+		frameInA.setRotation(fromVecToVecQuat(btVector3(1, 0, 0), axisThis));
+
+		if(otherRigidBody)
+		{
+			frameInB.setOrigin(pivotThat);
+			frameInB.setRotation(fromVecToVecQuat(btVector3(1, 0, 0), axisThat));
+		}
+	}
+
+	if(typeName == "BallSocket")
+	{
+		if(otherRigidBody)
+		{
+			return new btPoint2PointConstraint(
+				*otherRigidBody,
+				*rigidBody,
+				pivotThat,
+				pivotThis
+			);
+		}
+		return new btPoint2PointConstraint(*rigidBody, pivotThis);
+	}
+	else if(typeName == "Hinge")
+	{
+		if(otherRigidBody)
+		{
+			return new btHingeConstraint(
+				*otherRigidBody,
+				*rigidBody,
+				pivotThat,
+				pivotThis,
+				axisThat,
+				axisThis
+			);
+		}
+		return new btHingeConstraint(*rigidBody, pivotThis, axisThis);
+	}
+	else if(typeName == "Generic" || typeName == "Slider")
+	{
+		btGeneric6DofConstraint *genericJoint;
+		if(otherRigidBody)
+		{
+			genericJoint = new btGeneric6DofConstraint(
+				*otherRigidBody,
+				*rigidBody,
+				frameInB,
+				frameInA,
+				true // Dunno what this does...
+			);
+		}
+		else
+		{
+			genericJoint = new btGeneric6DofConstraint(
+				*rigidBody,
+				frameInA,
+				true // Dunno what this does...
+			);
+		}
+
+		if(typeName == "Slider")
+		{
+			genericJoint->setAngularLowerLimit(btVector3(0, 0, 0));
+			genericJoint->setAngularUpperLimit(btVector3(0, 0, 0));
+
+			//Lower > Upper = free movement
+			float lowerLimit = 1.0f;
+			float upperLimit = -1.0f;
+			IF_FIND(limits, jointData, "limits")
+			{
+				//Lower == Upper = locked
+				lowerLimit = (*limits)[0];
+				upperLimit = (*limits)[1];
+				if(lowerLimit >= upperLimit)
+					throw std::invalid_argument(entSubbed->getName() + " > " + physicsComp->getName() +
+												" > Slider Joint > 'Lower limit greater than upper limit.'");
+			}
+			genericJoint->setLinearLowerLimit(btVector3(lowerLimit, 0, 0));
+			genericJoint->setLinearUpperLimit(btVector3(upperLimit, 0, 0));
+
+			IF_FIND(motorData, jointData, "motor")
+			{
+				auto translationMotor = genericJoint->getTranslationalLimitMotor();
+				translationMotor->m_enableMotor[0] = true;
+				translationMotor->m_targetVelocity = btVector3((*motorData)["speed"], 0, 0);
+				translationMotor->m_maxMotorForce = btVector3((*motorData)["maxForce"], 0, 0);
+			}
+		}
+		else
+		{
+			auto doAxisLimit = [](json data, btVector3 *min, btVector3 *max, std::string key, int index) {
+				IF_FIND(axisData, data, key)
+				{
+					min->m_floats[index] = (*axisData)[0];
+					max->m_floats[index] = (*axisData)[1];
+				}
+			};
+
+			IF_FIND(limits, jointData, "limits")
+			{
+				btVector3 angularLimitMin(0, 0, 0);
+				btVector3 angularLimitMax(0, 0, 0);
+				IF_FIND(angular, *limits, "angular")
+				{
+					auto doAngularLimit = [doAxisLimit, angular, &angularLimitMin, &angularLimitMax]
+						(std::string key,int index) {
+						doAxisLimit(*angular, &angularLimitMin, &angularLimitMax, key, index);
+					};
+
+					doAngularLimit("x", 0);
+					doAngularLimit("y", 1);
+					doAngularLimit("z", 2);
+				}
+				genericJoint->setAngularLowerLimit(angularLimitMin);
+				genericJoint->setAngularUpperLimit(angularLimitMax);
+
+				btVector3 linearLimitMin(0, 0, 0);
+				btVector3 linearLimitMax(0, 0, 0);
+				IF_FIND(linear, *limits, "linear")
+				{
+					auto doLinearLimit = [doAxisLimit, linear, &linearLimitMin, &linearLimitMax]
+						(std::string key, int index) {
+						doAxisLimit(*linear, &linearLimitMin, &linearLimitMax, key, index);
+					};
+
+					doLinearLimit("x", 0);
+					doLinearLimit("y", 1);
+					doLinearLimit("z", 2);
+				}
+				genericJoint->setLinearLowerLimit(linearLimitMin);
+				genericJoint->setLinearUpperLimit(linearLimitMax);
+			}
+
+			IF_FIND(motorData, jointData, "motor")
+			{
+				auto translationMotor = genericJoint->getTranslationalLimitMotor();
+
+				btVector3 velocity(0, 0, 0);
+				btVector3 maxForce(0, 0, 0);
+
+				auto doMotor = [motorData, translationMotor, &velocity, &maxForce](std::string key, int index) {
+					IF_FIND(axisData, *motorData, key)
+					{
+						translationMotor->m_enableMotor[index] = true;
+						velocity.m_floats[index] = (*axisData)["speed"];
+						maxForce.m_floats[index] = (*axisData)["maxForce"];
+					}
+				};
+
+				doMotor("x", 0);
+				doMotor("y", 1);
+				doMotor("z", 2);
+
+				translationMotor->m_targetVelocity = btVector3(velocity);
+				translationMotor->m_maxMotorForce = btVector3(maxForce);
+			}
+		}
+		return genericJoint;
+	}
+}
+
 void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 {
 	auto transformComp = entSubbed->getComponent<TransformComponent>();
@@ -70,7 +271,7 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 	btVector3 localInertia(0,0,0);
 	physicsComp->collisionShape->calculateLocalInertia(mass, localInertia);
 
-	btMotionState* motionState = new btDefaultMotionState(transform);
+	btMotionState* motionState = new btDefaultMotionState(transform * physicsComp->principalTransform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(
 			mass,
 			motionState,
@@ -80,225 +281,33 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 
 	auto rigidBody = new btRigidBody(rbInfo);
 	dynamicsWorld->addRigidBody(rigidBody);
-
 	rigidBodies[entSubbed] = rigidBody;
 
-	for(auto jointData : physicsComp->jointData)
+	IF_FIND(angularFactorData, physicsComp->jsonData, "angularFactors")
+		rigidBody->setAngularFactor((*angularFactorData).get<btVector3>());
+
+	IF_FIND(linearFactorData, physicsComp->jsonData, "linearFactors")
+		rigidBody->setLinearFactor((*linearFactorData).get<btVector3>());
+
+	IF_FIND(gravity, physicsComp->jsonData, "gravity")
+		rigidBody->setGravity(*gravity);
+
+	IF_FIND(damping, physicsComp->jsonData, "damping")
+		rigidBody->setDamping((*damping)[0], (*damping)[1]);
+
+	IF_FIND(friction, physicsComp->jsonData, "friction")
+		rigidBody->setFriction(*friction);
+
+	IF_FIND(jointDataJson, physicsComp->jsonData, "joints")
 	{
-		std::string typeName = jointData["type"];
-
-		Entity* otherEntity = nullptr;
-		btRigidBody *otherRigidBody = nullptr;
-		auto otherEntityName = jointData.find("entity");
-		if(otherEntityName != jointData.end())
+		for(auto jointData : *jointDataJson)
 		{
-			otherEntity = ECSManager::i()->findEntity(*otherEntityName);
-			otherRigidBody = findRigidBody(otherEntity);
-		}
-
-		btVector3 pivotThis = jointData["pivotThis"];
-
-		btVector3 axisThis;
-		if(typeName == "Hinge" || typeName == "Slider" || typeName == "Generic")
-		{
-			axisThis = jointData["axisThis"];
-		}
-
-		btVector3 pivotThat;
-		btVector3 axisThat;
-		if(otherRigidBody)
-		{
-			pivotThat = jointData["pivotThat"];
-
-			if(typeName == "Hinge" || typeName == "Slider" || typeName == "Generic")
+			bool collide = false;
+			IF_FIND(collideData, jointData, "collide")
 			{
-				axisThat = jointData["axisThat"];
+				collide = *collideData;
 			}
-		}
-
-		btTransform frameInA = btTransform::getIdentity();
-		btTransform frameInB = btTransform::getIdentity();
-		if(typeName == "Slider" || typeName == "Generic")
-		{
-			frameInA.setOrigin(pivotThis);
-			frameInA.setRotation(fromVecToVecQuat(btVector3(1, 0, 0), axisThis));
-
-			if(otherRigidBody)
-			{
-				frameInB.setOrigin(pivotThat);
-				frameInB.setRotation(fromVecToVecQuat(btVector3(1, 0, 0), axisThat));
-			}
-		}
-
-		if(typeName == "BallSocket")
-		{
-			btPoint2PointConstraint *ballSocket;
-			if(otherRigidBody)
-			{
-				ballSocket = new btPoint2PointConstraint(
-					*otherRigidBody,
-					*rigidBody,
-					pivotThat,
-					pivotThis
-				);
-			}
-			else
-			{
-				ballSocket = new btPoint2PointConstraint(*rigidBody, pivotThis);
-			}
-			new btPoint2PointConstraint{*rigidBody, pivotThis};
-			dynamicsWorld->addConstraint(ballSocket);
-		}
-		else if(typeName == "Hinge")
-		{
-			btHingeConstraint *hinge;
-			if(otherRigidBody)
-			{
-				hinge = new btHingeConstraint(
-					*otherRigidBody,
-					*rigidBody,
-					pivotThat,
-					pivotThis,
-					axisThat,
-					axisThis
-				);
-			}
-			else
-			{
-				hinge = new btHingeConstraint(*rigidBody, pivotThis, axisThis);
-			}
-			dynamicsWorld->addConstraint(hinge);
-		}
-		else if(typeName == "Generic" || typeName == "Slider")
-		{
-			btGeneric6DofConstraint *genericJoint;
-			if(otherRigidBody)
-			{
-				genericJoint = new btGeneric6DofConstraint(
-					*otherRigidBody,
-					*rigidBody,
-					frameInB,
-					frameInA,
-					true // Dunno what this does...
-				);
-			}
-			else
-			{
-				genericJoint = new btGeneric6DofConstraint(
-					*rigidBody,
-					frameInA,
-					true // Dunno what this does...
-				);
-			}
-
-			if(typeName == "Slider")
-			{
-				genericJoint->setAngularLowerLimit(btVector3(0, 0, 0));
-				genericJoint->setAngularUpperLimit(btVector3(0, 0, 0));
-
-				//Lower > Upper = free movement
-				float lowerLimit = 1.0f;
-				float upperLimit = -1.0f;
-				auto limits = jointData.find("limits");
-				if(limits != jointData.end())
-				{
-					//Lower == Upper = locked
-					lowerLimit = (*limits)[0];
-					upperLimit = (*limits)[1];
-					if(lowerLimit >= upperLimit)
-						throw std::invalid_argument(entSubbed->getName() + " > " + physicsComp->getName() +
-													" > Slider Joint > 'Lower limit greater than upper limit.'");
-				}
-				genericJoint->setLinearLowerLimit(btVector3(lowerLimit, 0, 0));
-				genericJoint->setLinearUpperLimit(btVector3(upperLimit, 0, 0));
-
-				auto motorData = jointData.find("motor");
-				if(motorData != jointData.end())
-				{
-					auto translationMotor = genericJoint->getTranslationalLimitMotor();
-					translationMotor->m_enableMotor[0] = true;
-					translationMotor->m_targetVelocity = btVector3((*motorData)["speed"], 0, 0);
-					translationMotor->m_maxMotorForce = btVector3((*motorData)["maxForce"], 0, 0);
-				}
-			}
-			else
-			{
-				auto doAxisLimit = [](json data, btVector3 *min, btVector3 *max, std::string key, int index) {
-					auto axisData = data.find(key);
-					if(axisData != data.end())
-					{
-						min->m_floats[index] = (*axisData)[0];
-						max->m_floats[index] = (*axisData)[1];
-					}
-				};
-
-				auto limits = jointData.find("limits");
-				if(limits != jointData.end())
-				{
-					btVector3 angularLimitMin(0, 0, 0);
-					btVector3 angularLimitMax(0, 0, 0);
-					auto angular = (*limits).find("angular");
-					if(angular != (*limits).end())
-					{
-						auto doAngularLimit = [doAxisLimit, angular, &angularLimitMin, &angularLimitMax]
-											   (std::string key,int index) {
-							doAxisLimit((*angular), &angularLimitMin, &angularLimitMax, key, index);
-						};
-
-						doAngularLimit("x", 0);
-						doAngularLimit("y", 1);
-						doAngularLimit("z", 2);
-
-					}
-					genericJoint->setAngularLowerLimit(angularLimitMin);
-					genericJoint->setAngularUpperLimit(angularLimitMax);
-
-					btVector3 linearLimitMin(0, 0, 0);
-					btVector3 linearLimitMax(0, 0, 0);
-					auto linear = (*limits).find("linear");
-					if(linear != (*limits).end())
-					{
-						auto doLinearLimit = [doAxisLimit, linear, &linearLimitMin, &linearLimitMax]
-											  (std::string key, int index) {
-							doAxisLimit((*linear), &linearLimitMin, &linearLimitMax, key, index);
-						};
-
-						doLinearLimit("x", 0);
-						doLinearLimit("y", 1);
-						doLinearLimit("z", 2);
-					}
-					genericJoint->setLinearLowerLimit(linearLimitMin);
-					genericJoint->setLinearUpperLimit(linearLimitMax);
-				}
-
-				auto motorData = jointData.find("motor");
-				if(motorData != jointData.end())
-				{
-					auto translationMotor = genericJoint->getTranslationalLimitMotor();
-
-					btVector3 velocity(0, 0, 0);
-					btVector3 maxForce(0, 0, 0);
-
-					auto doMotor = [motorData, translationMotor, &velocity, &maxForce](std::string key, int index) {
-						auto axisData = (*motorData).find(key);
-						if(axisData != (*motorData).end())
-						{
-							translationMotor->m_enableMotor[index] = true;
-							velocity.m_floats[index] = (*axisData)["speed"];
-							maxForce.m_floats[index] = (*axisData)["maxForce"];
-						}
-					};
-
-					doMotor("x", 0);
-					doMotor("y", 1);
-					doMotor("z", 2);
-
-					translationMotor->m_targetVelocity = btVector3(velocity);
-					translationMotor->m_maxMotorForce = btVector3(maxForce);
-				}
-			}
-
-			dynamicsWorld->addConstraint(genericJoint);
+			dynamicsWorld->addConstraint(makeJoint(jointData, rigidBody, entSubbed, physicsComp), collide);
 		}
 	}
 }
@@ -365,12 +374,14 @@ void PhysicsSystem::update(double dt)
         updateEntityTriggers(entity);
 
 		auto transformComp = entity->getComponent<TransformComponent>();
+		auto physicsComp = entity->getComponent<PhysicsComponent>();
 
 		btRigidBody* rb = findRigidBody(entity);
 		if(rb)
 		{
 			btTransform transform;
 			rb->getMotionState()->getWorldTransform(transform);
+			transform = transform * physicsComp->principalTransform.inverse();
 			btVector3 pos = transform.getOrigin();
 			btQuaternion rot = transform.getRotation();
 			transformComp->setPosition(glm::vec3(pos.getX(), pos.getY(), pos.getZ()));
@@ -381,8 +392,7 @@ void PhysicsSystem::update(double dt)
 
 btRigidBody* PhysicsSystem::findRigidBody(Entity* toFind)
 {
-	auto t = rigidBodies.find(toFind);
-	if(t != rigidBodies.end())
+	IF_FIND(t, rigidBodies, toFind)
 		return t->second;
 	return nullptr;
 }

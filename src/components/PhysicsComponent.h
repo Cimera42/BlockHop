@@ -17,10 +17,12 @@ public:
 	PhysicsComponent();
 	~PhysicsComponent();
 	void setValues(json inValues);
+	btCollisionShape* loadShape(json inValues);
 
 	float mass;
+	btTransform principalTransform;
 
-	std::vector<json> jointData;
+	json jsonData;
 
 	friend std::ostream &operator<< (std::ostream &os, PhysicsComponent const &c) {
 		os << "PhysicsComponent";

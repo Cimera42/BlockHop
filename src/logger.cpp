@@ -96,6 +96,20 @@ Logger &Logger::operator<<(btVector3 val)
 
 Logger &Logger::operator<<(btQuaternion val)
 {
-	buffer << val.x() << ", " << val.y() << ", " << val.z() << "," << val.w() << between;
+	buffer << val.x() << ", " << val.y() << ", " << val.z() << ", " << val.w() << between;
 	return *this;
 }
+
+Logger &Logger::operator<<(btTransform val)
+{
+	const btVector3 translation = val.getOrigin();
+	const btQuaternion rotation = val.getRotation();
+	buffer << "T:(";
+	(*this) << translation;
+	buffer << ") ";
+	buffer << "R:(";
+	(*this) << rotation;
+	buffer << ")";
+	return *this;
+}
+

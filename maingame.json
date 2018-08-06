@@ -223,24 +223,40 @@
                 {
                     "name": "physicsComponent",
                     "values": {
-                        "mass": 0,
+                        "mass": 1,
+						"angularFactors": [0,1,0],
+						"gravity": [0,0,0],
                         "colliderShape": "compound",
                         "shapes": [
 							{
 								"colliderShape": "cone",
-								"radius": 2,
-								"height": 1.27,
-								"position": [0,2.6,0],
+								"radius": 1.78,
+								"height": 0.863,
+								"position": [0,2.8,0],
 								"rotation": [1,0,0,0]
 							},
 							{
 								"colliderShape": "cylinder",
 								"radius": 0.45,
-								"height": 2.35,
+								"halfHeight": 1.17,
 								"position": [0,1.17,0],
 								"rotation": [1,0,0,0]
 							}
-                        ]
+                        ],
+						"joints": [
+							{
+								"type": "Generic",
+								"pivotThis": [0, 0, 0],
+								"axisThis": [1, 0, 0],
+								"limits": {
+									"linear": {
+										"x": [-5, 5],
+										"y": [-2, 5],
+										"z": [-5, 5]
+									}
+								}
+							}
+						]
                     }
                 }
 			]

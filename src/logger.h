@@ -43,6 +43,7 @@ public:
 
 	Logger& operator<<(btVector3 val);
 	Logger& operator<<(btQuaternion val);
+	Logger& operator<<(btTransform val);
 };
 
 #endif // LOGGER_H_INCLUDED

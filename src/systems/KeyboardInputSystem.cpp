@@ -67,7 +67,7 @@ void KeyboardInputSystem::update(double dt)
 			json pj = {
 				{"colliderShape","cube"},
 				{"halfDimensions", {1, 1, 1}},
-				{"mass", 5}
+				{"mass", 0.5}
 			};
 			json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
 			std::vector<json> compData = {tj,pj,aj};
