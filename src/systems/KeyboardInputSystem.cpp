@@ -95,6 +95,6 @@ bool KeyboardInputSystem::isKeyPressed(int keyCode)
 
 void keyboardInputEvent(GLFWwindow* inWindow, int keyCode, int scanCode, int action, int modifiers)
 {
-	KeyboardInputSystem* keyboardSystem = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
+	KeyboardInputSystem* keyboardSystem = ECSManager::i()->findSystem<KeyboardInputSystem>();
 	keyboardSystem->keyList[keyCode] = action;
 }

@@ -16,6 +16,7 @@ class PhysicsSystem : public System<PhysicsSystem>
 	const float idealTimestep = 1.0f/60.0f;
 	double accumulator;
 
+public:
 	btDiscreteDynamicsWorld* dynamicsWorld;
 	btDefaultCollisionConfiguration* collisionConfiguration;
 	btCollisionDispatcher* dispatcher;
@@ -24,7 +25,6 @@ class PhysicsSystem : public System<PhysicsSystem>
 
 	std::map<Entity*, btRigidBody*> rigidBodies;
 
-public:
 	PhysicsSystem();
 	~PhysicsSystem() override;
 

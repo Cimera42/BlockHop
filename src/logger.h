@@ -9,6 +9,8 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include <bullet3/btBulletCollisionCommon.h>
+#include <vector>
+#include <map>
 
 class Logger
 {
@@ -34,13 +36,22 @@ public:
 		buffer << val << between;
 		return *this;
 	}
+
+	// STD
+	template <typename T>
+	Logger& operator<<(std::vector<T> val);
+	template <typename S, typename T>
+	Logger& operator<<(std::map<S, T> val);
+	Logger& operator<<(std::ostream& (*val)(std::ostream &));
+
+	// GLM
 	Logger& operator<<(glm::vec2 val);
 	Logger& operator<<(glm::vec3 val);
 	Logger& operator<<(glm::vec4 val);
 	Logger& operator<<(glm::quat val);
 	Logger& operator<<(glm::mat4 val);
-	Logger& operator<<(std::ostream& (*val)(std::ostream &));
 
+	// Bullet
 	Logger& operator<<(btVector3 val);
 	Logger& operator<<(btQuaternion val);
 	Logger& operator<<(btTransform val);

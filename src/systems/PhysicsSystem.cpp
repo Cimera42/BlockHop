@@ -187,41 +187,94 @@ btTypedConstraint * PhysicsSystem::makeJoint(json jointData, btRigidBody *rigidB
 			auto doAxisLimit = [](json data, btVector3 *min, btVector3 *max, std::string key, int index) {
 				IF_FIND(axisData, data, key)
 				{
-					min->m_floats[index] = (*axisData)[0];
-					max->m_floats[index] = (*axisData)[1];
+					if((*axisData).type() == json::value_t::string)
+					{
+						std::string state = (*axisData).get<std::string>();
+						if(state == "free")
+						{
+							min->m_floats[index] = 1;
+							max->m_floats[index] = -1;
+						}
+						else if(state == "lock")
+						{
+							min->m_floats[index] = 0;
+							max->m_floats[index] = 0;
+						}
+					}
+					else
+					{
+						min->m_floats[index] = (*axisData)[0];
+						max->m_floats[index] = (*axisData)[1];
+					}
 				}
 			};
 
 			IF_FIND(limits, jointData, "limits")
 			{
-				btVector3 angularLimitMin(0, 0, 0);
-				btVector3 angularLimitMax(0, 0, 0);
+				// Default unlocked
+				btVector3 angularLimitMin(1, 1, 1);
+				btVector3 angularLimitMax(-1, -1, -1);
 				IF_FIND(angular, *limits, "angular")
 				{
-					auto doAngularLimit = [doAxisLimit, angular, &angularLimitMin, &angularLimitMax]
-						(std::string key,int index) {
-						doAxisLimit(*angular, &angularLimitMin, &angularLimitMax, key, index);
-					};
+					if((*angular).type() == json::value_t::string)
+					{
+						std::string state = (*angular).get<std::string>();
+						if(state == "free")
+						{
+							angularLimitMin = {1, 1, 1};
+							angularLimitMax = {-1, -1, -1};
+						}
+						else if(state == "lock")
+						{
+							angularLimitMin = {0,0,0};
+							angularLimitMax = {0,0,0};
+						}
+					}
+					else
+					{
+						auto doAngularLimit = [doAxisLimit, angular, &angularLimitMin, &angularLimitMax]
+							(std::string key, int index) {
+							doAxisLimit(*angular, &angularLimitMin, &angularLimitMax, key, index);
+						};
 
-					doAngularLimit("x", 0);
-					doAngularLimit("y", 1);
-					doAngularLimit("z", 2);
+						doAngularLimit("x", 0);
+						doAngularLimit("y", 1);
+						doAngularLimit("z", 2);
+					}
 				}
 				genericJoint->setAngularLowerLimit(angularLimitMin);
 				genericJoint->setAngularUpperLimit(angularLimitMax);
 
+				// Default locked
 				btVector3 linearLimitMin(0, 0, 0);
 				btVector3 linearLimitMax(0, 0, 0);
 				IF_FIND(linear, *limits, "linear")
 				{
-					auto doLinearLimit = [doAxisLimit, linear, &linearLimitMin, &linearLimitMax]
-						(std::string key, int index) {
-						doAxisLimit(*linear, &linearLimitMin, &linearLimitMax, key, index);
-					};
+					if((*linear).type() == json::value_t::string)
+					{
+						std::string state = (*linear).get<std::string>();
+						if(state == "free")
+						{
+							linearLimitMin = {1, 1, 1};
+							linearLimitMax = {-1, -1, -1};
+						}
+						else if(state == "lock")
+						{
+							linearLimitMin = {0,0,0};
+							linearLimitMax = {0,0,0};
+						}
+					}
+					else
+					{
+						auto doLinearLimit = [doAxisLimit, linear, &linearLimitMin, &linearLimitMax]
+							(std::string key, int index) {
+							doAxisLimit(*linear, &linearLimitMin, &linearLimitMax, key, index);
+						};
 
-					doLinearLimit("x", 0);
-					doLinearLimit("y", 1);
-					doLinearLimit("z", 2);
+						doLinearLimit("x", 0);
+						doLinearLimit("y", 1);
+						doLinearLimit("z", 2);
+					}
 				}
 				genericJoint->setLinearLowerLimit(linearLimitMin);
 				genericJoint->setLinearUpperLimit(linearLimitMax);
@@ -270,6 +323,7 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 	btScalar mass(physicsComp->mass);
 	btVector3 localInertia(0,0,0);
 	physicsComp->collisionShape->calculateLocalInertia(mass, localInertia);
+	Logger() << entSubbed->getName() << ": " << localInertia;
 
 	btMotionState* motionState = new btDefaultMotionState(transform * physicsComp->principalTransform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(
@@ -280,8 +334,11 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 	);
 
 	auto rigidBody = new btRigidBody(rbInfo);
+	rigidBody->setUserPointer((void*) entSubbed);
+
 	dynamicsWorld->addRigidBody(rigidBody);
 	rigidBodies[entSubbed] = rigidBody;
+	physicsComp->rigidBody = rigidBody;
 
 	IF_FIND(angularFactorData, physicsComp->jsonData, "angularFactors")
 		rigidBody->setAngularFactor((*angularFactorData).get<btVector3>());
@@ -297,6 +354,9 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 
 	IF_FIND(friction, physicsComp->jsonData, "friction")
 		rigidBody->setFriction(*friction);
+
+	IF_FIND(rollingFriction, physicsComp->jsonData, "rollingFriction")
+		rigidBody->setRollingFriction(*rollingFriction);
 
 	IF_FIND(jointDataJson, physicsComp->jsonData, "joints")
 	{
@@ -317,47 +377,6 @@ void PhysicsSystem::update(double dt)
 {
 	accumulator += dt;
 
-	auto mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>("mouseButtonSystem");
-	int b = 0;
-	if(mouseButtonSystem->isButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
-	{
-		b = 1;
-	}
-	else if(mouseButtonSystem->isButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
-	{
-		b = -1;
-	}
-	if(b != 0)
-	{
-		Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
-		auto cameraTransform = cameraEntity->getComponent<TransformComponent>();
-		glm::vec3 startGlm = cameraTransform->getPosition();
-		glm::vec3 directionGlm = cameraTransform->getForward();
-		glm::vec3 endGlm = startGlm + directionGlm*50.0f;
-
-		btVector3 directionBt(directionGlm.x, directionGlm.y, directionGlm.z);
-		btVector3 startBt(startGlm.x, startGlm.y, startGlm.z);
-		btVector3 endBt(endGlm.x, endGlm.y, endGlm.z);
-		btCollisionWorld::ClosestRayResultCallback closestResult(startBt, endBt);
-
-		dynamicsWorld->rayTest(startBt, endBt, closestResult);
-
-		if(closestResult.hasHit())
-		{
-			auto rigidBody = (btRigidBody *) btRigidBody::upcast(closestResult.m_collisionObject);
-			rigidBody->activate();
-			btVector3 worldHit = closestResult.m_hitPointWorld;
-			btVector3 localHit = worldHit - rigidBody->getCenterOfMassTransform().getOrigin();
-			rigidBody->applyForce(directionBt * 10.0f * b, localHit);
-
-			// Get Entity "PickPos"
-			// Set position worldHit
-			auto indicator = ECSManager::i()->findEntity("RaycastIndicator");
-			auto indicatorTransform = indicator->getComponent<TransformComponent>();
-			indicatorTransform->setPosition(glm::vec3(worldHit.x(),worldHit.y(),worldHit.z()));
-		}
-	}
-
 	while(accumulator >= idealTimestep)
 	{
 		dynamicsWorld->stepSimulation(idealTimestep, 10);
@@ -376,7 +395,7 @@ void PhysicsSystem::update(double dt)
 		auto transformComp = entity->getComponent<TransformComponent>();
 		auto physicsComp = entity->getComponent<PhysicsComponent>();
 
-		btRigidBody* rb = findRigidBody(entity);
+		btRigidBody* rb = physicsComp->rigidBody;
 		if(rb)
 		{
 			btTransform transform;

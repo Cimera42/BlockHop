@@ -58,9 +58,9 @@ public:
 	}
 
 	template <typename T>
-	T* getTrigger(std::string trigName) {
-		auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](TriggerBase*& o) {
-			return (o->getName() == trigName);
+	T* getTrigger() {
+		auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [](TriggerBase*& o) {
+			return (o->getName() == Trigger<T>::name);
 		});
 
 		if (it != subbedTriggers.end())

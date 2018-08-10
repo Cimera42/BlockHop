@@ -3,6 +3,8 @@
 //
 
 #include "logger.h"
+#include "triggers/ClickedTrigger.h"
+#include <typeinfo>
 
 Logger::Logger()
 {
@@ -44,6 +46,46 @@ Logger::~Logger()
 		std::cout << std::endl;
 }
 
+template<typename T>
+Logger &Logger::operator<<(std::vector<T> val)
+{
+	buffer << typeid(val).name();
+	int i = 0;
+	for(auto item : val)
+	{
+		if(i != 0)
+			buffer << "\n";
+		buffer << "\tItem " << i++ << ": ";
+		(*this) << item;
+	}
+	return *this;
+}
+
+template<typename S, typename T>
+Logger &Logger::operator<<(std::map<S, T> val)
+{
+	buffer << typeid(val).name();
+	int i = 0;
+	for(auto item : val)
+	{
+		if(i++ != 0)
+			buffer << "\n";
+		buffer << "\tItem ";
+		(*this) << item->first();
+		buffer << ": ";
+		(*this) << item->second();
+	}
+	return *this;
+}
+
+//Function for special stream types, eg endl
+Logger& Logger::operator<<(std::ostream& (*val)(std::ostream &))
+{
+	buffer << val << between;
+	return *this;
+}
+
+// GLM
 Logger& Logger::operator<<(const glm::vec2 val)
 {
 	//Push input to stringstream
@@ -81,13 +123,7 @@ Logger& Logger::operator<<(const glm::mat4 val)
 	return *this;
 }
 
-//Function for special stream types, eg endl
-Logger& Logger::operator<<(std::ostream& (*val)(std::ostream &))
-{
-	buffer << val << between;
-	return *this;
-}
-
+// Bullet
 Logger &Logger::operator<<(btVector3 val)
 {
 	buffer << val.x() << ", " << val.y() << ", " << val.z() << between;
@@ -112,4 +148,3 @@ Logger &Logger::operator<<(btTransform val)
 	buffer << ")";
 	return *this;
 }
-

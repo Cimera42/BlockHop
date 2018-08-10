@@ -1,6 +1,12 @@
 {
 	"identifiers": [
 		{
+			"type": "phys",
+			"components": [
+                "physicsComponent"
+            ]
+		},
+		{
 			"type": "box",
 			"components": [
 				"transformComponent",
@@ -242,24 +248,18 @@
 								"position": [0,1.17,0],
 								"rotation": [1,0,0,0]
 							}
-                        ],
-						"joints": [
-							{
-								"type": "Generic",
-								"pivotThis": [0, 0, 0],
-								"axisThis": [1, 0, 0],
-								"limits": {
-									"linear": {
-										"x": [-5, 5],
-										"y": [-2, 5],
-										"z": [-5, 5]
-									}
-								}
-							}
-						]
+                        ]
                     }
                 }
-			]
+			],
+            "triggers": [
+                {
+                    "name": "clickedTrigger",
+                    "values": {
+                        "force": 30
+                    }
+                }
+            ]
 		},
 		{
 			"name": "Mine2",
@@ -336,7 +336,15 @@
 						]
 					}
 				}
-			]
+			],
+            "triggers": [
+                {
+                    "name": "clickedTrigger",
+                    "values": {
+                        "force": 30
+                    }
+                }
+            ]
 		},
 		{
 			"name": "PhysicsEntity1",
@@ -420,7 +428,15 @@
 						]
 					}
 				}
-			]
+			],
+            "triggers": [
+                {
+                    "name": "clickedTrigger",
+                    "values": {
+                        "force": 30
+                    }
+                }
+            ]
 		},
 		{
 			"name": "SliderEntity",
@@ -459,7 +475,15 @@
 						]
 					}
 				}
-			]
+			],
+            "triggers": [
+                {
+                    "name": "clickedTrigger",
+                    "values": {
+                        "force": 30
+                    }
+                }
+            ]
 		},
 		{
 			"name": "SliderEntity2",
@@ -501,7 +525,15 @@
 						]
 					}
 				}
-			]
+			],
+            "triggers": [
+                {
+                    "name": "clickedTrigger",
+                    "values": {
+                        "force": 30
+                    }
+                }
+            ]
 		},
 		{
 			"name": "SliderEntity3",
@@ -550,7 +582,15 @@
 						]
 					}
 				}
-			]
+			],
+            "triggers": [
+                {
+                    "name": "clickedTrigger",
+                    "values": {
+                        "force": 30
+                    }
+                }
+            ]
 		},
 		{
 			"name": "Door",
@@ -584,7 +624,15 @@
 						]
 					}
 				}
-			]
+			],
+            "triggers": [
+                {
+                    "name": "clickedTrigger",
+                    "values": {
+                        "force": 30
+                    }
+                }
+            ]
 		},
 		{
 			"name": "RaycastIndicator",
@@ -601,6 +649,57 @@
 					"name": "animatedModelComponent",
 					"values": {
 						"filename": "./assets/models/Sphere/sphere.fbx"
+					}
+				}
+			]
+		},
+		{
+			"name": "RollyBall",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0, 0, 0],
+						"rotation": [1, 0, 0, 0],
+						"scale": [1,1,1]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Sphere/sphere.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "sphere",
+						"radius": 1,
+						"mass": 1,
+						"friction": 1,
+						"rollingFriction": 1,
+						"joints": [
+							{
+								"type": "Generic",
+								"pivotThis": [0, 0, 0],
+								"axisThis": [1, 0, 0],
+								"limits": {
+									"linear": {
+										"x": [-20, 20],
+										"y": "free",
+										"z": [-20, 20]
+									}
+								}
+							}
+						]
+					}
+				}
+			],
+			"triggers": [
+				{
+					"name": "clickedTrigger",
+					"values": {
+						"force": 10
 					}
 				}
 			]

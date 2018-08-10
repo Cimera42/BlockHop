@@ -21,6 +21,7 @@ public:
 
 	float mass;
 	btTransform principalTransform;
+	btRigidBody* rigidBody;
 
 	json jsonData;
 

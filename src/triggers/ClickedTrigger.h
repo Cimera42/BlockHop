@@ -9,6 +9,17 @@
 #include "../systems/PhysicsSystem.h"
 #include <glm/glm.hpp>
 
+struct HitData
+{
+	btVector3 direction;
+	btVector3 localPoint;
+
+//	friend std::ostream &operator<< (std::ostream &os, HitData const &c) {
+//		os << c.direction << " - " << c.localPoint;
+//		return os;
+//	}
+};
+
 class ClickedTrigger : public Trigger<ClickedTrigger>
 {
 public:
@@ -18,8 +29,12 @@ public:
 
 	int force;
 
+	static std::map<Entity*, HitData> hitEntities;
+
 	void runSystemFunction(SystemBase* s);
 	bool entityCheck(SystemBase* s, Entity* e);
+
+	void doForce(SystemBase* s, Entity* e);
 };
 
 #endif //BLOCKHOP_CLICKEDTRIGGER_H
