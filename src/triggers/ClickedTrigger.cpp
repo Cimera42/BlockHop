@@ -29,9 +29,6 @@ void ClickedTrigger::runSystemFunction(SystemBase* sys) {
 
 	hitEntities.clear();
 
-	std::map<int, int> a;
-	Logger() << a;
-
 	auto mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>();
 	int b = 0;
 	if(mouseButtonSystem->isButtonPressed(GLFW_MOUSE_BUTTON_LEFT))

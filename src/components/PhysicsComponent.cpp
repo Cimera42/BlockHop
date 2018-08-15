@@ -9,6 +9,7 @@
 #include "../loaders/assetManager.h"
 
 #include <bullet3/btBulletCollisionCommon.h>
+#include <bullet3/BulletCollision/Gimpact/btGImpactShape.h>
 #include <bullet3/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
 
 COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
@@ -16,9 +17,9 @@ COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
 PhysicsComponent::PhysicsComponent() {}
 PhysicsComponent::~PhysicsComponent() {}
 
-btVector3 glmToBt(glm::vec3 in)
+btVector3 glmToBtWithRotation(glm::vec3 in)
 {
-	return btVector3(in.x,in.y,in.z);
+	return btVector3(in.x,in.z,in.y);
 }
 
 void PhysicsComponent::setValues(json inValues)
@@ -56,7 +57,7 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 	{
 		return new btConeShape(inValues["radius"], inValues["height"]);
 	}
-	else if(shapeName == "convex")
+	else if(shapeName == "hull")
 	{
 		auto typedCollisionShape = new btConvexHullShape();
 
@@ -74,11 +75,14 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 		else
 		{
 			auto model = dynamic_cast<ModelAsset*>(AssetManager::i()->loadSync(inValues["mesh"]));
-			auto mesh = model->normalMeshes[model->meshParts[0]->mesh];
-			for(auto index : mesh->indices)
+			auto meshPart = model->meshParts.begin()->second;
+			auto mesh = model->normalMeshes[meshPart->mesh];
+
+			for(auto vertex : mesh->vertices)
 			{
-				typedCollisionShape->addPoint(glmToBt(mesh->vertices[index]));
+				typedCollisionShape->addPoint(glmToBtWithRotation(vertex), false);
 			}
+			typedCollisionShape->recalcLocalAabb();
 		}
 
 		return typedCollisionShape;
@@ -110,7 +114,53 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 
 		return typedCollisionShape;
 	}
+	else if(shapeName == "concave")
+	{
+		auto model = dynamic_cast<ModelAsset*>(AssetManager::i()->loadSync(inValues["mesh"]));
+		auto meshPart = model->meshParts.begin()->second;
+		auto mesh = model->normalMeshes[meshPart->mesh];
 
-//	btHeightfieldTerrainShape
-//	mass = 0
+		auto triangleMesh = new btTriangleMesh();
+		for(auto vertex : mesh->vertices)
+		{
+			triangleMesh->findOrAddVertex(glmToBtWithRotation(vertex), false);
+		}
+//		for(auto index : mesh->indices)
+//		{
+//			triangleMesh->addIndex(index);
+//		}
+		for(int i = 0; i < mesh->indices.size(); i+=3)
+		{
+			triangleMesh->addTriangleIndices(
+				mesh->indices[i+0],
+				mesh->indices[i+1],
+				mesh->indices[i+2]
+			);
+		}
+
+		if(mass != 0)
+		{
+			auto shape = new btGImpactMeshShape(triangleMesh);
+			shape->updateBound();
+			return shape;
+		}
+		else
+			return new btBvhTriangleMeshShape(triangleMesh, true);
+	}
+//	else if(shapeName == "terrain")
+//	{
+//		btHeightfieldTerrainShape
+//		mass = 0
+
+//		width
+//		height
+// 		data
+//		height scale
+//		minheight
+//		maxheight
+//		upaxis = 1 //up
+//		heightdatatype
+//		flipquadedges?
+//		return new btHeightfieldTerrainShape();
+//	}
 }

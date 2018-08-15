@@ -163,7 +163,7 @@
                 {
                     "name": "transformComponent",
                     "values": {
-                        "position": [0,0,5],
+                        "position": [-10,0,5],
                         "rotation": [1,0,0,0],
                         "scale": [1,1,1]
                     }
@@ -292,7 +292,7 @@
 				{
 					"name": "transformComponent",
 					"values": {
-						"position": [0, 0, 5],
+						"position": [10, 0, 10],
 						"rotation": [0.707, -0.707, 0, 0],
 						"scale": [1, 1, 1]
 					}
@@ -566,8 +566,10 @@
 								"limits": {
 									"linear": {
 										"x": [-1, 1],
+										"y": "lock",
 										"z": [-1, 1]
-									}
+									},
+									"angular": "lock"
 								},
 								"entity": "SliderEntity2",
 								"pivotThat": [0, 0, 0],
@@ -692,6 +694,148 @@
 								}
 							}
 						]
+					}
+				}
+			],
+			"triggers": [
+				{
+					"name": "clickedTrigger",
+					"values": {
+						"force": 10
+					}
+				}
+			]
+		},
+		{
+			"name": "Cylinder",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [5,0,0],
+						"rotation": [1,0,0,0],
+						"scale": [1,1,1]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Cylinder/cylinder.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mass": 1,
+						"colliderShape": "cylinder",
+						"radius": 1,
+						"halfHeight": 1
+					}
+				}
+			],
+			"triggers": [
+				{
+					"name": "clickedTrigger",
+					"values": {
+						"force": 10
+					}
+				}
+			]
+		},
+		{
+			"name": "Capsule",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [-5,1,0],
+						"rotation": [1,0,0,0],
+						"scale": [1,1,1]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Capsule/capsule.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mass": 1,
+						"colliderShape": "capsule",
+						"radius": 1,
+						"height": 2
+					}
+				}
+			],
+			"triggers": [
+				{
+					"name": "clickedTrigger",
+					"values": {
+						"force": 10
+					}
+				}
+			]
+		},
+		{
+			"name": "Hull",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0,0,5],
+						"rotation": [1,0,0,0],
+						"scale": [1,1,1]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Convex/convex.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mass": 2,
+						"colliderShape": "hull",
+						"mesh": "./assets/models/Convex/convex.fbx"
+					}
+				}
+			],
+			"triggers": [
+				{
+					"name": "clickedTrigger",
+					"values": {
+						"force": 10
+					}
+				}
+			]
+		},
+		{
+			"name": "Concave",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0,0,10],
+						"rotation": [1,0,0,0],
+						"scale": [1,1,1]
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Concave/concave.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mass": 1,
+						"colliderShape": "concave",
+						"mesh": "./assets/models/Concave/concave.fbx"
 					}
 				}
 			],
