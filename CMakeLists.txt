@@ -60,6 +60,8 @@ set(SOURCE_FILES ${SOURCE_FILES} src/loaders/baseAsset.cpp src/loaders/baseAsset
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelAsset.cpp src/loaders/modelAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageAsset.cpp src/loaders/imageAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelLoader.cpp src/loaders/modelLoader.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/configAsset.cpp src/loaders/configAsset.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/configLoader.cpp src/loaders/configLoader.h)
 
 add_executable(BlockHop ${SOURCE_FILES})
 

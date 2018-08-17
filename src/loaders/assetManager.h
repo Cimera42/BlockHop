@@ -9,6 +9,7 @@
 #include <string>
 #include <json.hpp>
 #include "assetLoader.h"
+#include "configLoader.h"
 #include "imageLoader.h"
 #include "modelLoader.h"
 #include "../logger.h"
@@ -39,6 +40,10 @@ public:
 	~AssetManager();
 
 	void readConfig();
+	/*
+	 * Load default assets after reading config, at a convenient time
+	 */
+	void loadDefault();
 
 	/*
 	 * Singleton pattern. Must use i()-> to access any class methods.

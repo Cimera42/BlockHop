@@ -19,6 +19,7 @@ protected:
 	//Array of all assets that are loaded
 	std::map<std::string, BaseAsset*> fileList; //Raw image data
 	//A default asset that is gauranteed to exist
+	std::string defaultFilename;
 	BaseAsset* defaultAsset;
 
 	/*

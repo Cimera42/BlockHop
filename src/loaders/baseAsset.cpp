@@ -17,6 +17,12 @@ bool BaseAsset::load() {
 	return false;
 }
 
+bool BaseAsset::save() {
+	Logger()<<"Default save implementation being used to save '"<<filename<<"'. "
+			"Please implement an asset class for this extension correctly."<<std::endl;
+	return false;
+}
+
 std::string BaseAsset::getName() {
 	return filename;
 }

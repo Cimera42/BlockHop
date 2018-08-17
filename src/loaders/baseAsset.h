@@ -10,6 +10,8 @@
 class BaseAsset {
 	friend class AssetLoader;
 	virtual bool load();
+	// Be careful with save functionality. Only want to use it in scene editors or client side configs
+	virtual bool save();
 protected:
 	std::string filename = "";
 public:

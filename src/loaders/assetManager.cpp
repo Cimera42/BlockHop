@@ -11,7 +11,8 @@ AssetManager::AssetManager() {}
 
 void AssetManager::readConfig(){
 
-	//TODO possibly replace this with non-hard? Is it worth it?
+	//TODO possibly replace this with non-hard? Is it worth it? - No its not, just remember to do it
+	exportedLoaders.insert(std::pair<std::string, AssetLoader*>("config", new ConfigLoader()));
 	exportedLoaders.insert(std::pair<std::string, AssetLoader*>("image", new ImageLoader()));
 	exportedLoaders.insert(std::pair<std::string, AssetLoader*>("model", new ModelLoader()));
 
@@ -42,7 +43,7 @@ void AssetManager::readConfig(){
 				}
 			}
 			if(it != exportedLoaders.end()) {
-				it->second->defaultAsset = loadSync(loaderType["default"]["filename"]);
+				it->second->defaultFilename = loaderType["default"]["filename"];
 			}
 		}
 	}catch (std::invalid_argument invalidArgument) {
@@ -55,6 +56,13 @@ void AssetManager::readConfig(){
 	}
 
 	i.close();
+}
+
+void AssetManager::loadDefault() {
+	// Load all default assets after we have primed our loaders and setup the engine
+	for( auto it = exportedLoaders.begin(); it != exportedLoaders.end(); it++) {
+		it->second->defaultAsset = loadSync(it->second->defaultFilename);
+	}
 }
 
 AssetManager::~AssetManager() {
