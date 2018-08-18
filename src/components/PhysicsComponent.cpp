@@ -11,6 +11,7 @@
 #include <bullet3/btBulletCollisionCommon.h>
 #include <bullet3/BulletCollision/Gimpact/btGImpactShape.h>
 #include <bullet3/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
+#include <stb_image.h>
 
 COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
 
@@ -26,10 +27,10 @@ void PhysicsComponent::setValues(json inValues)
 {
 	jsonData = inValues;
 
+	mass = inValues["mass"];
+
 	principalTransform.setIdentity();
 	collisionShape = loadShape(inValues);
-
-	mass = inValues["mass"];
 }
 
 btCollisionShape* PhysicsComponent::loadShape(json inValues)
@@ -147,20 +148,32 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 		else
 			return new btBvhTriangleMeshShape(triangleMesh, true);
 	}
-//	else if(shapeName == "terrain")
-//	{
-//		btHeightfieldTerrainShape
-//		mass = 0
+	else if(shapeName == "terrain")
+	{
+		mass = 0;
 
-//		width
-//		height
-// 		data
-//		height scale
-//		minheight
-//		maxheight
-//		upaxis = 1 //up
-//		heightdatatype
-//		flipquadedges?
-//		return new btHeightfieldTerrainShape();
-//	}
+		int comp, dataWidth, dataHeight;
+		std::string filename = inValues["filename"];
+		stbi_uc* heightData = stbi_load(filename.c_str(), &dataWidth, &dataHeight, &comp, STBI_rgb);
+		if(!heightData)
+			throw std::runtime_error("Heightmap could not be loaded");
+
+		float lowerHeight = inValues["lowerHeight"];
+		float upperHeight = inValues["upperHeight"];
+		float heightRange = upperHeight - lowerHeight;
+
+		auto shape = new btHeightfieldTerrainShape(
+			inValues["width"],
+			inValues["depth"],
+			heightData,
+			heightRange/256.0f,
+			lowerHeight,
+			upperHeight,
+			1,
+			PHY_UCHAR,
+			true
+		);
+		shape->setLocalScaling(btVector3(1/10.0f, 1, 1/10.0f));
+		return shape;
+	}
 }

@@ -30,6 +30,7 @@ public:
 	int force;
 
 	static std::map<Entity*, HitData> hitEntities;
+	static int indicatorAccumulator;
 
 	void runSystemFunction(SystemBase* s);
 	bool entityCheck(SystemBase* s, Entity* e);

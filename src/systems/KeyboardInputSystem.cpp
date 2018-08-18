@@ -7,6 +7,7 @@
 #include "../window.h"
 #include "../components/TransformComponent.h"
 #include "../components/KeyboardControlComponent.h"
+#include "../triggers/ClickedTrigger.h"
 
 SYSTEM_EXPORT(KeyboardInputSystem, "keyboardInputSystem")
 
@@ -50,32 +51,41 @@ void KeyboardInputSystem::update(double dt)
 			displaced -= transform->getUp() * ((float)dt) * 5.0f;
 
 		transform->setPosition(displaced);
+	}
 
+	if(isKeyPressed(GLFW_KEY_R))
+	{
+		std::vector<std::string> comps = {"transformComponent",
+										  "physicsComponent",
+										  "animatedModelComponent"};
+		std::vector<std::string> trigs = {"clickedTrigger"};
 
-		if(isKeyPressed(GLFW_KEY_R))
+		json tj = {
+			{"position",{2.5, 10, 0}},
+			{"rotation",{1, 0, 0, 0}},
+			{"scale",{1, 1, 1}}
+		};
+		json pj = {
+			{"colliderShape","cube"},
+			{"halfDimensions", {1, 1, 1}},
+			{"mass", 0.5}
+		};
+		json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
+		std::vector<json> compData = {tj,pj,aj};
+
+		json ct = {{"force", rand() % 100 + 1}};
+		std::vector<json> trigData = {ct};
+
+		ECSManager::i()->createEntity("projectile", comps, compData, trigs, trigData);
+	}
+	if(isKeyPressed(GLFW_KEY_T))
+	{
+		std::string entname = "RaycastIndicator";
+		entname += std::to_string(ClickedTrigger::indicatorAccumulator);
+		auto indicator = ECSManager::i()->findEntity(entname);
+		if(indicator)
 		{
-			std::vector<std::string> comps = {"transformComponent",
-											  "physicsComponent",
-											  "animatedModelComponent"};
-			std::vector<std::string> trigs = {"clickedTrigger"};
-
-			json tj = {
-				{"position",{2.5, 10, 0}},
-	 			{"rotation",{1, 0, 0, 0}},
-   				{"scale",{1, 1, 1}}
-	 		};
-			json pj = {
-				{"colliderShape","cube"},
-				{"halfDimensions", {1, 1, 1}},
-				{"mass", 0.5}
-			};
-			json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
-			std::vector<json> compData = {tj,pj,aj};
-
-			json ct = {{"force", rand() % 100 + 1}};
-			std::vector<json> trigData = {ct};
-
-			ECSManager::i()->createEntity("projectile", comps, compData, trigs, trigData);
+			ClickedTrigger::indicatorAccumulator++;
 		}
 	}
 }

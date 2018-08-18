@@ -37,6 +37,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/systems/MouseInputSystem.cpp src/systems/Mo
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/KeyboardInputSystem.cpp src/systems/KeyboardInputSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/MouseButtonSystem.cpp src/systems/MouseButtonSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/PhysicsSystem.cpp src/systems/PhysicsSystem.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/systems/TerrainSystem.cpp src/systems/TerrainSystem.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TestComponent.cpp src/components/TestComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TimeoutComponent.cpp src/components/TimeoutComponent.h)
@@ -48,6 +49,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/CameraComponent.cpp src/componen
 set(SOURCE_FILES ${SOURCE_FILES} src/components/MouseControlComponent.cpp src/components/MouseControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/KeyboardControlComponent.cpp src/components/KeyboardControlComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/PhysicsComponent.cpp src/components/PhysicsComponent.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/components/TerrainComponent.cpp src/components/TerrainComponent.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/triggers/ClickedTrigger.cpp src/triggers/ClickedTrigger.h)
 

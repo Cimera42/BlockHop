@@ -89,6 +89,14 @@
 			"trigsToAttach": []
 		},
 		{
+			"name": "terrainSystem",
+			"compsToSub": [
+				"transformComponent",
+				"terrainComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
 			"name": "textSystem",
 			"compsToSub": [
 				"transformComponent",
@@ -637,25 +645,6 @@
             ]
 		},
 		{
-			"name": "RaycastIndicator",
-			"components": [
-				{
-					"name": "transformComponent",
-					"values": {
-						"position": [0, 0, 0],
-						"rotation": [1, 0, 0, 0],
-						"scale": [0.1, 0.1, 0.1]
-					}
-				},
-				{
-					"name": "animatedModelComponent",
-					"values": {
-						"filename": "./assets/models/Sphere/sphere.fbx"
-					}
-				}
-			]
-		},
-		{
 			"name": "RollyBall",
 			"components": [
 				{
@@ -844,6 +833,41 @@
 					"name": "clickedTrigger",
 					"values": {
 						"force": 10
+					}
+				}
+			]
+		},
+		{
+			"name": "Terrain",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [20,-2,-20],
+						"rotation": [1,0,0,0],
+						"scale": [1,1,1]
+					}
+				},
+				{
+					"name": "terrainComponent",
+					"values": {
+						"filename": "./assets/textures/island.png",
+						"width": 40,
+						"depth": 40,
+						"lowerHeight": 0,
+						"upperHeight": 2
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"mass": 1,
+						"colliderShape": "terrain",
+						"filename": "./assets/textures/island.png",
+						"width": 464,
+						"depth": 464,
+						"lowerHeight": 0,
+						"upperHeight": 2
 					}
 				}
 			]

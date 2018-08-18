@@ -67,7 +67,7 @@ public:
 			return static_cast<T*>(*it);
 		return nullptr;
 	}
-private:
+//private:
 	/*
 	 * Functions for adding/removing triggers from entities.
 	 * Called upon attaching a component to a system

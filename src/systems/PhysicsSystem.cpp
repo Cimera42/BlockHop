@@ -323,7 +323,6 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 	btScalar mass(physicsComp->mass);
 	btVector3 localInertia(0,0,0);
 	physicsComp->collisionShape->calculateLocalInertia(mass, localInertia);
-	Logger() << entSubbed->getName() << ": " << localInertia;
 
 	btMotionState* motionState = new btDefaultMotionState(transform * physicsComp->principalTransform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(

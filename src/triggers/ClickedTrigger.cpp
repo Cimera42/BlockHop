@@ -12,6 +12,7 @@
 TRIGGER_EXPORT(ClickedTrigger, "clickedTrigger");
 
 std::map<Entity*, HitData> ClickedTrigger::hitEntities;
+int ClickedTrigger::indicatorAccumulator = 0;
 
 ClickedTrigger::ClickedTrigger(){
 	// Register all functions that handle actions
@@ -69,9 +70,34 @@ void ClickedTrigger::runSystemFunction(SystemBase* sys) {
 
 			// Get Entity "PickPos"
 			// Set position worldHit
-			auto indicator = ECSManager::i()->findEntity("RaycastIndicator");
-			auto indicatorTransform = indicator->getComponent<TransformComponent>();
-			indicatorTransform->setPosition(glm::vec3(worldHit.x(),worldHit.y(),worldHit.z()));
+			std::string indicatorName = "RaycastIndicator";
+			indicatorName += std::to_string(indicatorAccumulator);
+			auto indicator = ECSManager::i()->findEntity(indicatorName);
+			if(indicator)
+			{
+				auto indicatorTransform = indicator->getComponent<TransformComponent>();
+				indicatorTransform->setPosition(glm::vec3(worldHit.x(),worldHit.y(),worldHit.z()));
+			}
+			else
+			{
+				std::vector<std::string> comps = {
+					"transformComponent",
+					"animatedModelComponent"
+				};
+				std::vector<std::string> trigs = {};
+
+				json tj = {
+					{"position",{worldHit.x(),worldHit.y(),worldHit.z()}},
+					{"rotation",{1, 0, 0, 0}},
+					{"scale",{0.1, 0.1, 0.1}}
+				};
+				json aj = {{"filename","./assets/models/Sphere/sphere.fbx"}};
+				std::vector<json> compData = {tj,aj};
+
+				std::vector<json> trigData = {};
+
+				ECSManager::i()->createEntity(indicatorName, comps, compData, trigs, trigData);
+			}
 		}
 	}
 }
