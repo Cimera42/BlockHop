@@ -864,10 +864,13 @@
 						"mass": 1,
 						"colliderShape": "terrain",
 						"filename": "./assets/textures/island.png",
-						"width": 464,
-						"depth": 464,
+						"width": 40,
+						"depth": 40,
 						"lowerHeight": 0,
-						"upperHeight": 2
+						"upperHeight": 2,
+						"offset": {
+							"position": [20,1,20]
+						}
 					}
 				}
 			]

@@ -306,6 +306,7 @@ btTypedConstraint * PhysicsSystem::makeJoint(json jointData, btRigidBody *rigidB
 		}
 		return genericJoint;
 	}
+	return nullptr;
 }
 
 void PhysicsSystem::subscribeCallback(Entity *entSubbed)
@@ -317,8 +318,8 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 
 	btTransform transform;
 	transform.setIdentity();
-	transform.setOrigin(btVector3(startPos.x, startPos.y, startPos.z));
-	transform.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
+	transform.setOrigin(btVector3(startPos.x, startPos.y, startPos.z) + physicsComp->offsetPos);
+	transform.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w) * physicsComp->offsetRot);
 
 	btScalar mass(physicsComp->mass);
 	btVector3 localInertia(0,0,0);
@@ -400,8 +401,8 @@ void PhysicsSystem::update(double dt)
 			btTransform transform;
 			rb->getMotionState()->getWorldTransform(transform);
 			transform = transform * physicsComp->principalTransform.inverse();
-			btVector3 pos = transform.getOrigin();
-			btQuaternion rot = transform.getRotation();
+			btVector3 pos = transform.getOrigin() - physicsComp->offsetPos;
+			btQuaternion rot = transform.getRotation() * (-physicsComp->offsetRot);
 			transformComp->setPosition(glm::vec3(pos.getX(), pos.getY(), pos.getZ()));
 			transformComp->setRotation(glm::quat(rot.getW(), rot.getX(), rot.getY(), rot.getZ()));
 		}

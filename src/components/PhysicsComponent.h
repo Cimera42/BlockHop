@@ -23,6 +23,9 @@ public:
 	btTransform principalTransform;
 	btRigidBody* rigidBody;
 
+	btVector3 offsetPos;
+	btQuaternion offsetRot;
+
 	json jsonData;
 
 	friend std::ostream &operator<< (std::ostream &os, PhysicsComponent const &c) {

@@ -45,6 +45,7 @@ BaseAsset* AssetLoader::loadAsset(std::string filename, BaseAsset* newAsset){
 BaseAsset* AssetLoader::loadAsset(std::string filename) {
 	Logger()<<"Default asset type attempting to be used for loading '"<<filename<<"'. "
 			"Please implement a loader with loadAsset and a correct asset type to use correctly.";
+	return nullptr;
 }
 
 bool AssetLoader::assetExists(std::string filename) {

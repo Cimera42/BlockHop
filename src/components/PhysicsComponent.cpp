@@ -13,6 +13,10 @@
 #include <bullet3/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
 #include <stb_image.h>
 
+#define IF_FIND(name, source, lookFor) \
+	auto (name) = (source).find(lookFor); \
+	if((name) != (source).end()) \
+
 COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
 
 PhysicsComponent::PhysicsComponent() {}
@@ -28,6 +32,20 @@ void PhysicsComponent::setValues(json inValues)
 	jsonData = inValues;
 
 	mass = inValues["mass"];
+
+	offsetPos = btVector3(0,0,0);
+	offsetRot = btQuaternion(0,0,0,1);
+	IF_FIND(offset, inValues, "offset")
+	{
+		IF_FIND(pos, *offset, "position")
+		{
+			offsetPos = *pos;
+		}
+		IF_FIND(rot, *offset, "rotation")
+		{
+			offsetRot = *rot;
+		}
+	}
 
 	principalTransform.setIdentity();
 	collisionShape = loadShape(inValues);
@@ -154,7 +172,7 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 
 		int comp, dataWidth, dataHeight;
 		std::string filename = inValues["filename"];
-		stbi_uc* heightData = stbi_load(filename.c_str(), &dataWidth, &dataHeight, &comp, STBI_rgb);
+		stbi_uc* heightData = stbi_load(filename.c_str(), &dataWidth, &dataHeight, &comp, STBI_grey);
 		if(!heightData)
 			throw std::runtime_error("Heightmap could not be loaded");
 
@@ -163,8 +181,8 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 		float heightRange = upperHeight - lowerHeight;
 
 		auto shape = new btHeightfieldTerrainShape(
-			inValues["width"],
-			inValues["depth"],
+			dataWidth,
+			dataHeight,
 			heightData,
 			heightRange/256.0f,
 			lowerHeight,
@@ -173,7 +191,10 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 			PHY_UCHAR,
 			true
 		);
-		shape->setLocalScaling(btVector3(1/10.0f, 1, 1/10.0f));
+		float xScale = inValues["width"].get<float>()/dataWidth;
+		float zScale = inValues["depth"].get<float>()/dataHeight;
+		shape->setLocalScaling(btVector3(xScale, 1, zScale));
 		return shape;
 	}
+	return nullptr;
 }
