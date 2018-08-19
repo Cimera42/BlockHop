@@ -855,7 +855,11 @@
 						"width": 40,
 						"depth": 40,
 						"lowerHeight": 0,
-						"upperHeight": 2
+						"upperHeight": 5,
+						"textures": [
+							"./assets/textures/rock.jpg",
+							"./assets/textures/sand.jpg"
+						]
 					}
 				},
 				{
@@ -867,9 +871,9 @@
 						"width": 40,
 						"depth": 40,
 						"lowerHeight": 0,
-						"upperHeight": 2,
+						"upperHeight": 5,
 						"offset": {
-							"position": [20,1,20]
+							"position": [20,2.5,20]
 						}
 					}
 				}

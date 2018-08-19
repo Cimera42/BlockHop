@@ -6,6 +6,7 @@
 #include "../ecs/ecsManager.h"
 #include <stb_image.h>
 #include "../openGLFunctions.h"
+#include "../loaders/assetManager.h"
 
 COMPONENT_EXPORT(TerrainComponent, "terrainComponent")
 
@@ -88,6 +89,10 @@ void TerrainComponent::setValues(json inValues)
 		vertex.normal = glm::normalize(vertex.normal);
 //		vertex.normal = (vertex.normal + glm::vec3(1))/2.0f;
 	}
+
+	std::vector<std::string> textureFilenames = inValues["textures"];
+	ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
+	texture = imgLoader->loadTexture(textureFilenames);
 
 	genBuffers();
 }

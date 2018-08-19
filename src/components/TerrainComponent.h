@@ -35,6 +35,8 @@ public:
 	std::vector<TerrainVertex> vertices;
 	std::vector<unsigned int> indices;
 
+	GLuint texture;
+
 	GLuint VAO;
 	GLuint vertexBuffer;
 	GLuint indexBuffer;

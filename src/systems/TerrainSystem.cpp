@@ -46,9 +46,9 @@ void TerrainSystem::update(double dt)
 		glUniformMatrix4fv(terrainShader->getLoc("modelMat"), 1, GL_FALSE, &modelMatrix[0][0]);
 
 		//Bind texture
-//		glSetActiveTexture(GL_TEXTURE0);
-//		glSetBindTexture(GL_TEXTURE_2D_ARRAY, animatedModel->modelAsset->texture);
-//		glUniform1i(terrainShader->getLoc("textureSampler"), 0);
+		glSetActiveTexture(GL_TEXTURE0);
+		glSetBindTexture(GL_TEXTURE_2D_ARRAY, terrain->texture);
+		glUniform1i(terrainShader->getLoc("textureSampler"), 0);
 
 		glSetBindVertexArray(terrain->VAO);
 		glDrawElements(GL_TRIANGLES, (GLint) terrain->indices.size(), GL_UNSIGNED_INT, 0);
