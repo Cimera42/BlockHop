@@ -12,10 +12,10 @@ Was initially intended as a playground to get features I haven't done properly b
 
 | Feature            | Backend            | ECS Interface |
 |--------------------|--------------------|---------------|
-| Skeletal animation | Completed          | Working   |
+| Skeletal animation | Completed, needs refactoring          | Working   |
 | SDF text rendering | Completed          | Working   |
-| Sound              | Started            | Not Started   |
-| Physics engine     | [BulletPhysics](https://github.com/bulletphysics/bullet3) | Started   |
+| Sound              | Research            | Not Started   |
+| Physics engine     | [BulletPhysics](https://github.com/bulletphysics/bullet3) | Working |
 
 ### Models
 Models made using Blender and exported as [`.fbx`](https://en.wikipedia.org/wiki/FBX).
