@@ -21,12 +21,16 @@ public:
 
 	float mass;
 	btTransform principalTransform;
+	btMotionState* motionState;
 	btRigidBody* rigidBody;
 
 	btVector3 offsetPos;
 	btQuaternion offsetRot;
 
 	json jsonData;
+	std::vector<btTypedConstraint*> joints;
+
+	std::vector<std::function<void()>> destructors;
 
 	friend std::ostream &operator<< (std::ostream &os, PhysicsComponent const &c) {
 		os << "PhysicsComponent";

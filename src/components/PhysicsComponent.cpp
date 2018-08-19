@@ -7,6 +7,7 @@
 #include "../mesh.h"
 #include "../loaders/modelAsset.h"
 #include "../loaders/assetManager.h"
+#include "../systems/PhysicsSystem.h"
 
 #include <bullet3/btBulletCollisionCommon.h>
 #include <bullet3/BulletCollision/Gimpact/btGImpactShape.h>
@@ -20,7 +21,24 @@
 COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
 
 PhysicsComponent::PhysicsComponent() {}
-PhysicsComponent::~PhysicsComponent() {}
+PhysicsComponent::~PhysicsComponent()
+{
+	for(const std::function<void()> &destructor : destructors)
+	{
+		destructor();
+	}
+	auto physSystem = ECSManager::i()->findSystem<PhysicsSystem>();
+	for(auto joint : joints)
+	{
+		//TODO Gives unaddressable memory error
+		physSystem->dynamicsWorld->removeConstraint(joint);
+		delete joint;
+	}
+	physSystem->dynamicsWorld->removeRigidBody(rigidBody);
+	delete motionState;
+	delete rigidBody;
+	delete collisionShape;
+}
 
 btVector3 glmToBtWithRotation(glm::vec3 in)
 {
@@ -144,10 +162,6 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 		{
 			triangleMesh->findOrAddVertex(glmToBtWithRotation(vertex), false);
 		}
-//		for(auto index : mesh->indices)
-//		{
-//			triangleMesh->addIndex(index);
-//		}
 		for(int i = 0; i < mesh->indices.size(); i+=3)
 		{
 			triangleMesh->addTriangleIndices(
@@ -194,6 +208,10 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 		float xScale = inValues["width"].get<float>()/dataWidth;
 		float zScale = inValues["depth"].get<float>()/dataHeight;
 		shape->setLocalScaling(btVector3(xScale, 1, zScale));
+		destructors.emplace_back([heightData](){
+			Logger() << "Heightdata " << (void*)heightData << " destroyed.";
+			stbi_image_free(heightData);
+		});
 		return shape;
 	}
 	return nullptr;

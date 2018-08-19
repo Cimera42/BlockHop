@@ -4,6 +4,7 @@
 #include "scenes/MainGameScene.h"
 #include "loaders/assetManager.h"
 #include "logger.h"
+#include "ecs/ecsManager.h"
 
 Window* window;
 bool shouldExit = false;
@@ -50,6 +51,7 @@ int main()
 		glfwSwapBuffers(window->glfwWindow);
 	}
 
+	delete ECSManager::i();
 	delete window;
 	glfwTerminate();
 	return 0;

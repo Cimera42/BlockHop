@@ -14,7 +14,6 @@ uniform sampler2DArray textureSampler;
 void main()
 {
     float intensity = clamp(dot(normalize(vec3(1,1,1)), inNorm), 0,1);
-    intensity = min(intensity + 0.3, 1);
     vec3 colour = texture(textureSampler, vec3(inUV, inMaterialIndex)).rgb;
     colour *= intensity;
 

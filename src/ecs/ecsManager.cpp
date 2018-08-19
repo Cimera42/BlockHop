@@ -6,7 +6,24 @@
 ECSManager *ECSManager::c_instance = 0;
 
 ECSManager::ECSManager() {}
-ECSManager::~ECSManager() {}
+ECSManager::~ECSManager()
+{
+	for(auto entity : gameEntities)
+	{
+		Logger() << "Deleting entity " << entity.second->getName();
+		delete entity.second;
+	}
+	for(auto system : gameSystems)
+	{
+		Logger() << "Deleting system " << system.second->getName();
+		delete system.second;
+	}
+	for(auto trigger : gameTriggers)
+	{
+		Logger() << "Deleting trigger " << trigger.second->getName();
+		delete trigger.second;
+	}
+}
 
 //TODO upon failure of creation, need to actually unsubscribe/deallocate resources!
 

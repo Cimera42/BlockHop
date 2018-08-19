@@ -325,10 +325,10 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 	btVector3 localInertia(0,0,0);
 	physicsComp->collisionShape->calculateLocalInertia(mass, localInertia);
 
-	btMotionState* motionState = new btDefaultMotionState(transform * physicsComp->principalTransform);
+	physicsComp->motionState = new btDefaultMotionState(transform * physicsComp->principalTransform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(
 			mass,
-			motionState,
+			physicsComp->motionState,
 			physicsComp->collisionShape,
 			localInertia
 	);
@@ -367,7 +367,9 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 			{
 				collide = *collideData;
 			}
-			dynamicsWorld->addConstraint(makeJoint(jointData, rigidBody, entSubbed, physicsComp), collide);
+			auto joint = makeJoint(jointData, rigidBody, entSubbed, physicsComp);
+			physicsComp->joints.emplace_back(joint);
+			dynamicsWorld->addConstraint(joint, collide);
 		}
 	}
 }

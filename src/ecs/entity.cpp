@@ -5,7 +5,21 @@ Entity::Entity(std::string inName)
 {
 	name = inName;
 }
-Entity::~Entity(){}
+Entity::~Entity()
+{
+	Logger() << "\tComponents:";
+	for(auto component : subbedComponents)
+	{
+		Logger() << "\t\tDeleting " << component->getName() << " from " << getName();
+		delete component;
+	}
+	Logger() << "\tTriggers:";
+	for(auto trigger : subbedTriggers)
+	{
+		Logger() << "\t\tDeleting " << trigger->getName() << " from " << getName();
+		delete trigger;
+	}
+}
 
 void Entity::addComponent(ComponentBase* comp) {
 	subbedComponents.push_back(comp);
@@ -20,10 +34,13 @@ void Entity::removeComponent(std::string compName) {
 	});
 
 	if (it != subbedComponents.end())
+	{
 		subbedComponents.erase(it);
-	//After updating our subscribed components, do system unsubscription
-	unsubscribeFromSystems();
-	unsubscribeToActions();
+		delete *it;
+		//After updating our subscribed components, do system unsubscription
+		unsubscribeFromSystems();
+		unsubscribeToActions();
+	}
 }
 
 void Entity::addTrigger(TriggerBase *trig) {
@@ -39,7 +56,10 @@ void Entity::removeTrigger(std::string trigName) {
 	});
 
 	if (it != subbedTriggers.end())
+	{
 		subbedTriggers.erase(it);
+		delete *it;
+	}
 }
 
 std::vector<std::string> Entity::getComponents() const {
