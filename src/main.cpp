@@ -52,6 +52,7 @@ int main()
 	}
 
 	delete ECSManager::i();
+	delete AssetManager::i();
 	delete window;
 	glfwTerminate();
 	return 0;

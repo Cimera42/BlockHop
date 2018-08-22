@@ -28,7 +28,18 @@ glm::mat4 AToGMat(aiMatrix4x4 aiMat)
 }
 
 AnimatedModelComponent::AnimatedModelComponent() {}
-AnimatedModelComponent::~AnimatedModelComponent() {}
+AnimatedModelComponent::~AnimatedModelComponent()
+{
+	for(auto chBm : changingBoneMeshes)
+		delete chBm.second;
+	for(auto chNode : changingNodes)
+		delete chNode.second;
+}
+BoneMeshChanging::~BoneMeshChanging()
+{
+	for(auto chBone : changingBones)
+		delete chBone;
+}
 
 void AnimatedModelComponent::setValues(json inValues)
 {

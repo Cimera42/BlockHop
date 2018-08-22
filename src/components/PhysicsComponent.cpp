@@ -31,7 +31,7 @@ PhysicsComponent::~PhysicsComponent()
 	for(auto joint : joints)
 	{
 		//TODO Gives unaddressable memory error
-		physSystem->dynamicsWorld->removeConstraint(joint);
+//		physSystem->dynamicsWorld->removeConstraint(joint);
 		delete joint;
 	}
 	physSystem->dynamicsWorld->removeRigidBody(rigidBody);
@@ -170,6 +170,11 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 				mesh->indices[i+2]
 			);
 		}
+
+		destructors.emplace_back([triangleMesh](){
+			Logger() << "Trianglemesh " << (void*)triangleMesh << " destroyed.";
+			delete triangleMesh;
+		});
 
 		if(mass != 0)
 		{
