@@ -27,6 +27,8 @@ PhysicsComponent::~PhysicsComponent()
 	{
 		destructor();
 	}
+	delete motionState;
+	delete collisionShape;
 	auto physSystem = ECSManager::i()->findSystem<PhysicsSystem>();
 	for(auto joint : joints)
 	{
@@ -35,9 +37,7 @@ PhysicsComponent::~PhysicsComponent()
 		delete joint;
 	}
 	physSystem->dynamicsWorld->removeRigidBody(rigidBody);
-	delete motionState;
 	delete rigidBody;
-	delete collisionShape;
 }
 
 btVector3 glmToBtWithRotation(glm::vec3 in)
