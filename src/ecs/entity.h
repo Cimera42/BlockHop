@@ -58,16 +58,16 @@ public:
 	}
 
 	template <typename T>
-	T* getTrigger(std::string trigName) {
-		auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [&trigName](TriggerBase*& o) {
-			return (o->getName() == trigName);
+	T* getTrigger() {
+		auto it = std::find_if(subbedTriggers.begin(), subbedTriggers.end(), [](TriggerBase*& o) {
+			return (o->getName() == Trigger<T>::name);
 		});
 
 		if (it != subbedTriggers.end())
 			return static_cast<T*>(*it);
 		return nullptr;
 	}
-private:
+//private:
 	/*
 	 * Functions for adding/removing triggers from entities.
 	 * Called upon attaching a component to a system

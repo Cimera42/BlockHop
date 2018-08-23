@@ -9,23 +9,33 @@
 #include "../systems/PhysicsSystem.h"
 #include <glm/glm.hpp>
 
-class ClickedTrigger : public Trigger<ClickedTrigger> {
-	void runBox2(SystemBase* sys, Entity* ent);
-	void runBox(SystemBase* sys, Entity* ent);
+struct HitData
+{
+	btVector3 direction;
+	btVector3 localPoint;
 
+//	friend std::ostream &operator<< (std::ostream &os, HitData const &c) {
+//		os << c.direction << " - " << c.localPoint;
+//		return os;
+//	}
+};
+
+class ClickedTrigger : public Trigger<ClickedTrigger>
+{
 public:
 	ClickedTrigger();
 	~ClickedTrigger();
 	void setValues(json inValues);
 
-	static rp3d::RigidBody* clicked;
-	static rp3d::Vector3 worldPoint;
-	static glm::vec3 direction;
-
 	int force;
+
+	static std::map<Entity*, HitData> hitEntities;
+	static int indicatorAccumulator;
 
 	void runSystemFunction(SystemBase* s);
 	bool entityCheck(SystemBase* s, Entity* e);
+
+	void doForce(SystemBase* s, Entity* e);
 };
 
 #endif //BLOCKHOP_CLICKEDTRIGGER_H

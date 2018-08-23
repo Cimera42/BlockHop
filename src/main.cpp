@@ -4,6 +4,7 @@
 #include "scenes/MainGameScene.h"
 #include "loaders/assetManager.h"
 #include "logger.h"
+#include "ecs/ecsManager.h"
 
 Window* window;
 bool shouldExit = false;
@@ -16,7 +17,6 @@ void windowCloseEvent(GLFWwindow *closingWindow)
 int main()
 {
 	Logger() << "First Line of Program";
-
 	initGLFW();
 
 	window = new Window("Template", 640, 480);
@@ -51,6 +51,8 @@ int main()
 		glfwSwapBuffers(window->glfwWindow);
 	}
 
+	delete ECSManager::i();
+	delete AssetManager::i();
 	delete window;
 	glfwTerminate();
 	return 0;

@@ -12,13 +12,13 @@ SYSTEM_EXPORT(MouseButtonSystem, "mouseButtonSystem")
 extern Window* window;
 void mouseButtonEvent(GLFWwindow* inWindow, int buttonCode, int action, int modifiers);
 
-MouseButtonSystem::MouseButtonSystem() 
+MouseButtonSystem::MouseButtonSystem()
 {
 	glfwSetMouseButtonCallback(window->glfwWindow, mouseButtonEvent);
 }
 MouseButtonSystem::~MouseButtonSystem() {}
 
-void MouseButtonSystem::update(double dt) 
+void MouseButtonSystem::update(double dt)
 {
 	/*
 	updateSystemTriggers();
@@ -27,7 +27,7 @@ void MouseButtonSystem::update(double dt)
 	{
 		updateEntityTriggers(entity);
 
-		//XComponent* x = entity->getComponent<XComponent>("xComponent");
+		//XComponent* x = entity->getComponent<XComponent>();
 	}*/
 }
 
@@ -46,6 +46,6 @@ bool MouseButtonSystem::isButtonPressed(int buttonCode)
 
 void mouseButtonEvent(GLFWwindow* inWindow, int buttonCode, int action, int modifiers)
 {
-	MouseButtonSystem* mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>("mouseButtonSystem");
+	MouseButtonSystem* mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>();
 	mouseButtonSystem->buttonList[buttonCode] = action;
 }

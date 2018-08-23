@@ -53,8 +53,10 @@ struct Animation
 
 	std::map<std::string, AnimationNode*> animationNodes;
 	std::map<std::string, aiNodeAnim*> animNodes;
-	
+
 	aiNodeAnim* FindAnimNode(std::string findThis);
+
+	~Animation();
 };
 
 struct NodePart

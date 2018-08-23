@@ -10,11 +10,11 @@ COMPONENT_EXPORT(MouseControlComponent, "mouseControlComponent")
 MouseControlComponent::MouseControlComponent() {}
 MouseControlComponent::~MouseControlComponent() {}
 
-void MouseControlComponent::setValues(json inValues) 
+void MouseControlComponent::setValues(json inValues)
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
-	xSensitivity = inValues["xSensitivity"].get<double>();
-	ySensitivity = inValues["ySensitivity"].get<double>();
+	xSensitivity = inValues["xSensitivity"];
+	ySensitivity = inValues["ySensitivity"];
 }
 
 double MouseControlComponent::getXSensitivity() const
