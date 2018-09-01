@@ -46,7 +46,10 @@ int main()
 
 	// Load background sample
 	wav.load("assets/Jo Blankenburg - Hyde.ogg");       // Load a wave file
-	soloud.play(wav);             // Play it
+	int handle1 = soloud.play(wav);             // Play it
+	soloud.setVolume(handle1, 0.5f);            // Set volume; 1.0f is "normal"
+	soloud.setPan(handle1, -0.2f);              // Set pan; -1 is left, 1 is right
+	soloud.setRelativePlaySpeed(handle1, 1.5f); // Play a bit slower; 1.0f is normal
 
 	std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
 	start = std::chrono::steady_clock::now();
@@ -66,6 +69,7 @@ int main()
 		glfwSwapBuffers(window->glfwWindow);
 	}
 
+	soloud.deinit();
 	delete ECSManager::i();
 	delete AssetManager::i();
 	delete window;
