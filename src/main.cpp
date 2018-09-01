@@ -6,6 +6,9 @@
 #include "logger.h"
 #include "ecs/ecsManager.h"
 
+#include <soloud/soloud.h>
+#include <soloud/soloud_wav.h>
+
 Window* window;
 bool shouldExit = false;
 
@@ -32,6 +35,18 @@ int main()
 	//Load scene from file
 	MainGameScene* currScene = new MainGameScene();
 	currScene->load();
+
+	// Declare some variables
+	SoLoud::Soloud soloud; // Engine core
+	SoLoud::Wav wav;       // One sample source
+
+	// Initialize SoLoud (automatic back-end selection)
+	// also, enable visualization for FFT calc
+	soloud.init();
+
+	// Load background sample
+	wav.load("assets/Jo Blankenburg - Hyde.ogg");       // Load a wave file
+	soloud.play(wav);             // Play it
 
 	std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
 	start = std::chrono::steady_clock::now();
