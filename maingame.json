@@ -103,6 +103,14 @@
 				"textComponent"
 			],
 			"trigsToAttach": []
+		},
+		{
+			"name": "soundSystem",
+			"compsToSub": [
+				"transformComponent",
+				"soundComponent"
+			],
+			"trigsToAttach": []
 		}
 	],
 	"entities": [
@@ -875,6 +883,25 @@
 						"offset": {
 							"position": [20,2.5,20]
 						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Terrain",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": [0,0,0],
+						"rotation": [1,0,0,0],
+						"scale": [1,1,1]
+					}
+				},
+				{
+					"name": "soundComponent",
+					"values": {
+						"filename": "assets/Jo Blankenburg - Hyde.ogg"
 					}
 				}
 			]
