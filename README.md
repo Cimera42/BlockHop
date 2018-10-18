@@ -20,9 +20,11 @@ Was initially intended as a playground to get features I haven't done properly b
 ### Models
 Models made using Blender and exported as [`.fbx`](https://en.wikipedia.org/wiki/FBX).
 
-**Blender export settings**
+#### Blender export settings
+
 ![Main settings](http://i.imgur.com/mVOLQEw.png)
 ![Geometry settings](http://i.imgur.com/uRBs5SY.png)
+
 ![Armature settings](http://i.imgur.com/rOiMFFx.png)
 ![Animation settings](http://i.imgur.com/DAE56IA.png)
 
