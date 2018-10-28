@@ -31,6 +31,10 @@ bool GameSettings::getWindowFullscreen() {
 	return clientConfig->config["windowFullscreen"];
 }
 
+bool GameSettings::getVSync() {
+	return clientConfig->config["windowVSync"];
+}
+
 // Setters to save us having to access config directly
 void GameSettings::setWindowName(std::string name) {
 	clientConfig->config["windowName"] = name;
@@ -48,9 +52,14 @@ void GameSettings::setWindowFullscreen(bool isFullscreen) {
 	clientConfig->config["windowFullscreen"] = isFullscreen;
 }
 
-void GameSettings::setWindow(std::string name, int width, int height, bool isFullscreen) {
+void GameSettings::setVSync(bool isVSync) {
+	clientConfig->config["windowVSync"] = isVSync;
+}
+
+void GameSettings::setWindow(std::string name, int width, int height, bool isFullscreen, bool isVSync) {
 	setWindowName(name);
 	setWindowWidth(width);
 	setWindowHeight(height);
 	setWindowFullscreen(isFullscreen);
+	setVSync(isVSync);
 }

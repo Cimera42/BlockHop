@@ -2,12 +2,13 @@
 #include "gameSettings.h"
 
 Window::Window(){};
-Window::Window(const char* inTitle, int inWidth, int inHeight, bool inFullscreen)
+Window::Window(const char* inTitle, int inWidth, int inHeight, bool inFullscreen, bool inVSync)
 {
 	title = inTitle;
 	width = inWidth;
 	height = inHeight;
 	isFullscreen = inFullscreen;
+	isVSync = inVSync;
 
 	createGLFWWindow();
 	resize(width, height, isFullscreen);
@@ -36,19 +37,24 @@ void Window::createGLFWWindow()
 
 	//glfwSetWindowUserPointer(glfwWindow, this);
 	//glfwSetWindowSizeCallback(glfwWindow, Window::resizeCallback );
-	glfwSwapInterval(1);
 }
 
 void Window::updateViewport() {
 	if ( _updateViewport )
 	{
 		// Update opengl
+		if (isVSync) {
+			glfwSwapInterval(1);
+		} else {
+			glfwSwapInterval(0);
+		}
+
 		int f1, f2;
 		glfwGetFramebufferSize( glfwWindow, &f1, &f2 );
 		glViewport( 0, 0, f1, f2 );
 
 		// Commit to saving new settings to file
-		GameSettings::get().setWindow(title,width,height,isFullscreen);
+		GameSettings::get().setWindow(title, width, height, isFullscreen, isVSync);
 		GameSettings::get().saveSettings();
 
 		_updateViewport = false;

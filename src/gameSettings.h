@@ -35,14 +35,16 @@ public:
 	int getWindowWidth();
 	int getWindowHeight();
 	bool getWindowFullscreen();
+	bool getVSync();
 
 	// Setters...
 	void setWindowName(std::string name);
 	void setWindowWidth(int width);
 	void setWindowHeight(int height);
 	void setWindowFullscreen(bool isFullscreen);
+	void setVSync(bool isVSync);
 	// Ability to set multiple at once for convenience
-	void setWindow(std::string name, int width, int height, bool isFullscreen);
+	void setWindow(std::string name, int width, int height, bool isFullscreen, bool isVSync);
 };
 
 

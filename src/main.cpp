@@ -33,7 +33,8 @@ int main()
 		GameSettings::get().getWindowName().c_str(),
 		GameSettings::get().getWindowWidth(),
 		GameSettings::get().getWindowHeight(),
-		GameSettings::get().getWindowFullscreen());
+		GameSettings::get().getWindowFullscreen(),
+		GameSettings::get().getVSync());
 	window->cursorMode(GLFW_CURSOR_DISABLED);
 
 	initGLEW();

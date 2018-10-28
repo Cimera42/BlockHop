@@ -9,13 +9,18 @@ class Window
 
 public:
 	Window();
-	Window(const char* title, int width, int height, bool fullscreen);
+	Window(const char* title,
+			int width,
+			int height,
+			bool fullscreen,
+			bool vsync);
 	~Window();
 
 	GLFWwindow* glfwWindow;
 	int width, height;
 	const char* title;
 	bool isFullscreen = false;
+	bool isVSync = true;
 
 	void updateViewport();
 	void destroy();
