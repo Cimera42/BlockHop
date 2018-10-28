@@ -45,15 +45,17 @@ private:
 public:
 	ECSManager(ECSManager const&) = delete;
 	void operator=(ECSManager const&) = delete;
-	/*
+	~ECSManager();
+		/*
 	 * Helper functions
 	 * Will return nullptr if a match cannot be found
 	 */
-	template <typename T>
-	T* findSystem(std::string name) {
+		template <typename T>
+		T *findSystem()
+	{
 		auto it =
-				std::find_if(gameSystems.begin(), gameSystems.end(), [&name](std::pair<std::string, SystemBase*> o) {
-					return (o.first == name);
+				std::find_if(gameSystems.begin(), gameSystems.end(), [](std::pair<std::string, SystemBase*> o) {
+					return (o.first == System<T>::name);
 				});
 		if(it != gameSystems.end())
 			return static_cast<T*>(it->second);

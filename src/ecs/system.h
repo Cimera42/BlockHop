@@ -98,6 +98,7 @@ private:
 template <typename T>
 class System : public SystemBase
 {
+public:
 	static const std::string name;
 	const std::string getName() final { return name; }
 

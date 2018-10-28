@@ -60,6 +60,8 @@ struct BoneMeshChanging
 	std::vector<glm::mat4> boneMats;
 
 	void transformBones(glm::mat4 inverseMesh);
+
+	~BoneMeshChanging();
 };
 
 class ModelAsset;

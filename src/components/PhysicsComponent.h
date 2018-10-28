@@ -6,23 +6,31 @@
 #define BLOCKHOP_PHYSICSCOMPONENT_H
 
 #include "../ecs/component.h"
-#include <reactphysics3d.h>
+#include <bullet3/btBulletDynamicsCommon.h>
 
 class PhysicsComponent : public Component<PhysicsComponent>
 {
-	rp3d::CollisionShape* collisionShape;
-	rp3d::ProxyShape* collisionShapeInstance;
-	rp3d::BodyType collisionMode;
-
 public:
+	btCollisionShape* collisionShape;
+	static bool exported;
+
 	PhysicsComponent();
 	~PhysicsComponent();
 	void setValues(json inValues);
+	btCollisionShape* loadShape(json inValues);
 
-	rp3d::CollisionShape *getCollisionShape() const;
-	void setCollisionShapeInstance(rp3d::ProxyShape *collisionShapeInstance);
-	rp3d::ProxyShape *getCollisionShapeInstance() const;
-	rp3d::BodyType getMode() const;
+	float mass;
+	btTransform principalTransform;
+	btMotionState* motionState;
+	btRigidBody* rigidBody;
+
+	btVector3 offsetPos;
+	btQuaternion offsetRot;
+
+	json jsonData;
+	std::vector<btTypedConstraint*> joints;
+
+	std::vector<std::function<void()>> destructors;
 
 	friend std::ostream &operator<< (std::ostream &os, PhysicsComponent const &c) {
 		os << "PhysicsComponent";

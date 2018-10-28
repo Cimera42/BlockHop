@@ -210,62 +210,6 @@
 			]
 		},
 		{
-			"name": "PhysicsEntity",
-			"components": [
-				{
-					"name": "transformComponent",
-					"values": {
-						"position": {
-							"x": 10,
-							"y": 0,
-							"z": 5
-						},
-						"rotation": {
-							"w": 1,
-							"x": 0,
-							"y": 0,
-							"z": 0
-						},
-						"scale": {
-							"x": 1,
-							"y": 1,
-							"z": 1
-						}
-					}
-				},
-				{
-					"name": "animatedModelComponent",
-					"values": {
-						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
-					}
-				},
-				{
-					"name": "physicsComponent",
-					"values": {
-						"mode": "dynamic",
-						"colliderShape": "cube",
-						"halfWidth": 1,
-						"halfHeight": 1,
-						"halfDepth": 1
-					}
-				},
-				{
-					"name": "testComponent",
-					"values": {
-						"test": false
-					}
-				}
-			],
-			"triggers": [
-				{
-					"name": "clickedTrigger",
-					"values": {
-						"force": 30
-					}
-				}
-			]
-		},
-		{
 			"name": "PhysicsPlane",
 			"components": [
 				{
@@ -298,11 +242,497 @@
 				{
 					"name": "physicsComponent",
 					"values": {
-						"mode": "static",
 						"colliderShape": "cube",
 						"halfWidth": 20,
 						"halfHeight": 0.5,
-						"halfDepth": 20
+						"halfDepth": 20,
+						"mass": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "PhysicsEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 8,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfWidth": 1,
+						"halfHeight": 1,
+						"halfDepth": 1,
+						"mass": 1,
+						"joints": [
+							{
+								"type": "BallSocket",
+								"pivotThis": {
+									"x": 0,
+									"y": 3,
+									"z": 0
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "PhysicsEntity1",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 4,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfWidth": 1,
+						"halfHeight": 1,
+						"halfDepth": 1,
+						"mass": 1,
+						"joints": [
+							{
+								"type": "BallSocket",
+								"pivotThis": {
+									"x": 0,
+									"y": 3,
+									"z": 0
+								},
+								"entity": "PhysicsEntity",
+								"pivotThat": {
+									"x": 0,
+									"y": 0,
+									"z": 0
+								}
+							}
+						]
+					}
+				},
+				{
+					"name": "testComponent",
+					"values": {
+						"test": false
+					}
+				}
+			],
+			"triggers": [
+				{
+					"name": "clickedTrigger",
+					"values": {
+						"force": 30
+					}
+				}
+			]
+		},
+		{
+			"name": "PhysicsEntity2",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 2,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfWidth": 1,
+						"halfHeight": 1,
+						"halfDepth": 1,
+						"mass": 1,
+						"joints": [
+							{
+								"type": "BallSocket",
+								"pivotThis": {
+									"x": 0,
+									"y": 3,
+									"z": 0
+								},
+								"entity": "PhysicsEntity1",
+								"pivotThat": {
+									"x": 0,
+									"y": 0,
+									"z": 0
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SliderEntity",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 5,
+							"z": -7
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 0.5,
+							"y": 0.5,
+							"z": 0.5
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfWidth": 0.5,
+						"halfHeight": 0.5,
+						"halfDepth": 0.5,
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Slider",
+								"pivotThis": {
+									"x": 0,
+									"y": 0,
+									"z": 0
+								},
+								"axisThis": {
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
+								"limits": [-1, 0],
+								"motor": {
+									"speed": -10,
+									"maxForce": 2
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SliderEntity2",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 4,
+							"z": -7
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 0.5,
+							"y": 0.5,
+							"z": 0.5
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfWidth": 0.5,
+						"halfHeight": 0.5,
+						"halfDepth": 0.5,
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Slider",
+								"pivotThis": {
+									"x": 0,
+									"y": 1.1,
+									"z": 0
+								},
+								"axisThis": {
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
+								"limits": [-1, 0],
+								"entity": "SliderEntity",
+								"pivotThat": {
+									"x": 0,
+									"y": 0,
+									"z": 0
+								},
+								"axisThat":{
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
+								"motor": {
+									"speed": -10,
+									"maxForce": 2
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SliderEntity3",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 3,
+							"z": -7
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 0.5,
+							"y": 0.5,
+							"z": 0.5
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/colourfulCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfWidth": 0.5,
+						"halfHeight": 0.5,
+						"halfDepth": 0.5,
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Generic",
+								"pivotThis": {
+									"x": 0,
+									"y": 1.1,
+									"z": 0
+								},
+								"axisThis": {
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
+								"limits": {
+									"linear": {
+										"x": [-1,1],
+										"z": [-1,1]
+									}
+								},
+								"entity": "SliderEntity2",
+								"pivotThat": {
+									"x": 0,
+									"y": 0,
+									"z": 0
+								},
+								"axisThat":{
+									"x": 1,
+									"y": 0,
+									"z": 0
+								},
+								"motor": {
+									"x": {
+										"speed": -10,
+										"maxForce": 5
+									}
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Door",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": -10,
+							"y": 2,
+							"z": -2
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 0.1,
+							"y": 2.5,
+							"z": 2
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/ColourfulCube/framedCube.fbx"
+					}
+				},
+				{
+					"name": "physicsComponent",
+					"values": {
+						"colliderShape": "cube",
+						"halfWidth": 0.1,
+						"halfHeight": 2.5,
+						"halfDepth": 2,
+						"mass": 1,
+						"joints": [
+							{
+								"type": "Hinge",
+								"pivotThis": {
+									"x": 0,
+									"y": 2.5,
+									"z": 0
+								},
+								"axisThis": {
+									"x": 0,
+									"y": 0,
+									"z": 1
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "RaycastIndicator",
+			"components": [
+				{
+					"name": "transformComponent",
+					"values": {
+						"position": {
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"rotation": {
+							"w": 1,
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"scale": {
+							"x": 0.1,
+							"y": 0.1,
+							"z": 0.1
+						}
+					}
+				},
+				{
+					"name": "animatedModelComponent",
+					"values": {
+						"filename": "./assets/models/Sphere/sphere.fbx"
 					}
 				}
 			]

@@ -6,6 +6,7 @@
 #include "loaders/assetManager.h"
 #include "gameSettings.h"
 #include "logger.h"
+#include "ecs/ecsManager.h"
 
 Window* window;
 bool shouldExit = false;

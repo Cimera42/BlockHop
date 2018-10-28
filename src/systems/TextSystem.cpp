@@ -35,8 +35,8 @@ void TextSystem::update(double dt)
 	{
 		updateEntityTriggers(entity);
 
-		TransformComponent* transform = entity->getComponent<TransformComponent>();
-		TextComponent* text = entity->getComponent<TextComponent>();
+		auto transform = entity->getComponent<TransformComponent>();
+		auto text = entity->getComponent<TextComponent>();
 
 		//Default data setting for now, just set to delta time
 		text->set(std::to_string(dt));

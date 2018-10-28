@@ -3,6 +3,8 @@
 //
 
 #include "logger.h"
+#include "triggers/ClickedTrigger.h"
+#include <typeinfo>
 
 Logger::Logger()
 {
@@ -14,12 +16,12 @@ Logger::Logger(bool doEndLine)
 	endLine = doEndLine;
 	between = "";
 }
-Logger::Logger(std::string inBetween)
+Logger::Logger(const std::string& inBetween)
 {
 	endLine = true;
 	between = inBetween;
 }
-Logger::Logger(bool doEndLine, std::string inBetween)
+Logger::Logger(bool doEndLine, const std::string& inBetween)
 {
 	endLine = doEndLine;
 	between = inBetween;
@@ -44,6 +46,46 @@ Logger::~Logger()
 		std::cout << std::endl;
 }
 
+template<typename T>
+Logger &Logger::operator<<(std::vector<T> val)
+{
+	buffer << typeid(val).name();
+	int i = 0;
+	for(auto item : val)
+	{
+		if(i != 0)
+			buffer << "\n";
+		buffer << "\tItem " << i++ << ": ";
+		(*this) << item;
+	}
+	return *this;
+}
+
+template<typename S, typename T>
+Logger &Logger::operator<<(std::map<S, T> val)
+{
+	buffer << typeid(val).name();
+	int i = 0;
+	for(auto item : val)
+	{
+		if(i++ != 0)
+			buffer << "\n";
+		buffer << "\tItem ";
+		(*this) << item->first();
+		buffer << ": ";
+		(*this) << item->second();
+	}
+	return *this;
+}
+
+//Function for special stream types, eg endl
+Logger& Logger::operator<<(std::ostream& (*val)(std::ostream &))
+{
+	buffer << val << between;
+	return *this;
+}
+
+// GLM
 Logger& Logger::operator<<(const glm::vec2 val)
 {
 	//Push input to stringstream
@@ -81,15 +123,28 @@ Logger& Logger::operator<<(const glm::mat4 val)
 	return *this;
 }
 
-//Function for special stream types, eg endl
-Logger& Logger::operator<<(std::ostream& (*val)(std::ostream &))
+// Bullet
+Logger &Logger::operator<<(btVector3 val)
 {
-	buffer << val << between;
+	buffer << val.x() << ", " << val.y() << ", " << val.z() << between;
 	return *this;
 }
 
-Logger &Logger::operator<<(const rp3d::Vector3 val)
+Logger &Logger::operator<<(btQuaternion val)
 {
-	buffer << val.x << ", " << val.y << ", " << val.z << between;
+	buffer << val.x() << ", " << val.y() << ", " << val.z() << ", " << val.w() << between;
+	return *this;
+}
+
+Logger &Logger::operator<<(btTransform val)
+{
+	const btVector3 translation = val.getOrigin();
+	const btQuaternion rotation = val.getRotation();
+	buffer << "T:(";
+	(*this) << translation;
+	buffer << ") ";
+	buffer << "R:(";
+	(*this) << rotation;
+	buffer << ")";
 	return *this;
 }

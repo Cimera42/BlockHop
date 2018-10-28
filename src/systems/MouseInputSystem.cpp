@@ -45,7 +45,7 @@ void MouseInputSystem::setLastPos(glm::vec2 inLastPos)
 
 void mouseMoveInputEvent(GLFWwindow *window, double xpos, double ypos)
 {
-	MouseInputSystem* mouseSystem = ECSManager::get().findSystem<MouseInputSystem>("mouseInputSystem");
+	MouseInputSystem* mouseSystem = ECSManager::get().findSystem<MouseInputSystem>();
 	glm::vec2 lastPos = mouseSystem->getLastPos();
 	if(lastPos.x == 0 && lastPos.y == 0)
 		lastPos = glm::vec2(xpos, ypos);
@@ -55,8 +55,8 @@ void mouseMoveInputEvent(GLFWwindow *window, double xpos, double ypos)
 
 	for(auto entity : mouseSystem->getEntities())
 	{
-		TransformComponent* transform = entity->getComponent<TransformComponent>();
-		MouseControlComponent* mouseControl = entity->getComponent<MouseControlComponent>();
+		auto transform = entity->getComponent<TransformComponent>();
+		auto mouseControl = entity->getComponent<MouseControlComponent>();
 
 		glm::quat rotation = transform->getRotation();
 		glm::quat y = glm::angleAxis((float) (-yaw*(mouseControl->getXSensitivity()/100)), glm::vec3(0,1,0));

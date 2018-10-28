@@ -207,9 +207,26 @@ ModelAsset::ModelAsset(std::string inFilename) : BaseAsset(inFilename) {}
 ModelAsset::~ModelAsset()
 {
 	for(auto nM : normalMeshes)
+	{
 		nM.second->destruct();
+		delete nM.second;
+	}
 	for(auto bM : boneMeshes)
+	{
 		bM.second->destruct();
+		delete bM.second;
+	}
+	for(auto animation : animations)
+		delete animation.second;
+	for(auto nodePart : nodeParts)
+		delete nodePart.second;
+	for(auto meshPart : meshParts)
+		delete meshPart.second;
+}
+
+Animation::~Animation() {
+	for(auto animationNode : animationNodes)
+		delete animationNode.second;
 }
 
 bool ModelAsset::load()

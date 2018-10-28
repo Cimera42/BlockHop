@@ -4,70 +4,220 @@
 
 #include "PhysicsComponent.h"
 #include "../ecs/ecsManager.h"
-#include <reactphysics3d.h>
+#include "../mesh.h"
+#include "../loaders/modelAsset.h"
+#include "../loaders/assetManager.h"
+#include "../systems/PhysicsSystem.h"
+
+#include <bullet3/btBulletCollisionCommon.h>
+#include <bullet3/BulletCollision/Gimpact/btGImpactShape.h>
+#include <bullet3/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
+#include <stb_image.h>
+
+#define IF_FIND(name, source, lookFor) \
+	auto (name) = (source).find(lookFor); \
+	if((name) != (source).end()) \
 
 COMPONENT_EXPORT(PhysicsComponent, "physicsComponent")
 
 PhysicsComponent::PhysicsComponent() {}
-PhysicsComponent::~PhysicsComponent() {}
-
-void PhysicsComponent::setValues(json inValues) 
+PhysicsComponent::~PhysicsComponent()
 {
-	std::string shape = inValues["colliderShape"].get<std::string>();
-	if(shape == "cube")
+	for(const std::function<void()> &destructor : destructors)
 	{
-		collisionShape = new rp3d::BoxShape(rp3d::Vector3(inValues["halfWidth"].get<float>(),
-														  inValues["halfHeight"].get<float>(),
-														  inValues["halfDepth"].get<float>()));
+		destructor();
 	}
-	else if(shape == "sphere")
+	delete motionState;
+	delete collisionShape;
+	auto physSystem = ECSManager::get().findSystem<PhysicsSystem>();
+	for(auto joint : joints)
 	{
-		collisionShape = new rp3d::SphereShape(inValues["radius"].get<float>());
+		//TODO Gives unaddressable memory error
+//		physSystem->dynamicsWorld->removeConstraint(joint);
+		delete joint;
 	}
-	else if(shape == "cone")
-	{
-		collisionShape = new rp3d::ConeShape(inValues["radius"].get<float>(), inValues["height"].get<float>());
-	}
-	else if(shape == "cylinder")
-	{
-		collisionShape = new rp3d::CylinderShape(inValues["radius"].get<float>(), inValues["height"].get<float>());
-	}
-	else if(shape == "capsule")
-	{
-		collisionShape = new rp3d::CapsuleShape(inValues["radius"].get<float>(), inValues["height"].get<float>());
-	}
-
-	std::string mode = inValues["mode"].get<std::string>();
-	if(mode == "static")
-	{
-		collisionMode = rp3d::STATIC;
-	}
-	else if(mode == "kinematic")
-	{
-		collisionMode = rp3d::KINEMATIC;
-	}
-	else if(mode == "dynamic")
-	{
-		collisionMode = rp3d::DYNAMIC;
-	}
+	physSystem->dynamicsWorld->removeRigidBody(rigidBody);
+	delete rigidBody;
 }
 
-rp3d::CollisionShape *PhysicsComponent::getCollisionShape() const
+btVector3 glmToBtWithRotation(glm::vec3 in)
 {
-	return collisionShape;
+	return btVector3(in.x,in.z,in.y);
 }
 
-rp3d::ProxyShape *PhysicsComponent::getCollisionShapeInstance() const
+void PhysicsComponent::setValues(json inValues)
 {
-	return collisionShapeInstance;
+	jsonData = inValues;
+
+	mass = inValues["mass"];
+
+	offsetPos = btVector3(0,0,0);
+	offsetRot = btQuaternion(0,0,0,1);
+	IF_FIND(offset, inValues, "offset")
+	{
+		IF_FIND(pos, *offset, "position")
+		{
+			offsetPos = *pos;
+		}
+		IF_FIND(rot, *offset, "rotation")
+		{
+			offsetRot = *rot;
+		}
+	}
+
+	principalTransform.setIdentity();
+	collisionShape = loadShape(inValues);
 }
 
-rp3d::BodyType PhysicsComponent::getMode() const
+btCollisionShape* PhysicsComponent::loadShape(json inValues)
 {
-	return collisionMode;
-}
+	std::string shapeName = inValues["colliderShape"];
 
-void PhysicsComponent::setCollisionShapeInstance(rp3d::ProxyShape *collisionShapeInstance)
-{
-	PhysicsComponent::collisionShapeInstance = collisionShapeInstance;
+	// Primitives
+	if(shapeName == "cube")
+	{
+		return new btBoxShape(inValues["halfDimensions"].get<btVector3>());
+	}
+	else if(shapeName == "sphere")
+	{
+		return new btSphereShape(inValues["radius"].get<float>()); // Requires .get for some reason
+	}
+	else if(shapeName == "capsule")
+	{
+		return new btCapsuleShape(inValues["radius"], inValues["height"]);
+	}
+	else if(shapeName == "cylinder")
+	{
+		return new btCylinderShape(btVector3(inValues["radius"], inValues["halfHeight"], 0));
+	}
+	else if(shapeName == "cone")
+	{
+		return new btConeShape(inValues["radius"], inValues["height"]);
+	}
+	else if(shapeName == "hull")
+	{
+		auto typedCollisionShape = new btConvexHullShape();
+
+		auto points = inValues.find("points");
+		if(points != inValues.end())
+		{
+			std::vector<json> pointData = (*points);
+			for(const auto &point : pointData)
+			{
+				// Don't recalc AABB while adding points
+				typedCollisionShape->addPoint(btVector3(point), false);
+			}
+			typedCollisionShape->recalcLocalAabb();
+		}
+		else
+		{
+			auto model = dynamic_cast<ModelAsset*>(AssetManager::get().loadSync(inValues["mesh"]));
+			auto meshPart = model->meshParts.begin()->second;
+			auto mesh = model->normalMeshes[meshPart->mesh];
+
+			for(auto vertex : mesh->vertices)
+			{
+				typedCollisionShape->addPoint(glmToBtWithRotation(vertex), false);
+			}
+			typedCollisionShape->recalcLocalAabb();
+		}
+
+		return typedCollisionShape;
+	}
+	else if(shapeName == "compound")
+	{
+		auto typedCollisionShape = new btCompoundShape();
+
+		std::vector<json> shapes = inValues["shapes"];
+		std::vector<btScalar> masses;
+		for(const auto &shapeData : shapes)
+		{
+			btTransform transform(shapeData["rotation"].get<btQuaternion>(), shapeData["position"]);
+
+			typedCollisionShape->addChildShape(transform, loadShape(shapeData));
+			masses.emplace_back(1);
+		}
+
+		btVector3 inertia;
+		typedCollisionShape->calculatePrincipalAxisTransform(masses.data(), principalTransform, inertia);
+
+		const int countChildren = typedCollisionShape->getNumChildShapes();
+		for(int i = 0; i < countChildren; i++)
+		{
+			btTransform newTransform = principalTransform.inverse() * typedCollisionShape->getChildTransform(i);
+
+			typedCollisionShape->updateChildTransform(i, newTransform, i == countChildren-1);
+		}
+
+		return typedCollisionShape;
+	}
+	else if(shapeName == "concave")
+	{
+		auto model = dynamic_cast<ModelAsset*>(AssetManager::get().loadSync(inValues["mesh"]));
+		auto meshPart = model->meshParts.begin()->second;
+		auto mesh = model->normalMeshes[meshPart->mesh];
+
+		auto triangleMesh = new btTriangleMesh();
+		for(auto vertex : mesh->vertices)
+		{
+			triangleMesh->findOrAddVertex(glmToBtWithRotation(vertex), false);
+		}
+		for(int i = 0; i < mesh->indices.size(); i+=3)
+		{
+			triangleMesh->addTriangleIndices(
+				mesh->indices[i+0],
+				mesh->indices[i+1],
+				mesh->indices[i+2]
+			);
+		}
+
+		destructors.emplace_back([triangleMesh](){
+			Logger() << "Trianglemesh " << (void*)triangleMesh << " destroyed.";
+			delete triangleMesh;
+		});
+
+		if(mass != 0)
+		{
+			auto shape = new btGImpactMeshShape(triangleMesh);
+			shape->updateBound();
+			return shape;
+		}
+		else
+			return new btBvhTriangleMeshShape(triangleMesh, true);
+	}
+	else if(shapeName == "terrain")
+	{
+		mass = 0;
+
+		int comp, dataWidth, dataHeight;
+		std::string filename = inValues["filename"];
+		stbi_uc* heightData = stbi_load(filename.c_str(), &dataWidth, &dataHeight, &comp, STBI_grey);
+		if(!heightData)
+			throw std::runtime_error("Heightmap could not be loaded");
+
+		float lowerHeight = inValues["lowerHeight"];
+		float upperHeight = inValues["upperHeight"];
+		float heightRange = upperHeight - lowerHeight;
+
+		auto shape = new btHeightfieldTerrainShape(
+			dataWidth,
+			dataHeight,
+			heightData,
+			heightRange/256.0f,
+			lowerHeight,
+			upperHeight,
+			1,
+			PHY_UCHAR,
+			true
+		);
+		float xScale = inValues["width"].get<float>()/dataWidth;
+		float zScale = inValues["depth"].get<float>()/dataHeight;
+		shape->setLocalScaling(btVector3(xScale, 1, zScale));
+		destructors.emplace_back([heightData](){
+			Logger() << "Heightdata " << (void*)heightData << " destroyed.";
+			stbi_image_free(heightData);
+		});
+		return shape;
+	}
+	return nullptr;
 }

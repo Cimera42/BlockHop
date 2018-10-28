@@ -7,6 +7,7 @@
 #include "../window.h"
 #include "../components/TransformComponent.h"
 #include "../components/KeyboardControlComponent.h"
+#include "../triggers/ClickedTrigger.h"
 
 SYSTEM_EXPORT(KeyboardInputSystem, "keyboardInputSystem")
 
@@ -27,8 +28,8 @@ void KeyboardInputSystem::update(double dt)
 	{
 		updateEntityTriggers(entity);
 
-		TransformComponent* transform = entity->getComponent<TransformComponent>();
-		KeyboardControlComponent* keyboardControl = entity->getComponent<KeyboardControlComponent>();
+		auto transform = entity->getComponent<TransformComponent>();
+		auto keyboardControl = entity->getComponent<KeyboardControlComponent>();
 
 		glm::vec3 displaced = transform->getPosition();
 		if(isKeyPressed(keyboardControl->getForwardKey()))
@@ -44,34 +45,47 @@ void KeyboardInputSystem::update(double dt)
 			displaced -= transform->getRight() * ((float)dt) * 5.0f;
 
 		if(isKeyPressed(keyboardControl->getUpKey()))
-			displaced += glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
+			displaced += transform->getUp() * ((float)dt) * 5.0f;
 
 		if(isKeyPressed(keyboardControl->getDownKey()))
-			displaced -= glm::vec3(0, 1, 0) * ((float)dt) * 5.0f;
+			displaced -= transform->getUp() * ((float)dt) * 5.0f;
 
 		transform->setPosition(displaced);
+	}
 
+	if(isKeyPressed(GLFW_KEY_R))
+	{
+		std::vector<std::string> comps = {"transformComponent",
+										  "physicsComponent",
+										  "animatedModelComponent"};
+		std::vector<std::string> trigs = {"clickedTrigger"};
 
-		if(isKeyPressed(GLFW_KEY_R))
+		json tj = {
+			{"position",{2.5, 10, 0}},
+			{"rotation",{1, 0, 0, 0}},
+			{"scale",{1, 1, 1}}
+		};
+		json pj = {
+			{"colliderShape","cube"},
+			{"halfDimensions", {1, 1, 1}},
+			{"mass", 0.5}
+		};
+		json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
+		std::vector<json> compData = {tj,pj,aj};
+
+		json ct = {{"force", rand() % 100 + 1}};
+		std::vector<json> trigData = {ct};
+
+		ECSManager::get().createEntity("projectile", comps, compData, trigs, trigData);
+	}
+	if(isKeyPressed(GLFW_KEY_T))
+	{
+		std::string entname = "RaycastIndicator";
+		entname += std::to_string(ClickedTrigger::indicatorAccumulator);
+		auto indicator = ECSManager::get().findEntity(entname);
+		if(indicator)
 		{
-			std::vector<std::string> comps = {"transformComponent",
-											  "physicsComponent",
-											  "animatedModelComponent"};
-			std::vector<std::string> trigs = {"clickedTrigger"};
-
-			json tj = {{"position",{{"x",2.5},{"y",10},{"z",0}}},
-					   {"rotation",{{"w",1},{"x",0},{"y",0},{"z",0}}},
-					   {"scale",{{"x",1},{"y",1},{"z",1}}}};
-			json pj = {{"mode","dynamic"},
-					   {"colliderShape","cube"},
-					   {"halfWidth",1},
-					   {"halfHeight",1},
-					   {"halfDepth",1}};
-			json aj = {{"filename","./assets/models/ColourfulCube/framedCube.fbx"}};
-			std::vector<json> compData = {tj,pj,aj};
-			json ct = {{"force", rand() % 100 + 1}};
-			std::vector<json> trigData = {ct};
-			ECSManager::get().createEntity("projectile", comps, compData, trigs, trigData);
+			ClickedTrigger::indicatorAccumulator++;
 		}
 	}
 }
@@ -91,6 +105,6 @@ bool KeyboardInputSystem::isKeyPressed(int keyCode)
 
 void keyboardInputEvent(GLFWwindow* inWindow, int keyCode, int scanCode, int action, int modifiers)
 {
-	KeyboardInputSystem* keyboardSystem = ECSManager::get().findSystem<KeyboardInputSystem>("keyboardInputSystem");
+	KeyboardInputSystem* keyboardSystem = ECSManager::get().findSystem<KeyboardInputSystem>();
 	keyboardSystem->keyList[keyCode] = action;
 }

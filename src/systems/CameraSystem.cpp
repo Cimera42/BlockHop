@@ -20,8 +20,8 @@ void CameraSystem::update(double dt)
 	{
 		updateEntityTriggers(entity);
 
-		CameraComponent* camera = entity->getComponent<CameraComponent>();
-		TransformComponent* transform = entity->getComponent<TransformComponent>();
+		auto camera = entity->getComponent<CameraComponent>();
+		auto transform = entity->getComponent<TransformComponent>();
 
 		camera->lookAt(transform->getPosition(),
 					   transform->getPosition() + transform->getForward(),

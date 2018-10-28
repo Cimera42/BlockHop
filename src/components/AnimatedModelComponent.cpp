@@ -28,24 +28,35 @@ glm::mat4 AToGMat(aiMatrix4x4 aiMat)
 }
 
 AnimatedModelComponent::AnimatedModelComponent() {}
-AnimatedModelComponent::~AnimatedModelComponent() {}
+AnimatedModelComponent::~AnimatedModelComponent()
+{
+	for(auto chBm : changingBoneMeshes)
+		delete chBm.second;
+	for(auto chNode : changingNodes)
+		delete chNode.second;
+}
+BoneMeshChanging::~BoneMeshChanging()
+{
+	for(auto chBone : changingBones)
+		delete chBone;
+}
 
-void AnimatedModelComponent::setValues(json inValues) 
+void AnimatedModelComponent::setValues(json inValues)
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
-	modelAsset = static_cast<ModelAsset*>(AssetManager::get().loadSync(inValues["filename"].get<std::string>()));
+	modelAsset = static_cast<ModelAsset*>(AssetManager::get().loadSync(inValues["filename"]));
 	load();
 }
 
 void AnimatedModelComponent::load()
 {
 	//If there are available animations, animate the model
-	if(modelAsset->animations.size() > 0)
+	if(!modelAsset->animations.empty())
 	{
 		animated = true;
 		//Get a default animation to use
 		currentAnimation = modelAsset->animations.begin()->second;
-		
+
 		//Create a changeable node above the shared asset
 		for(std::pair<const std::string, NodePart*> pair : modelAsset->nodeParts)
 		{
@@ -81,7 +92,7 @@ void AnimatedModelComponent::nodeFamilySetup()
 
 		if(chNode->node->nodeParent != nullptr)
 			chNode->nodeChParent = FindChangingNode(chNode->node->nodeParent->name);
-		
+
 		for(NodePart *node : chNode->node->nodeChildren)
 		{
 			chNode->nodeChChildren.push_back(FindChangingNode(node->name));
@@ -174,7 +185,7 @@ bool AnimatedModelComponent::playAnimation(std::string name)
 	Animation* anim = modelAsset->FindAnim(name);
 	if(anim == nullptr)
 		return false;
-	
+
 	time = 0;
 	currentAnimation = anim;
 	return true;

@@ -43,7 +43,7 @@ void AnimatedModelSystem::update(double dt)
 	Entity* cameraEntity = ECSManager::get().findEntity("Camera");
 	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>();
 
-	KeyboardInputSystem* keyInput = ECSManager::get().findSystem<KeyboardInputSystem>("keyboardInputSystem");
+	KeyboardInputSystem* keyInput = ECSManager::get().findSystem<KeyboardInputSystem>();
 
 	updateSystemTriggers();
 
@@ -83,6 +83,10 @@ void AnimatedModelSystem::update(double dt)
 				{
 					modelMatrix *= chNode->collectiveMatrix;
 				}
+			}
+			else
+			{
+				modelMatrix *= nodePart->defaultTransform;
 			}
 
 			//Check if mesh has bones
