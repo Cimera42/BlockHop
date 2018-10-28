@@ -14,10 +14,12 @@ class BaseAsset {
 	virtual bool save();
 protected:
 	std::string filename = "";
+	bool isMutable = false;
 public:
 	BaseAsset(std::string filename);
 	virtual ~BaseAsset();
 	std::string getName();
+	void setMutable(bool v);
 };
 
 

@@ -17,6 +17,8 @@ bool BaseAsset::load() {
 	return false;
 }
 
+// TODO: Determine if we need saving to go through the same AssetManager -> AssetLoader -> Asset channels
+// or if we can just save dirrectly (since we likely have a pointer to the asset instance)
 bool BaseAsset::save() {
 	Logger()<<"Default save implementation being used to save '"<<filename<<"'. "
 			"Please implement an asset class for this extension correctly."<<std::endl;
@@ -25,4 +27,8 @@ bool BaseAsset::save() {
 
 std::string BaseAsset::getName() {
 	return filename;
+}
+
+void BaseAsset::setMutable(bool v) {
+	isMutable = v;
 }

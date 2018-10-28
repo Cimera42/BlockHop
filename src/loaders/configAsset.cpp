@@ -35,11 +35,10 @@ bool ConfigAsset::load()
 }
 
 bool ConfigAsset::save() {
-	// TODO set immutability by default, unless we unset
 	// ie. prevent people changing config at all, not just saving
 	if (isMutable) {
 		std::ofstream o(filename);
-		o << config << std::endl;
+		o << config.dump(2) << std::endl;
 		Logger()<<filename<<" saved."<<std::endl;
 		return true;
 	}

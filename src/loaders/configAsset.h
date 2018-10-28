@@ -13,11 +13,11 @@ class ConfigAsset : public BaseAsset
 {
 	friend class ConfigLoader;
 	bool load();
-	bool save();
 	ConfigAsset(std::string filename);
 	~ConfigAsset();
-	bool isMutable = false; //TODO change once implemented save
 public:
+	// TODO move save to private if we decide to move saving to loader based approach
+	bool save();
 	json config;
 };
 

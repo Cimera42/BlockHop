@@ -1,13 +1,16 @@
 #include "window.h"
+#include "gameSettings.h"
 
 Window::Window(){};
-Window::Window(const char* inTitle, int inWidth, int inHeight)
+Window::Window(const char* inTitle, int inWidth, int inHeight, bool inFullscreen)
 {
 	title = inTitle;
 	width = inWidth;
 	height = inHeight;
+	isFullscreen = inFullscreen;
 
 	createGLFWWindow();
+	resize(width, height, isFullscreen);
 }
 
 Window::~Window()
@@ -39,17 +42,25 @@ void Window::createGLFWWindow()
 void Window::updateViewport() {
 	if ( _updateViewport )
 	{
+		// Update opengl
 		int f1, f2;
 		glfwGetFramebufferSize( glfwWindow, &f1, &f2 );
 		glViewport( 0, 0, f1, f2 );
+
+		// Commit to saving new settings to file
+		GameSettings::get().setWindow(title,width,height,isFullscreen);
+		GameSettings::get().saveSettings();
+
 		_updateViewport = false;
 	}
 };
 
-void Window::resize(int width, int height, bool fullscreen) {
+void Window::resize(int inWidth, int inHeight, bool inFullscreen) {
 	//if not fullscreen- place window in center of screen
-	_isFullscreen = fullscreen;
-	if(!_isFullscreen) {
+	width = inWidth;
+	height = inHeight;
+	isFullscreen = inFullscreen;
+	if(!isFullscreen) {
 		const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		int window_width = mode->width;
 		int window_height = mode->height;

@@ -29,9 +29,10 @@ int main()
 	initGLFW();
 
 	window = new Window(
-			GameSettings::get().getWindowName().c_str(),
-			GameSettings::get().getWindowWidth(),
-			GameSettings::get().getWindowHeight());
+		GameSettings::get().getWindowName().c_str(),
+		GameSettings::get().getWindowWidth(),
+		GameSettings::get().getWindowHeight(),
+		GameSettings::get().getWindowFullscreen());
 	window->cursorMode(GLFW_CURSOR_DISABLED);
 
 	initGLEW();
@@ -63,8 +64,12 @@ int main()
 		if(glfwGetKey(window->glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			shouldExit = true;
 
+		//TODO - DEMO ONLY - REMOVE ONCE MENU - PREVENT MULTIPLE PRESSES ETC
 		if(glfwGetKey(window->glfwWindow, GLFW_KEY_8) == GLFW_PRESS) {
 			window->resize(1080, 720, true);
+		}
+		if(glfwGetKey(window->glfwWindow, GLFW_KEY_7) == GLFW_PRESS) {
+			window->resize(640, 480, false);
 		}
 
 		glfwPollEvents();
@@ -72,7 +77,6 @@ int main()
 	}
 
 	delete window;
-	// delete AssetManager::get();
 	glfwTerminate();
 	return 0;
 }

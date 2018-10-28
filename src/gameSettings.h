@@ -7,7 +7,7 @@
 
 #include "loaders/configAsset.h"
 
-// TODO convert other singletons to https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
+// Note: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
 class GameSettings {
 public:
 	/* Singleton */
@@ -26,14 +26,23 @@ public:
 	GameSettings(GameSettings const&) = delete;
 	void operator=(GameSettings const&) = delete;
 
-	// Initiate loading
+	// Initiate loading / saving
 	void loadSettings();
+	void saveSettings();
 
+	// Getters...
 	std::string getWindowName();
 	int getWindowWidth();
 	int getWindowHeight();
+	bool getWindowFullscreen();
 
-	// TODO methods to update game settings as needed
+	// Setters...
+	void setWindowName(std::string name);
+	void setWindowWidth(int width);
+	void setWindowHeight(int height);
+	void setWindowFullscreen(bool isFullscreen);
+	// Ability to set multiple at once for convenience
+	void setWindow(std::string name, int width, int height, bool isFullscreen);
 };
 
 
