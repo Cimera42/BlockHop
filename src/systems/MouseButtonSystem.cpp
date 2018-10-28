@@ -46,6 +46,6 @@ bool MouseButtonSystem::isButtonPressed(int buttonCode)
 
 void mouseButtonEvent(GLFWwindow* inWindow, int buttonCode, int action, int modifiers)
 {
-	MouseButtonSystem* mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>("mouseButtonSystem");
+	MouseButtonSystem* mouseButtonSystem = ECSManager::get().findSystem<MouseButtonSystem>("mouseButtonSystem");
 	mouseButtonSystem->buttonList[buttonCode] = action;
 }

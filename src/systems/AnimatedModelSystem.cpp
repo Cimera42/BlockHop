@@ -40,10 +40,10 @@ AnimatedModelSystem::~AnimatedModelSystem()
 
 void AnimatedModelSystem::update(double dt)
 {
-	Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
+	Entity* cameraEntity = ECSManager::get().findEntity("Camera");
 	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>();
 
-	KeyboardInputSystem* keyInput = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
+	KeyboardInputSystem* keyInput = ECSManager::get().findSystem<KeyboardInputSystem>("keyboardInputSystem");
 
 	updateSystemTriggers();
 

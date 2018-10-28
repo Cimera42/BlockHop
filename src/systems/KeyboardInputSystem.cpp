@@ -71,7 +71,7 @@ void KeyboardInputSystem::update(double dt)
 			std::vector<json> compData = {tj,pj,aj};
 			json ct = {{"force", rand() % 100 + 1}};
 			std::vector<json> trigData = {ct};
-			ECSManager::i()->createEntity("projectile", comps, compData, trigs, trigData);
+			ECSManager::get().createEntity("projectile", comps, compData, trigs, trigData);
 		}
 	}
 }
@@ -91,6 +91,6 @@ bool KeyboardInputSystem::isKeyPressed(int keyCode)
 
 void keyboardInputEvent(GLFWwindow* inWindow, int keyCode, int scanCode, int action, int modifiers)
 {
-	KeyboardInputSystem* keyboardSystem = ECSManager::i()->findSystem<KeyboardInputSystem>("keyboardInputSystem");
+	KeyboardInputSystem* keyboardSystem = ECSManager::get().findSystem<KeyboardInputSystem>("keyboardInputSystem");
 	keyboardSystem->keyList[keyCode] = action;
 }

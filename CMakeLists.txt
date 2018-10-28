@@ -50,6 +50,8 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/PhysicsComponent.cpp src/compone
 
 set(SOURCE_FILES ${SOURCE_FILES} src/triggers/ClickedTrigger.cpp src/triggers/ClickedTrigger.h)
 
+set(SOURCE_FILES ${SOURCE_FILES} src/gameSettings.cpp src/gameSettings.h)
+
 set(SOURCE_FILES ${SOURCE_FILES} src/scenes/Scene.cpp src/scenes/Scene.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/scenes/MainGameScene.cpp src/scenes/MainGameScene.h)
 

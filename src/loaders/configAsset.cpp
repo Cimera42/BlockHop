@@ -26,7 +26,7 @@ bool ConfigAsset::load()
 		return false;
 	}
 
-	if(!config)
+	if(config.empty())
 	{
 		Logger() << "Could not load config: " << filename;
 		return false;

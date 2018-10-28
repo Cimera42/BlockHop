@@ -283,7 +283,7 @@ bool ModelAsset::load()
 			std::string baseFolder = std::string(filename);
 			baseFolder = baseFolder.substr(0, baseFolder.find_last_of("/"));
 			//Load image
-			material.image = static_cast<ImageAsset*>(AssetManager::i()->loadSync(std::string(baseFolder +"/"+ backslashFixed)));
+			material.image = static_cast<ImageAsset*>(AssetManager::get().loadSync(std::string(baseFolder +"/"+ backslashFixed)));
 		}
 
 		materials.push_back(material);
@@ -299,7 +299,7 @@ bool ModelAsset::load()
 	//Load textures and place into singular OpenGL texture Array
 	if(texPaths.size() > 0)
 	{
-		ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
+		ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::get().getLoader("image"));
 		texture = imgLoader->loadTexture(texPaths);
 	}
 

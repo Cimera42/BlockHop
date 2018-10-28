@@ -50,7 +50,7 @@ public:
 void ClickedTrigger::runSystemFunction(SystemBase* sys) {
 	PhysicsSystem* s = static_cast<PhysicsSystem*>(sys);
 
-	MouseButtonSystem* mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>("mouseButtonSystem");
+	MouseButtonSystem* mouseButtonSystem = ECSManager::get().findSystem<MouseButtonSystem>("mouseButtonSystem");
 	int b = 0;
 	if(mouseButtonSystem->isButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 		b = 1;
@@ -58,7 +58,7 @@ void ClickedTrigger::runSystemFunction(SystemBase* sys) {
 		b = -1;
 	if(b != 0)
 	{
-		Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
+		Entity* cameraEntity = ECSManager::get().findEntity("Camera");
 		TransformComponent* cameraTransform = cameraEntity->getComponent<TransformComponent>();
 		glm::vec3 startGlm = cameraTransform->getPosition();
 		glm::vec3 camDirection = cameraTransform->getForward();
@@ -98,7 +98,7 @@ bool ClickedTrigger::entityCheck(SystemBase* sys, Entity* ent) {
 }
 
 void ClickedTrigger::runBox2(SystemBase* sys, Entity* ent) {
-	auto time = static_cast<TimeoutComponent*>(ECSManager::i()->createComponent("timeoutComponent", json {}));
+	auto time = static_cast<TimeoutComponent*>(ECSManager::get().createComponent("timeoutComponent", json {}));
 	time->setDuration(3000);
 	time->setCallback(testCallback);
 	ent->addComponent(time);

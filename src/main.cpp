@@ -4,6 +4,7 @@
 #include "scenes/MainGameScene.h"
 #include "loaders/configAsset.h"
 #include "loaders/assetManager.h"
+#include "gameSettings.h"
 #include "logger.h"
 
 Window* window;
@@ -19,15 +20,18 @@ int main()
 	Logger() << "First Line of Program";
 
 	//Prime our asset loader and load engines main config
-	AssetManager::i()->readConfig();
-	ConfigAsset* clientConfig = static_cast<ConfigAsset*>(AssetManager::i()->loadSync("./conf/clientConfig.conf"));
+	AssetManager::get().readConfig();
+	GameSettings::get().loadSettings();
 
 	//Logger() << clientConfig->config << std::endl;
 
 	// Initialise window, opengl
 	initGLFW();
 
-	window = new Window("Template", 640, 480);
+	window = new Window(
+			GameSettings::get().getWindowName().c_str(),
+			GameSettings::get().getWindowWidth(),
+			GameSettings::get().getWindowHeight());
 	window->cursorMode(GLFW_CURSOR_DISABLED);
 
 	initGLEW();
@@ -35,7 +39,7 @@ int main()
 	glfwSetWindowCloseCallback(window->glfwWindow, windowCloseEvent);
 
 	//Load default assets for engine
-	AssetManager::i()->loadDefault();
+	AssetManager::get().loadDefault();
 
 	//Load scene from file
 	MainGameScene* currScene = new MainGameScene();
@@ -68,7 +72,7 @@ int main()
 	}
 
 	delete window;
-	delete AssetManager::i();
+	// delete AssetManager::get();
 	glfwTerminate();
 	return 0;
 }

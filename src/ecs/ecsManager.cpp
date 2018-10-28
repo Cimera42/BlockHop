@@ -3,10 +3,7 @@
 //
 #include "ecsManager.h"
 
-ECSManager *ECSManager::c_instance = 0;
-
 ECSManager::ECSManager() {}
-ECSManager::~ECSManager() {}
 
 //TODO upon failure of creation, need to actually unsubscribe/deallocate resources!
 

@@ -16,10 +16,10 @@ void MainGameScene::load() {
 	ecsLoader.readStream("maingame.json");
 
 	//Get 'special' entities
-	mapEntity = ECSManager::i()->findEntity("Map");
-	mines.push_back(ECSManager::i()->findEntity("Mine1"));
-	mines.push_back(ECSManager::i()->findEntity("Mine2"));
-	mines.push_back(ECSManager::i()->findEntity("Mine3"));
+	mapEntity = ECSManager::get().findEntity("Map");
+	mines.push_back(ECSManager::get().findEntity("Mine1"));
+	mines.push_back(ECSManager::get().findEntity("Mine2"));
+	mines.push_back(ECSManager::get().findEntity("Mine3"));
 }
 
 void MainGameScene::run(std::chrono::duration<double> dt) {
@@ -27,7 +27,7 @@ void MainGameScene::run(std::chrono::duration<double> dt) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Run update on our systems
-	for(auto sysPair : ECSManager::i()->gameSystems)
+	for(auto sysPair : ECSManager::get().gameSystems)
 	{
 		auto system = sysPair.second;
 		//Get time difference for updating systems

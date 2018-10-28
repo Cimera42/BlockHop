@@ -71,7 +71,7 @@ void Entity::unsubscribeToActions() {
 
 void Entity::subscribeToSystems() {
 	//Move through each system
-	for(auto &sys : ECSManager::i()->gameSystems) {
+	for(auto &sys : ECSManager::get().gameSystems) {
 		auto sysPtr = sys.second;
 
 		//Attempt to subscribe.
@@ -86,7 +86,7 @@ void Entity::subscribeToSystems() {
 
 void Entity::unsubscribeFromSystems() {
 	//Move through each system
-	for(auto &sys : ECSManager::i()->gameSystems) {
+	for(auto &sys : ECSManager::get().gameSystems) {
 		auto sysPtr = sys.second;
 
 		if(sysPtr->hasEntity(this) && !sysPtr->hasRequired(this))
@@ -107,9 +107,9 @@ std::string Entity::getName() const
 }
 
 bool Entity::isType(std::string identifier) {
-	return ECSManager::i()->isType(this, identifier);
+	return ECSManager::get().isType(this, identifier);
 }
 
 bool Entity::isExactType(std::string identifier) {
-	return ECSManager::i()->isExactType(this, identifier);
+	return ECSManager::get().isExactType(this, identifier);
 }

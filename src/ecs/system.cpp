@@ -17,8 +17,8 @@ void SystemBase::setAttachedTriggers(std::vector<std::string> inTrigs) {
 	std::vector<TriggerBase*> trigInstances;
 
 	for(auto trigName : inTrigs) {
-		auto it = ECSManager::i()->gameTriggers.find(trigName);
-		if(it != ECSManager::i()->gameTriggers.end()) {
+		auto it = ECSManager::get().gameTriggers.find(trigName);
+		if(it != ECSManager::get().gameTriggers.end()) {
 			trigInstances.push_back(it->second);
 		}
 	}

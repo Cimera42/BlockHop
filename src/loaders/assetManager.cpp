@@ -5,9 +5,12 @@
 #include "assetManager.h"
 #include <fstream>
 
-AssetManager *AssetManager::c_instance = 0;
-
 AssetManager::AssetManager() {}
+AssetManager::~AssetManager() {
+	for (auto it : exportedLoaders) {
+		delete it.second;
+	}
+}
 
 void AssetManager::readConfig(){
 
@@ -62,12 +65,6 @@ void AssetManager::loadDefault() {
 	// Load all default assets after we have primed our loaders and setup the engine
 	for( auto it = exportedLoaders.begin(); it != exportedLoaders.end(); it++) {
 		it->second->defaultAsset = loadSync(it->second->defaultFilename);
-	}
-}
-
-AssetManager::~AssetManager() {
-	for (auto it : exportedLoaders) {
-		delete it.second;
 	}
 }
 
