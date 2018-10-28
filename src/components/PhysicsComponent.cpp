@@ -29,7 +29,7 @@ PhysicsComponent::~PhysicsComponent()
 	}
 	delete motionState;
 	delete collisionShape;
-	auto physSystem = ECSManager::i()->findSystem<PhysicsSystem>();
+	auto physSystem = ECSManager::get().findSystem<PhysicsSystem>();
 	for(auto joint : joints)
 	{
 		//TODO Gives unaddressable memory error
@@ -111,7 +111,7 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 		}
 		else
 		{
-			auto model = dynamic_cast<ModelAsset*>(AssetManager::i()->loadSync(inValues["mesh"]));
+			auto model = dynamic_cast<ModelAsset*>(AssetManager::get().loadSync(inValues["mesh"]));
 			auto meshPart = model->meshParts.begin()->second;
 			auto mesh = model->normalMeshes[meshPart->mesh];
 
@@ -153,7 +153,7 @@ btCollisionShape* PhysicsComponent::loadShape(json inValues)
 	}
 	else if(shapeName == "concave")
 	{
-		auto model = dynamic_cast<ModelAsset*>(AssetManager::i()->loadSync(inValues["mesh"]));
+		auto model = dynamic_cast<ModelAsset*>(AssetManager::get().loadSync(inValues["mesh"]));
 		auto meshPart = model->meshParts.begin()->second;
 		auto mesh = model->normalMeshes[meshPart->mesh];
 

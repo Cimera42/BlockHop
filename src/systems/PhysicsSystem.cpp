@@ -66,7 +66,7 @@ btTypedConstraint * PhysicsSystem::makeJoint(json jointData, btRigidBody *rigidB
 	btRigidBody *otherRigidBody = nullptr;
 	IF_FIND(otherEntityName, jointData, "entity")
 	{
-		otherEntity = ECSManager::i()->findEntity(*otherEntityName);
+		otherEntity = ECSManager::get().findEntity(*otherEntityName);
 		otherRigidBody = findRigidBody(otherEntity);
 	}
 

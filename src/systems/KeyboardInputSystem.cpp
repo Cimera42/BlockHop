@@ -76,13 +76,13 @@ void KeyboardInputSystem::update(double dt)
 		json ct = {{"force", rand() % 100 + 1}};
 		std::vector<json> trigData = {ct};
 
-		ECSManager::i()->createEntity("projectile", comps, compData, trigs, trigData);
+		ECSManager::get().createEntity("projectile", comps, compData, trigs, trigData);
 	}
 	if(isKeyPressed(GLFW_KEY_T))
 	{
 		std::string entname = "RaycastIndicator";
 		entname += std::to_string(ClickedTrigger::indicatorAccumulator);
-		auto indicator = ECSManager::i()->findEntity(entname);
+		auto indicator = ECSManager::get().findEntity(entname);
 		if(indicator)
 		{
 			ClickedTrigger::indicatorAccumulator++;
@@ -105,6 +105,6 @@ bool KeyboardInputSystem::isKeyPressed(int keyCode)
 
 void keyboardInputEvent(GLFWwindow* inWindow, int keyCode, int scanCode, int action, int modifiers)
 {
-	KeyboardInputSystem* keyboardSystem = ECSManager::i()->findSystem<KeyboardInputSystem>();
+	KeyboardInputSystem* keyboardSystem = ECSManager::get().findSystem<KeyboardInputSystem>();
 	keyboardSystem->keyList[keyCode] = action;
 }

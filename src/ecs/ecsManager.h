@@ -19,26 +19,40 @@ typedef SystemBase* (*SystemFactoryPtr)();
 typedef TriggerBase* (*TriggerFactoryPtr)();
 
 #define COMPONENT_EXPORT(type, componentName) \
-template<> const bool Component<type>::exported = ECSManager::i()->exportComponent<type>(componentName); \
+template<> const bool Component<type>::exported = ECSManager::get().exportComponent<type>(componentName); \
 template<> const std::string Component<type>::name = componentName;
 #define SYSTEM_EXPORT(type, systemName) \
-template<> const bool System<type>::exported = ECSManager::i()->exportSystem<type>(systemName); \
+template<> const bool System<type>::exported = ECSManager::get().exportSystem<type>(systemName); \
 template<> const std::string System<type>::name = systemName;
 #define TRIGGER_EXPORT(type, triggerName) \
-template<> const bool Trigger<type>::exported = ECSManager::i()->exportTrigger<type>(triggerName); \
+template<> const bool Trigger<type>::exported = ECSManager::get().exportTrigger<type>(triggerName); \
 template<> const std::string Trigger<type>::name = triggerName;
 
 class ECSManager {
 public:
+	/* Singleton */
+	static ECSManager& get()
+	{
+		static ECSManager c_instance;
+		return c_instance;
+	}
+private:
 	ECSManager();
+	//Holds references to exports for use in creation
+	std::map<std::string, SystemFactoryPtr> gameSystemExports;
+	std::map<std::string, ComponentFactoryPtr> gameComponentExports;
+	std::map<std::string, TriggerFactoryPtr> gameTriggerExports;
+public:
+	ECSManager(ECSManager const&) = delete;
+	void operator=(ECSManager const&) = delete;
 	~ECSManager();
-
-	/*
+		/*
 	 * Helper functions
 	 * Will return nullptr if a match cannot be found
 	 */
-	template <typename T>
-	T* findSystem() {
+		template <typename T>
+		T *findSystem()
+	{
 		auto it =
 				std::find_if(gameSystems.begin(), gameSystems.end(), [](std::pair<std::string, SystemBase*> o) {
 					return (o.first == System<T>::name);
@@ -98,24 +112,6 @@ public:
 
 	//Used by systems to retrieve instances do not use otherwise
 	std::map<std::string, TriggerBase*> gameTriggers;
-
-	/*
-	 * Singleton pattern. Must use i()-> to access any class methods.
-	 * Prevents static initialisation hell.
-	 */
-	static ECSManager *i()
-	{
-		if (!c_instance)
-			c_instance = new ECSManager;
-		return c_instance;
-	}
-
-private:
-	static ECSManager *c_instance;
-	//Holds references to exports for use in creation
-	std::map<std::string, SystemFactoryPtr> gameSystemExports;
-	std::map<std::string, ComponentFactoryPtr> gameComponentExports;
-	std::map<std::string, TriggerFactoryPtr> gameTriggerExports;
 };
 
 #endif //BLOCKHOP_ECSMANAGER_H

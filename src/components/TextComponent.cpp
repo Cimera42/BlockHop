@@ -15,8 +15,8 @@ Font::Font()
 	std::ifstream i("./assets/textures/OpenSans-Regular.json");
 	i >> metrics;
 
-	image = static_cast<ImageAsset*>(AssetManager::i()->loadSync("./assets/textures/text.png"));
-	ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
+	image = static_cast<ImageAsset*>(AssetManager::get().loadSync("./assets/textures/text.png"));
+	ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::get().getLoader("image"));
 	texture = imgLoader->loadTexture(image->getName());
 }
 

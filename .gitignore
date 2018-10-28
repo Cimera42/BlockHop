@@ -4,4 +4,6 @@ cmake-build-debug/
 .idea/markdown-navigator.xml
 .idea/markdown-navigator/profiles_settings.xml
 .idea/markdown-exported-files.xml
+.idea/codeStyles/
+.vscode/
 RenderDocSettings.cap

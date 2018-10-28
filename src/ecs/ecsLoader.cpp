@@ -30,14 +30,14 @@ void ECSLoader::readStream(std::string fileName) {
 			for(std::string comp : iden["components"]) {
 				componentsNeeded.push_back(comp);
 			}
-			ECSManager::i()->gameIdentities.insert(std::make_pair(iden["type"].get<std::string>(), componentsNeeded));
+			ECSManager::get().gameIdentities.insert(std::make_pair(iden["type"].get<std::string>(), componentsNeeded));
 		}
 
 		//Just need to sort out our systems that need certain components
 		for (auto& sys : j["systems"]) {
 			std::vector<std::string> compsToSub = sys["compsToSub"];
 			std::vector<std::string> trigsToAttach = sys["trigsToAttach"];
-			ECSManager::i()->createSystem(sys["name"], compsToSub, trigsToAttach);
+			ECSManager::get().createSystem(sys["name"], compsToSub, trigsToAttach);
 		}
 
 		//Get entities
@@ -59,7 +59,7 @@ void ECSLoader::readStream(std::string fileName) {
 				trigData.push_back(trig["values"]);
 			}
 
-			ECSManager::i()->createEntity(ent["name"], compNames, compData, trigNames, trigData);
+			ECSManager::get().createEntity(ent["name"], compNames, compData, trigNames, trigData);
 		}
 
 	}catch (std::invalid_argument invalidArgument) {

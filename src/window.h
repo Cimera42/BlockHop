@@ -4,18 +4,30 @@
 #include <GLFW/glfw3.h>
 class Window
 {
+	bool _updateViewport = false;
+	void createGLFWWindow();
+
 public:
 	Window();
-	Window(const char* title, int width, int height);
+	Window(const char* title,
+			int width,
+			int height,
+			bool fullscreen,
+			bool vsync);
 	~Window();
 
 	GLFWwindow* glfwWindow;
 	int width, height;
 	const char* title;
+	bool isFullscreen = false;
+	bool isVSync = true;
 
+	void updateViewport();
 	void destroy();
-	void createGLFWWindow();
+
 	void cursorMode(int mode);
+	void resize(int width, int height, bool fullscreen);
+	//static void resizeCallback(GLFWwindow* window, int x, int y);
 };
 
 #endif // WINDOW_H_INCLUDED

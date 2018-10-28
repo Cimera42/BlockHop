@@ -53,6 +53,8 @@ set(SOURCE_FILES ${SOURCE_FILES} src/components/TerrainComponent.cpp src/compone
 
 set(SOURCE_FILES ${SOURCE_FILES} src/triggers/ClickedTrigger.cpp src/triggers/ClickedTrigger.h)
 
+set(SOURCE_FILES ${SOURCE_FILES} src/gameSettings.cpp src/gameSettings.h)
+
 set(SOURCE_FILES ${SOURCE_FILES} src/scenes/Scene.cpp src/scenes/Scene.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/scenes/MainGameScene.cpp src/scenes/MainGameScene.h)
 
@@ -63,7 +65,8 @@ set(SOURCE_FILES ${SOURCE_FILES} src/loaders/baseAsset.cpp src/loaders/baseAsset
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelAsset.cpp src/loaders/modelAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/imageAsset.cpp src/loaders/imageAsset.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelLoader.cpp src/loaders/modelLoader.h)
-set(SOURCE_FILES ${SOURCE_FILES} src/loaders/modelLoader.cpp src/loaders/modelLoader.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/configAsset.cpp src/loaders/configAsset.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/loaders/configLoader.cpp src/loaders/configLoader.h)
 
 add_executable(BlockHop ${SOURCE_FILES})
 

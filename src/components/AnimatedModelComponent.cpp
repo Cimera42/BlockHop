@@ -44,7 +44,7 @@ BoneMeshChanging::~BoneMeshChanging()
 void AnimatedModelComponent::setValues(json inValues)
 {
 	//Will throw if incorrect/should automatically be caught by ECSManager
-	modelAsset = static_cast<ModelAsset*>(AssetManager::i()->loadSync(inValues["filename"]));
+	modelAsset = static_cast<ModelAsset*>(AssetManager::get().loadSync(inValues["filename"]));
 	load();
 }
 

@@ -91,7 +91,7 @@ void TerrainComponent::setValues(json inValues)
 	}
 
 	std::vector<std::string> textureFilenames = inValues["textures"];
-	ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::i()->getLoader("image"));
+	ImageLoader* imgLoader = static_cast<ImageLoader*>(AssetManager::get().getLoader("image"));
 	texture = imgLoader->loadTexture(textureFilenames);
 
 	genBuffers();

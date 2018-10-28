@@ -30,7 +30,7 @@ void ClickedTrigger::runSystemFunction(SystemBase* sys) {
 
 	hitEntities.clear();
 
-	auto mouseButtonSystem = ECSManager::i()->findSystem<MouseButtonSystem>();
+	auto mouseButtonSystem = ECSManager::get().findSystem<MouseButtonSystem>();
 	int b = 0;
 	if(mouseButtonSystem->isButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
@@ -42,7 +42,7 @@ void ClickedTrigger::runSystemFunction(SystemBase* sys) {
 	}
 	if(b != 0)
 	{
-		Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
+		Entity* cameraEntity = ECSManager::get().findEntity("Camera");
 		auto cameraTransform = cameraEntity->getComponent<TransformComponent>();
 		glm::vec3 startGlm = cameraTransform->getPosition();
 		glm::vec3 directionGlm = cameraTransform->getForward();
@@ -72,7 +72,7 @@ void ClickedTrigger::runSystemFunction(SystemBase* sys) {
 			// Set position worldHit
 			std::string indicatorName = "RaycastIndicator";
 			indicatorName += std::to_string(indicatorAccumulator);
-			auto indicator = ECSManager::i()->findEntity(indicatorName);
+			auto indicator = ECSManager::get().findEntity(indicatorName);
 			if(indicator)
 			{
 				auto indicatorTransform = indicator->getComponent<TransformComponent>();
@@ -96,7 +96,7 @@ void ClickedTrigger::runSystemFunction(SystemBase* sys) {
 
 				std::vector<json> trigData = {};
 
-				ECSManager::i()->createEntity(indicatorName, comps, compData, trigs, trigData);
+				ECSManager::get().createEntity(indicatorName, comps, compData, trigs, trigData);
 			}
 		}
 	}

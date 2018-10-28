@@ -9,12 +9,23 @@
 #include <string>
 #include <json.hpp>
 #include "assetLoader.h"
+#include "configLoader.h"
 #include "imageLoader.h"
 #include "modelLoader.h"
 #include "../logger.h"
 using json = nlohmann::json;
 
 class AssetManager {
+public:
+	/* Singleton */
+	static AssetManager& get()
+	{
+		static AssetManager c_instance;
+		return c_instance;
+	}
+
+private:
+	AssetManager();
 	/*
 	 * Base asset loading class - singleton & factory pattern
 	 * Maintains a map of loaders which contain all assets that have been loaded into the engine
@@ -33,23 +44,17 @@ class AssetManager {
 
 	std::map<std::string, AssetLoader*> exportedLoaders; //Loader with name
 
-	static AssetManager *c_instance;
 public:
-	AssetManager();
+	AssetManager(AssetManager const&) = delete;
+	void operator=(AssetManager const&) = delete;
 	~AssetManager();
 
 	void readConfig();
-
 	/*
-	 * Singleton pattern. Must use i()-> to access any class methods.
+	 * Load default assets after reading config, at a convenient time
 	 */
-	static AssetManager *i()
-	{
-		if (!c_instance) {
-			c_instance = new AssetManager();
-		}
-		return c_instance;
-	}
+	void loadDefault();
+
 
 	/*
 	 * Load a raw asset from file. Will automatically determine the loader to use for the

@@ -45,7 +45,7 @@ void MouseInputSystem::setLastPos(glm::vec2 inLastPos)
 
 void mouseMoveInputEvent(GLFWwindow *window, double xpos, double ypos)
 {
-	MouseInputSystem* mouseSystem = ECSManager::i()->findSystem<MouseInputSystem>();
+	MouseInputSystem* mouseSystem = ECSManager::get().findSystem<MouseInputSystem>();
 	glm::vec2 lastPos = mouseSystem->getLastPos();
 	if(lastPos.x == 0 && lastPos.y == 0)
 		lastPos = glm::vec2(xpos, ypos);

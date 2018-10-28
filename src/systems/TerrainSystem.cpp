@@ -26,7 +26,7 @@ TerrainSystem::~TerrainSystem()
 
 void TerrainSystem::update(double dt)
 {
-	Entity* cameraEntity = ECSManager::i()->findEntity("Camera");
+	Entity* cameraEntity = ECSManager::get().findEntity("Camera");
 	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>();
 
 	updateSystemTriggers();

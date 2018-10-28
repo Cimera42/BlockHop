@@ -22,24 +22,24 @@ void TriggerBase::subscribeEntityToActions(Entity *ent) {
 		actionMode mode = std::get<1>(action);
 		//In mode, check correct type and attempt to subscribe
 		if(mode == EXACT_ONLY) {
-			if(ECSManager::i()->isExactType(ent, identity)) {
+			if(ECSManager::get().isExactType(ent, identity)) {
 				//Subscribe and break
 				subbedActions.push_back(action);
 				break;
 			}
 		} else if(mode == EXACT) {
-			if(ECSManager::i()->isExactType(ent, identity)) {
+			if(ECSManager::get().isExactType(ent, identity)) {
 				//Subscribe but dont break
 				subbedActions.push_back(action);
 			}
 		} else if(mode == INEXACT_ONLY) {
-			if(ECSManager::i()->isType(ent, identity)) {
+			if(ECSManager::get().isType(ent, identity)) {
 				//Subscribe and break
 				subbedActions.push_back(action);
 				break;
 			}
 		} else if(mode == INEXACT) {
-			if(ECSManager::i()->isType(ent, identity)) {
+			if(ECSManager::get().isType(ent, identity)) {
 				//Subscribe but dont break
 				subbedActions.push_back(action);
 			}
