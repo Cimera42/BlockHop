@@ -14,5 +14,7 @@ void SoundComponent::setValues(json inValues)
 {
 	filename = inValues["filename"];
 
-	wav.load(filename.c_str());
+	SoLoud::result loadResult = wav.load(filename.c_str());
+	if(loadResult != SoLoud::SO_NO_ERROR)
+		throw std::invalid_argument("Could not find audio file \"" + filename + "\"");
 }

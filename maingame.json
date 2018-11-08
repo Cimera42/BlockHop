@@ -888,7 +888,7 @@
 			]
 		},
 		{
-			"name": "Terrain",
+			"name": "Sound",
 			"components": [
 				{
 					"name": "transformComponent",
@@ -901,7 +901,7 @@
 				{
 					"name": "soundComponent",
 					"values": {
-						"filename": "assets/Jo Blankenburg - Hyde.ogg"
+						"filename": "assets/Jo Blankenburg - Hyde.sogg"
 					}
 				}
 			]

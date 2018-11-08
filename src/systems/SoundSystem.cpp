@@ -23,14 +23,22 @@ void SoundSystem::subscribeCallback(Entity *entSubbed)
 {
 	auto soundComponent = entSubbed->getComponent<SoundComponent>();
 	auto transformComponent = entSubbed->getComponent<TransformComponent>();
-	auto pos = transformComponent->getPosition();
-	soundComponent->soundHandle = soloud.play3d(
-		soundComponent->wav,
-		pos.x,
-		pos.y,
-		pos.z
-	);
-	soloud.set3dSourceAttenuation(soundComponent->soundHandle, SoLoud::AudioSource::ATTENUATION_MODELS::INVERSE_DISTANCE, 0.5);
+	if(transformComponent)
+	{
+		auto pos = transformComponent->getPosition();
+		soundComponent->soundHandle = soloud.play3d(
+			soundComponent->wav,
+			pos.x,
+			pos.y,
+			pos.z
+		);
+		soloud.set3dSourceAttenuation(soundComponent->soundHandle,
+									  SoLoud::AudioSource::ATTENUATION_MODELS::INVERSE_DISTANCE, 0.5);
+	}
+	else
+	{
+		soundComponent->soundHandle = soloud.play(soundComponent->wav);
+	}
 
 //	soloud.setVolume(handle1, 0.5f);            // Set volume; 1.0f is "normal"
 //	soloud.setPan(handle1, -0.2f);              // Set pan; -1 is left, 1 is right

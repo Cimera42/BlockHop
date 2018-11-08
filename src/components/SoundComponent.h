@@ -18,7 +18,7 @@ public:
 
 	std::string filename;
 	SoLoud::Wav wav;
-	int soundHandle;
+	SoLoud::handle soundHandle;
 
 	friend std::ostream &operator<< (std::ostream &os, SoundComponent const &c) {
 		os << "SoundComponent";
