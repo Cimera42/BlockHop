@@ -29,7 +29,8 @@ public:
 	//Entity* cameraEntity;
 
 	void load();
-	void run(std::chrono::duration<double> dt);
+	void runLogic(double dt);
+	void runPresentation(double dt);
 };
 
 

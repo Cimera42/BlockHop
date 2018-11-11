@@ -52,16 +52,29 @@ int main()
 	std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
 	start = std::chrono::steady_clock::now();
 	previous = start;
+	double accumulator; //TODO precision?
 	while(!shouldExit)
 	{
 		window->updateViewport();
 
 		current = std::chrono::steady_clock::now();
-		std::chrono::duration<double> dt = (current - previous);
+		std::chrono::duration<double> frameTime = (current - previous);
 		previous = current;
 
+
+		accumulator += frameTime.count();
+
+		while(accumulator >= GameSettings::get().updateTimestep)
+		{
+			// TODO serialize current state somehow
+			currScene->runLogic(GameSettings::get().updateTimestep);
+			accumulator -= GameSettings::get().updateTimestep;
+		}
+
+		const double alpha = accumulator / GameSettings::get().updateTimestep;
+
 		//Run the current scene
-		currScene->run(dt);
+		currScene->runPresentation(frameTime.count());
 
 		if(glfwGetKey(window->glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			shouldExit = true;

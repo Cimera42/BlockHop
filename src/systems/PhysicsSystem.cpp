@@ -3,6 +3,7 @@
 //
 
 #include "PhysicsSystem.h"
+#include "../gameSettings.h"
 #include "../ecs/ecsManager.h"
 #include "../components/TransformComponent.h"
 #include "../components/PhysicsComponent.h"
@@ -39,8 +40,6 @@ btQuaternion fromVecToVecQuat(btVector3 from, btVector3 to)
 
 PhysicsSystem::PhysicsSystem()
 {
-	accumulator = 0;
-
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	overlappingPairCache = new btDbvtBroadphase();
@@ -377,14 +376,9 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 extern Window window;
 void PhysicsSystem::update(double dt)
 {
-	accumulator += dt;
-
-	while(accumulator >= idealTimestep)
-	{
-		dynamicsWorld->stepSimulation(idealTimestep, 10);
-
-		accumulator -= idealTimestep;
-	}
+	// Update physics world according to `timeStep < maxSubSteps * fixedTimeStep`!
+	//dynamicsWorld->stepSimulation(dt, 2, GameSettings::get().updateTimestep);
+	dynamicsWorld->stepSimulation(dt, 10); //Default fixedTimeStep for physics is 1/60
 
 	//Run triggers
 	updateSystemTriggers();

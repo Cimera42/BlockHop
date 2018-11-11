@@ -6,16 +6,12 @@
 #define BLOCKHOP_ANIMATEDMODELSYSTEM_H
 
 #include "../ecs/system.h"
-#include "../shader.h"
 
 class AnimatedModelSystem : public System<AnimatedModelSystem>
 {
 public:
 	AnimatedModelSystem();
 	~AnimatedModelSystem();
-
-	Shader *genericShader;
-	Shader *boneShader;
 
 	void update(double dt);
 };

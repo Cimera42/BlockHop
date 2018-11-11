@@ -33,6 +33,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/systems/TimeSystem.cpp src/systems/TimeSyst
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/TextSystem.cpp src/systems/TextSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/AnimatedModelSystem.cpp src/systems/AnimatedModelSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/CameraSystem.cpp src/systems/CameraSystem.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/systems/RenderModelSystem.cpp src/systems/RenderModelSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/MouseInputSystem.cpp src/systems/MouseInputSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/KeyboardInputSystem.cpp src/systems/KeyboardInputSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/MouseButtonSystem.cpp src/systems/MouseButtonSystem.h)

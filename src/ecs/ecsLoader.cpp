@@ -37,7 +37,7 @@ void ECSLoader::readStream(std::string fileName) {
 		for (auto& sys : j["systems"]) {
 			std::vector<std::string> compsToSub = sys["compsToSub"];
 			std::vector<std::string> trigsToAttach = sys["trigsToAttach"];
-			ECSManager::get().createSystem(sys["name"], compsToSub, trigsToAttach);
+			ECSManager::get().createSystem(sys["name"], sys["isPresentation"], compsToSub, trigsToAttach);
 		}
 
 		//Get entities

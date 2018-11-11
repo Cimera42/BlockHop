@@ -16,27 +16,23 @@ void MainGameScene::load() {
 	ecsLoader.readStream("maingame.json");
 
 	//Get 'special' entities
-	mapEntity = ECSManager::get().findEntity("Map");
+	/*mapEntity = ECSManager::get().findEntity("Map");
 	mines.push_back(ECSManager::get().findEntity("Mine1"));
 	mines.push_back(ECSManager::get().findEntity("Mine2"));
-	mines.push_back(ECSManager::get().findEntity("Mine3"));
+	mines.push_back(ECSManager::get().findEntity("Mine3"));*/
 }
 
-void MainGameScene::run(std::chrono::duration<double> dt) {
-	glClearColor(0.55f, 0.65f, 0.8f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+void MainGameScene::runLogic(double dt) {
 	//Run update on our systems
-	for(auto sysPair : ECSManager::get().gameSystems)
+	for(auto sysTuple : ECSManager::get().getLogicSystems())
 	{
-		auto system = sysPair.second;
+		auto system = std::get<1>(sysTuple);
 		//Get time difference for updating systems
-		//Call both basic update and one with timestep, implementation dependant
-		system->update(dt.count());
+		system->update(dt);
 	}
 
 	//Finally update our 'scores' and see if we're at endgame
-	int team1Count = 0;
+	/*int team1Count = 0;
 	int team2Count = 0;
 	for(auto mine : mines) {
 		TeamComponent* teamComponent = mine->getComponent<TeamComponent>();
@@ -60,5 +56,18 @@ void MainGameScene::run(std::chrono::duration<double> dt) {
 	if(team2Resources > resourceEndGoal) {
 		//Transition away to end scene/end game
 		std::cout<< "team 2 wins" << std::endl;
+	}*/
+}
+
+void MainGameScene::runPresentation(double dt) {
+	glClearColor(0.55f, 0.65f, 0.8f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//Run update on our systems
+	for(auto sysTuple : ECSManager::get().getPresentationSystems())
+	{
+		auto system = std::get<1>(sysTuple);
+		//Get time difference for updating systems
+		system->update(dt);
 	}
 }

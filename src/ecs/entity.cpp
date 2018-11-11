@@ -91,23 +91,23 @@ void Entity::unsubscribeToActions() {
 
 void Entity::subscribeToSystems() {
 	//Move through each system
-	for(auto &sys : ECSManager::get().gameSystems) {
-		auto sysPtr = sys.second;
+	for(auto &sys : ECSManager::get().getGameSystems()) {
+		auto sysPtr = std::get<1>(sys);
 
 		//Attempt to subscribe.
 		//A false return type means that either the entity is already subbed
 		//or doesn't meet the requirements
 		if(sysPtr->subscribeEntity(this)) {
 			sysPtr->subscribeCallback(this);
-			Logger() << "Entity \"" << this->getName() << "\" successfully subscribed to "<<sys.first;
+			Logger() << "Entity \"" << this->getName() << "\" successfully subscribed to "<<std::get<0>(sys);
 		}
 	}
 }
 
 void Entity::unsubscribeFromSystems() {
 	//Move through each system
-	for(auto &sys : ECSManager::get().gameSystems) {
-		auto sysPtr = sys.second;
+	for(auto &sys : ECSManager::get().getGameSystems()) {
+		auto sysPtr = std::get<1>(sys);
 
 		if(sysPtr->hasEntity(this) && !sysPtr->hasRequired(this))
 		{
@@ -115,7 +115,7 @@ void Entity::unsubscribeFromSystems() {
 			//A false return type means that the entity is not subbed
 			if(sysPtr->unsubscribeEntity(this)) {
 				sysPtr->unsubscribeCallback(this);
-				Logger() << "Entity \"" << this->getName() << "\" successfully unsubscribed from "<<sys.first;
+				Logger() << "Entity \"" << this->getName() << "\" successfully unsubscribed from "<<std::get<0>(sys);
 			}
 		}
 	}
