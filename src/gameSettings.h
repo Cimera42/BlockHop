@@ -28,6 +28,7 @@ public:
 
 	// Non-client controlled settings
 	const double updateTimestep = 1.0f/10.0f; //1.0f/60.0f
+	const double maxFrameTime = 0.25f;
 
 	// Initiate loading / saving
 	void loadSettings();

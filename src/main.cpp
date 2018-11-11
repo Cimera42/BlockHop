@@ -58,23 +58,26 @@ int main()
 		window->updateViewport();
 
 		current = std::chrono::steady_clock::now();
-		std::chrono::duration<double> frameTime = (current - previous);
+		std::chrono::duration<double> timeDiff = (current - previous);
+		double frameTime = timeDiff.count();
+		if(frameTime > GameSettings::get().maxFrameTime) {
+			frameTime = GameSettings::get().maxFrameTime;
+		}
 		previous = current;
 
+		accumulator += frameTime;
 
-		accumulator += frameTime.count();
-
+		//Run the current scene's logic
 		while(accumulator >= GameSettings::get().updateTimestep)
 		{
-			// TODO serialize current state somehow
 			currScene->runLogic(GameSettings::get().updateTimestep);
 			accumulator -= GameSettings::get().updateTimestep;
 		}
 
 		const double alpha = accumulator / GameSettings::get().updateTimestep;
 
-		//Run the current scene
-		currScene->runPresentation(frameTime.count());
+		//Run the current scene's presentation and make use of extrapolation
+		currScene->runPresentation(frameTime);
 
 		if(glfwGetKey(window->glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			shouldExit = true;
