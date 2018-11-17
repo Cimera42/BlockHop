@@ -68,6 +68,14 @@
 			"trigsToAttach": []
 		},
 		{
+			"name": "transformSystem",
+			"isPresentation": false,
+			"compsToSub": [
+				"transformComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
 			"name": "physicsSystem",
 			"isPresentation": false,
 			"compsToSub": [
@@ -132,7 +140,7 @@
 					"name": "transformComponent",
 					"values": {
 						"position": [0, 0, 0],
-						"rotation": [1, 0 , 0, 0],
+						"rotation": [1, 0, 0, 0],
 						"scale": [1, 1, 1]
 					}
 				},

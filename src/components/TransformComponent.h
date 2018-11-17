@@ -17,6 +17,9 @@ class TransformComponent : public Component<TransformComponent>
 	glm::quat rotation;
 	glm::vec3 scale;
 
+	glm::vec3 velocity;
+	glm::quat angularVelocity;
+
 	glm::vec3 forward;
 	glm::vec3 right;
 	glm::vec3 up;
@@ -31,11 +34,18 @@ public:
 
 	glm::mat4 getMatrix() const;
 	glm::vec3 getPosition() const;
+	glm::vec3 getAlphaPosition(const double alpha) const;
 	void setPosition(glm::vec3 inPosition);
 	glm::quat getRotation() const;
+	glm::quat getAlphaRotation(const double alpha) const;
 	void setRotation(glm::quat inRotation);
 	glm::vec3 getScale() const;
 	void setScale(glm::vec3 inScale);
+
+	glm::vec3 getVelocity() const;
+	void setVelocity(glm::vec3 inVelocity);
+	glm::quat getAngularVelocity() const;
+	void setAngularVelocity(glm::quat inAngularVelocity);
 
 	glm::vec3 getForward() const;
 	glm::vec3 getRight() const;

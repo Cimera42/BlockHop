@@ -39,6 +39,7 @@ set(SOURCE_FILES ${SOURCE_FILES} src/systems/KeyboardInputSystem.cpp src/systems
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/MouseButtonSystem.cpp src/systems/MouseButtonSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/PhysicsSystem.cpp src/systems/PhysicsSystem.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/systems/TerrainSystem.cpp src/systems/TerrainSystem.h)
+set(SOURCE_FILES ${SOURCE_FILES} src/systems/TransformSystem.cpp src/systems/TransformSystem.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TestComponent.cpp src/components/TestComponent.h)
 set(SOURCE_FILES ${SOURCE_FILES} src/components/TimeoutComponent.cpp src/components/TimeoutComponent.h)

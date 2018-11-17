@@ -32,25 +32,27 @@ void KeyboardInputSystem::update(double dt, double alpha)
 		auto keyboardControl = entity->getComponent<KeyboardControlComponent>();
 
 		glm::vec3 displaced = transform->getPosition();
+		glm::vec3 newVel(0);
+		float mod = 4.0;
 		if(isKeyPressed(keyboardControl->getForwardKey()))
-			displaced += transform->getForward() * ((float)dt) * 5.0f;
+			newVel += transform->getForward() * mod;
 
 		if(isKeyPressed(keyboardControl->getBackKey()))
-			displaced -= transform->getForward() * ((float)dt) * 5.0f;
+			newVel -= transform->getForward() * mod;
 
 		if(isKeyPressed(keyboardControl->getLeftKey()))
-			displaced += transform->getRight() * ((float)dt) * 5.0f;
+			newVel += transform->getRight() * mod;
 
 		if(isKeyPressed(keyboardControl->getRightKey()))
-			displaced -= transform->getRight() * ((float)dt) * 5.0f;
+			newVel -= transform->getRight() * mod;
 
 		if(isKeyPressed(keyboardControl->getUpKey()))
-			displaced += transform->getUp() * ((float)dt) * 5.0f;
+			newVel += transform->getUp() * mod;
 
 		if(isKeyPressed(keyboardControl->getDownKey()))
-			displaced -= transform->getUp() * ((float)dt) * 5.0f;
+			newVel -= transform->getUp() * mod;
 
-		transform->setPosition(displaced);
+		transform->setVelocity(newVel);
 	}
 
 	if(isKeyPressed(GLFW_KEY_R))

@@ -21,6 +21,9 @@ void TransformComponent::setValues(json inValues) {
 
 	scale = inValues["scale"];
 
+	velocity = glm::vec3(0,0,0);
+	angularVelocity = glm::quat(0,0,0,0);
+
 	genMatrix();
 	genVectors();
 }
@@ -41,6 +44,10 @@ void TransformComponent::genVectors()
 }
 
 glm::vec3 TransformComponent::getPosition() const { return position; }
+glm::vec3 TransformComponent::getAlphaPosition(const double alpha) const
+{
+	return position + (velocity * float(alpha));
+}
 void TransformComponent::setPosition(glm::vec3 inPosition)
 {
 	position = inPosition;
@@ -48,6 +55,10 @@ void TransformComponent::setPosition(glm::vec3 inPosition)
 }
 
 glm::quat TransformComponent::getRotation() const { return rotation; }
+glm::quat TransformComponent::getAlphaRotation(const double alpha) const
+{
+	return rotation + ((float(alpha) * angularVelocity * rotation) / 2.0f);
+}
 void TransformComponent::setRotation(glm::quat inRotation)
 {
 	rotation = inRotation;
@@ -60,6 +71,18 @@ void TransformComponent::setScale(glm::vec3 inScale)
 {
 	scale = inScale;
 	genMatrix();
+}
+
+glm::vec3 TransformComponent::getVelocity() const { return velocity; }
+void TransformComponent::setVelocity(glm::vec3 inVelocity)
+{
+	velocity = inVelocity;
+}
+
+glm::quat TransformComponent::getAngularVelocity() const { return angularVelocity; }
+void TransformComponent::setAngularVelocity(glm::quat inAngularVelocity)
+{
+	angularVelocity = inAngularVelocity;
 }
 
 glm::mat4 TransformComponent::getMatrix() const { return matrix; }

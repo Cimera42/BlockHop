@@ -401,6 +401,12 @@ void PhysicsSystem::update(double dt, double alpha)
 			btQuaternion rot = transform.getRotation() * (-physicsComp->offsetRot);
 			transformComp->setPosition(glm::vec3(pos.getX(), pos.getY(), pos.getZ()));
 			transformComp->setRotation(glm::quat(rot.getW(), rot.getX(), rot.getY(), rot.getZ()));
+
+			auto velocity = rb->getLinearVelocity();
+			transformComp->setVelocity(glm::vec3(velocity.getX(), velocity.getY(), velocity.getZ()));
+
+			auto angularVelocity = rb->getAngularVelocity();
+			transformComp->setAngularVelocity(glm::quat(angularVelocity.getX(), angularVelocity.getY(), angularVelocity.getZ(), 0));
 		}
 	}
 }
