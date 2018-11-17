@@ -12,7 +12,7 @@ SYSTEM_EXPORT(TransformSystem, "transformSystem")
 TransformSystem::TransformSystem() {}
 TransformSystem::~TransformSystem() {}
 
-void TransformSystem::update(double dt)
+void TransformSystem::update(double dt, double alpha)
 {
 	updateSystemTriggers();
 

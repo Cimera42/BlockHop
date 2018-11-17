@@ -26,6 +26,14 @@
 	],
 	"systems": [
 		{
+			"name": "transformSystem",
+			"isPresentation": false,
+			"compsToSub": [
+				"transformComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
 			"name": "eventSystem",
 			"isPresentation": false,
 			"compsToSub": [
@@ -64,14 +72,6 @@
 			"isPresentation": false,
 			"compsToSub": [
 				"mouseControlComponent"
-			],
-			"trigsToAttach": []
-		},
-		{
-			"name": "transformSystem",
-			"isPresentation": false,
-			"compsToSub": [
-				"transformComponent"
 			],
 			"trigsToAttach": []
 		},

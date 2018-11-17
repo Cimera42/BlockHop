@@ -377,8 +377,8 @@ extern Window window;
 void PhysicsSystem::update(double dt, double alpha)
 {
 	// Update physics world according to `timeStep < maxSubSteps * fixedTimeStep`!
-	//dynamicsWorld->stepSimulation(dt, 2, GameSettings::get().updateTimestep);
-	dynamicsWorld->stepSimulation(dt, 10); //Default fixedTimeStep for physics is 1/60
+	auto pft = GameSettings::get().physicsFixedTimestep;
+	dynamicsWorld->stepSimulation(btScalar(dt), (int) ceil(dt / pft), btScalar(pft)); //Default fixedTimeStep for physics is 1/60
 
 	//Run triggers
 	updateSystemTriggers();
@@ -406,7 +406,7 @@ void PhysicsSystem::update(double dt, double alpha)
 			transformComp->setVelocity(glm::vec3(velocity.getX(), velocity.getY(), velocity.getZ()));
 
 			auto angularVelocity = rb->getAngularVelocity();
-			transformComp->setAngularVelocity(glm::quat(angularVelocity.getX(), angularVelocity.getY(), angularVelocity.getZ(), 0));
+			transformComp->setAngularVelocity(glm::vec3(angularVelocity.getX(), angularVelocity.getY(), angularVelocity.getZ()));
 		}
 	}
 }

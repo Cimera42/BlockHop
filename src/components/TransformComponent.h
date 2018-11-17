@@ -18,7 +18,7 @@ class TransformComponent : public Component<TransformComponent>
 	glm::vec3 scale;
 
 	glm::vec3 velocity;
-	glm::quat angularVelocity;
+	glm::vec3 angularVelocity;
 
 	glm::vec3 forward;
 	glm::vec3 right;
@@ -33,6 +33,7 @@ public:
 	void setValues(json inValues);
 
 	glm::mat4 getMatrix() const;
+	glm::mat4 getAlphaMatrix(const double alpha) const;
 	glm::vec3 getPosition() const;
 	glm::vec3 getAlphaPosition(const double alpha) const;
 	void setPosition(glm::vec3 inPosition);
@@ -44,12 +45,15 @@ public:
 
 	glm::vec3 getVelocity() const;
 	void setVelocity(glm::vec3 inVelocity);
-	glm::quat getAngularVelocity() const;
-	void setAngularVelocity(glm::quat inAngularVelocity);
+	glm::vec3 getAngularVelocity() const;
+	void setAngularVelocity(glm::vec3 inAngularVelocity);
 
 	glm::vec3 getForward() const;
 	glm::vec3 getRight() const;
 	glm::vec3 getUp() const;
+	glm::vec3 getAlphaForward(const double alpha) const;
+	glm::vec3 getAlphaRight(const double alpha) const;
+	glm::vec3 getAlphaUp(const double alpha) const;
 
 	friend std::ostream &operator<< (std::ostream &os, TransformComponent const &t) {
 		os << "TransformComponent: ";

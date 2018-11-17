@@ -13,7 +13,7 @@ public:
 	TransformSystem();
 	~TransformSystem();
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_TRANSFORMSYSTEM_H

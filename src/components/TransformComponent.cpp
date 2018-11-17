@@ -22,7 +22,7 @@ void TransformComponent::setValues(json inValues) {
 	scale = inValues["scale"];
 
 	velocity = glm::vec3(0,0,0);
-	angularVelocity = glm::quat(0,0,0,0);
+	angularVelocity = glm::vec3(0,0,0);
 
 	genMatrix();
 	genVectors();
@@ -57,7 +57,9 @@ void TransformComponent::setPosition(glm::vec3 inPosition)
 glm::quat TransformComponent::getRotation() const { return rotation; }
 glm::quat TransformComponent::getAlphaRotation(const double alpha) const
 {
-	return rotation + ((float(alpha) * angularVelocity * rotation) / 2.0f);
+	auto quatAV = glm::quat(angularVelocity.x, angularVelocity.y, angularVelocity.z, 0);
+	auto r = rotation + ((float(alpha) * quatAV * rotation) / 2.0f);
+	return glm::normalize(r);
 }
 void TransformComponent::setRotation(glm::quat inRotation)
 {
@@ -79,8 +81,8 @@ void TransformComponent::setVelocity(glm::vec3 inVelocity)
 	velocity = inVelocity;
 }
 
-glm::quat TransformComponent::getAngularVelocity() const { return angularVelocity; }
-void TransformComponent::setAngularVelocity(glm::quat inAngularVelocity)
+glm::vec3 TransformComponent::getAngularVelocity() const { return angularVelocity; }
+void TransformComponent::setAngularVelocity(glm::vec3 inAngularVelocity)
 {
 	angularVelocity = inAngularVelocity;
 }
@@ -89,3 +91,25 @@ glm::mat4 TransformComponent::getMatrix() const { return matrix; }
 glm::vec3 TransformComponent::getForward() const { return forward; }
 glm::vec3 TransformComponent::getRight() const { return right; }
 glm::vec3 TransformComponent::getUp() const { return up; }
+
+glm::mat4 TransformComponent::getAlphaMatrix(const double alpha) const
+{
+	auto alphaMatrix = glm::mat4();
+	alphaMatrix *= glm::translate(getAlphaPosition(alpha));
+	alphaMatrix *= glm::toMat4(getAlphaRotation(alpha));
+	alphaMatrix *= glm::scale(scale);
+	return alphaMatrix;
+}
+
+glm::vec3 TransformComponent::getAlphaForward(const double alpha) const
+{
+	return glm::vec3(0,0,1) * getAlphaRotation(alpha);
+}
+glm::vec3 TransformComponent::getAlphaRight(const double alpha) const
+{
+	return glm::vec3(1,0,0) * getAlphaRotation(alpha);
+}
+glm::vec3 TransformComponent::getAlphaUp(const double alpha) const
+{
+	return glm::vec3(0,1,0) * getAlphaRotation(alpha);
+}

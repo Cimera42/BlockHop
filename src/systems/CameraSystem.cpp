@@ -23,8 +23,8 @@ void CameraSystem::update(double dt, double alpha)
 		auto camera = entity->getComponent<CameraComponent>();
 		auto transform = entity->getComponent<TransformComponent>();
 
-		camera->lookAt(transform->getPosition(),
-					   transform->getPosition() + transform->getForward(),
-					   transform->getUp());
+		camera->lookAt(transform->getAlphaPosition(alpha),
+					   transform->getAlphaPosition(alpha) + transform->getAlphaForward(alpha),
+					   transform->getAlphaUp(alpha));
 	}
 }

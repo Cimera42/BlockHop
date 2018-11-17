@@ -27,8 +27,9 @@ public:
 	void operator=(GameSettings const&) = delete;
 
 	// Non-client controlled settings
-	const double updateTimestep = 1.0f/10.0f; //1.0f/60.0f
+	const double updateTimestep = 1.0f/60.0f; //1.0f/60.0f
 	const double maxFrameTime = 0.25f;
+	const double physicsFixedTimestep = 1.0f / 60.0f;
 
 	// Initiate loading / saving
 	void loadSettings();
