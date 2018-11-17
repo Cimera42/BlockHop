@@ -31,7 +31,7 @@ RenderModelSystem::~RenderModelSystem() {
 	delete boneShader;
 }
 
-void RenderModelSystem::update(double dt)
+void RenderModelSystem::update(double dt, double alpha)
 {
 	Entity* cameraEntity = ECSManager::get().findEntity("Camera");
 	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>();

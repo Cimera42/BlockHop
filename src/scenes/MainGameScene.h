@@ -29,8 +29,8 @@ public:
 	//Entity* cameraEntity;
 
 	void load();
-	void runLogic(double dt);
-	void runPresentation(double dt);
+	void runLogic(double dt, double alpha);
+	void runPresentation(double dt, double alpha);
 };
 
 

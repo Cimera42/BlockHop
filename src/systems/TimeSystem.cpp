@@ -11,7 +11,7 @@ SYSTEM_EXPORT(TimeSystem, "timeSystem")
 TimeSystem::TimeSystem() {}
 TimeSystem::~TimeSystem() {}
 
-void TimeSystem::update(double dt)
+void TimeSystem::update(double dt, double alpha)
 {
 	updateSystemTriggers();
 

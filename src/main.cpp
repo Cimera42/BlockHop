@@ -70,14 +70,14 @@ int main()
 		//Run the current scene's logic
 		while(accumulator >= GameSettings::get().updateTimestep)
 		{
-			currScene->runLogic(GameSettings::get().updateTimestep);
+			currScene->runLogic(GameSettings::get().updateTimestep, 0);
 			accumulator -= GameSettings::get().updateTimestep;
 		}
 
 		const double alpha = accumulator / GameSettings::get().updateTimestep;
 
 		//Run the current scene's presentation and make use of extrapolation
-		currScene->runPresentation(frameTime);
+		currScene->runPresentation(frameTime, alpha);
 
 		if(glfwGetKey(window->glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			shouldExit = true;

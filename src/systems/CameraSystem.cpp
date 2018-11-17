@@ -12,7 +12,7 @@ SYSTEM_EXPORT(CameraSystem, "cameraSystem")
 CameraSystem::CameraSystem() {}
 CameraSystem::~CameraSystem() {}
 
-void CameraSystem::update(double dt)
+void CameraSystem::update(double dt, double alpha)
 {
 	updateSystemTriggers();
 

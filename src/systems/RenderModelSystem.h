@@ -17,7 +17,7 @@ public:
 	Shader *genericShader;
 	Shader *boneShader;
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_RENDERMODELSYSTEM_H

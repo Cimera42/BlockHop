@@ -17,7 +17,7 @@ AnimatedModelSystem::AnimatedModelSystem() {}
 
 AnimatedModelSystem::~AnimatedModelSystem() {}
 
-void AnimatedModelSystem::update(double dt)
+void AnimatedModelSystem::update(double dt, double alpha)
 {
 	KeyboardInputSystem* keyInput = ECSManager::get().findSystem<KeyboardInputSystem>();
 

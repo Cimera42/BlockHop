@@ -13,7 +13,7 @@ public:
 	AnimatedModelSystem();
 	~AnimatedModelSystem();
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_ANIMATEDMODELSYSTEM_H

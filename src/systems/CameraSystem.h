@@ -13,7 +13,7 @@ public:
 	CameraSystem();
 	~CameraSystem();
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_CAMERASYSTEM_H

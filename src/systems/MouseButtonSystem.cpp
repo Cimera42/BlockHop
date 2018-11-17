@@ -18,7 +18,7 @@ MouseButtonSystem::MouseButtonSystem()
 }
 MouseButtonSystem::~MouseButtonSystem() {}
 
-void MouseButtonSystem::update(double dt)
+void MouseButtonSystem::update(double dt, double alpha)
 {
 	/*
 	updateSystemTriggers();

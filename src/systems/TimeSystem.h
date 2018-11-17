@@ -13,7 +13,7 @@ public:
 	TimeSystem();
 	~TimeSystem();
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_TIMESYSTEM_H

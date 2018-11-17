@@ -22,13 +22,13 @@ void MainGameScene::load() {
 	mines.push_back(ECSManager::get().findEntity("Mine3"));*/
 }
 
-void MainGameScene::runLogic(double dt) {
+void MainGameScene::runLogic(double dt, double alpha) {
 	//Run update on our systems
 	for(auto sysTuple : ECSManager::get().getLogicSystems())
 	{
 		auto system = std::get<1>(sysTuple);
 		//Get time difference for updating systems
-		system->update(dt);
+		system->update(dt, alpha);
 	}
 
 	//Finally update our 'scores' and see if we're at endgame
@@ -59,7 +59,7 @@ void MainGameScene::runLogic(double dt) {
 	}*/
 }
 
-void MainGameScene::runPresentation(double dt) {
+void MainGameScene::runPresentation(double dt, double alpha) {
 	glClearColor(0.55f, 0.65f, 0.8f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -68,6 +68,6 @@ void MainGameScene::runPresentation(double dt) {
 	{
 		auto system = std::get<1>(sysTuple);
 		//Get time difference for updating systems
-		system->update(dt);
+		system->update(dt, alpha);
 	}
 }

@@ -20,7 +20,7 @@ KeyboardInputSystem::KeyboardInputSystem()
 }
 KeyboardInputSystem::~KeyboardInputSystem() {}
 
-void KeyboardInputSystem::update(double dt)
+void KeyboardInputSystem::update(double dt, double alpha)
 {
 	updateSystemTriggers();
 

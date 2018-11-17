@@ -374,7 +374,7 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 }
 
 extern Window window;
-void PhysicsSystem::update(double dt)
+void PhysicsSystem::update(double dt, double alpha)
 {
 	// Update physics world according to `timeStep < maxSubSteps * fixedTimeStep`!
 	//dynamicsWorld->stepSimulation(dt, 2, GameSettings::get().updateTimestep);

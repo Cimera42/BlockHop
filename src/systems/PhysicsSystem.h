@@ -28,7 +28,7 @@ public:
 
 	void subscribeCallback(Entity* entSubbed) override;
 
-	void update(double dt) override;
+	void update(double dt, double alpha) override;
 
 	btTypedConstraint *
 	makeJoint(json jointData, btRigidBody *rigidBody, Entity *entSubbed, PhysicsComponent *physicsComp);

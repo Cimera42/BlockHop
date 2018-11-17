@@ -12,7 +12,7 @@ TestSystem::TestSystem() {
 }
 TestSystem::~TestSystem() {}
 
-void TestSystem::update(double dt) {
+void TestSystem::update(double dt, double alpha) {
 	//Logger()<<"Virtual inheritance test works!";
 
 	updateSystemTriggers();

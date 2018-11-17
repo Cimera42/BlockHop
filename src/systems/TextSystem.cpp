@@ -27,7 +27,7 @@ TextSystem::~TextSystem()
 	delete textShader;
 }
 
-void TextSystem::update(double dt)
+void TextSystem::update(double dt, double alpha)
 {
 	updateSystemTriggers();
 

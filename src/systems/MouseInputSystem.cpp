@@ -20,7 +20,7 @@ MouseInputSystem::MouseInputSystem()
 }
 MouseInputSystem::~MouseInputSystem() {}
 
-void MouseInputSystem::update(double dt)
+void MouseInputSystem::update(double dt, double alpha)
 {
 	/*
 	updateSystemTriggers();

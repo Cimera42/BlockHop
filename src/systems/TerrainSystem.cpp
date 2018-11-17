@@ -24,7 +24,7 @@ TerrainSystem::~TerrainSystem()
 	delete terrainShader;
 }
 
-void TerrainSystem::update(double dt)
+void TerrainSystem::update(double dt, double alpha)
 {
 	Entity* cameraEntity = ECSManager::get().findEntity("Camera");
 	CameraComponent* camera = cameraEntity->getComponent<CameraComponent>();
