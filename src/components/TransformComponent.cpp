@@ -57,7 +57,7 @@ void TransformComponent::setPosition(glm::vec3 inPosition)
 glm::quat TransformComponent::getRotation() const { return rotation; }
 glm::quat TransformComponent::getAlphaRotation(const double alpha) const
 {
-	auto quatAV = glm::quat(angularVelocity.x, angularVelocity.y, angularVelocity.z, 0);
+	auto quatAV = glm::quat(0, angularVelocity.x, angularVelocity.y, angularVelocity.z);
 	auto r = rotation + ((float(alpha) * quatAV * rotation) / 2.0f);
 	return glm::normalize(r);
 }

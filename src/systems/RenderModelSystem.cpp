@@ -45,11 +45,16 @@ void RenderModelSystem::update(double dt, double alpha)
 		TransformComponent* transform = entity->getComponent<TransformComponent>();
 		AnimatedModelComponent* animatedModel = entity->getComponent<AnimatedModelComponent>();
 
-		glm::mat4 modelMatrix = transform->getAlphaMatrix(alpha);
+		glm::mat4 transformModelMatrix;
+		if(!animatedModel->modelAsset->meshParts.empty()) {
+			transformModelMatrix = transform->getAlphaMatrix(alpha);
+		}
 		for(auto pair : animatedModel->modelAsset->meshParts)
 		{
 			MeshPart *meshPart = pair.second;
 			NodePart *nodePart = meshPart->nodePart;
+
+			glm::mat4 modelMatrix = transformModelMatrix;
 
 			//If model is animated, use animated transformation
 			if(animatedModel->animated)
