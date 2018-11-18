@@ -16,7 +16,7 @@ public:
 
 	Shader *terrainShader;
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_TERRAINSYSTEM_H

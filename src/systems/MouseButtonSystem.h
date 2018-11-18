@@ -16,7 +16,7 @@ public:
 	std::map<int, int> buttonList;
 	bool isButtonPressed(int buttonCode);
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_MOUSEBUTTONSYSTEM_H

@@ -52,16 +52,32 @@ int main()
 	std::chrono::time_point<std::chrono::steady_clock> start, previous, current;
 	start = std::chrono::steady_clock::now();
 	previous = start;
+	double accumulator; //TODO precision?
 	while(!shouldExit)
 	{
 		window->updateViewport();
 
 		current = std::chrono::steady_clock::now();
-		std::chrono::duration<double> dt = (current - previous);
+		std::chrono::duration<double> timeDiff = (current - previous);
+		double frameTime = timeDiff.count();
+		if(frameTime > GameSettings::get().maxFrameTime) {
+			frameTime = GameSettings::get().maxFrameTime;
+		}
 		previous = current;
 
-		//Run the current scene
-		currScene->run(dt);
+		accumulator += frameTime;
+
+		//Run the current scene's logic
+		while(accumulator >= GameSettings::get().updateTimestep)
+		{
+			currScene->runLogic(GameSettings::get().updateTimestep, 0);
+			accumulator -= GameSettings::get().updateTimestep;
+		}
+
+		const double alpha = accumulator / GameSettings::get().updateTimestep;
+
+		//Run the current scene's presentation and make use of extrapolation
+		currScene->runPresentation(frameTime, alpha * GameSettings::get().updateTimestep);
 
 		if(glfwGetKey(window->glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			shouldExit = true;

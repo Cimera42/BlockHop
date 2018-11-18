@@ -12,6 +12,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <tuple>
 #include "../logger.h"
 
 typedef ComponentBase* (*ComponentFactoryPtr)();
@@ -42,6 +43,15 @@ private:
 	std::map<std::string, SystemFactoryPtr> gameSystemExports;
 	std::map<std::string, ComponentFactoryPtr> gameComponentExports;
 	std::map<std::string, TriggerFactoryPtr> gameTriggerExports;
+
+	// Systems have other behind the scenes logic for logic vs presentational - hence private
+	int systemPresentationalIndex = 0;
+	// Preserve ordering for systems: name, systempointer, isPresentational
+	std::vector<std::tuple<std::string, SystemBase*, bool> > gameSystems;
+	// TODO avoid storing systems twice
+	// (however better than copying as per https://stackoverflow.com/questions/421573/best-way-to-extract-a-subvector-from-a-vector)
+	std::vector<std::tuple<std::string, SystemBase*, bool> > presentationSystems;
+	std::vector<std::tuple<std::string, SystemBase*, bool> > logicSystems;
 public:
 	ECSManager(ECSManager const&) = delete;
 	void operator=(ECSManager const&) = delete;
@@ -54,11 +64,11 @@ public:
 		T *findSystem()
 	{
 		auto it =
-				std::find_if(gameSystems.begin(), gameSystems.end(), [](std::pair<std::string, SystemBase*> o) {
-					return (o.first == System<T>::name);
+				std::find_if(gameSystems.begin(), gameSystems.end(), [](std::tuple<std::string, SystemBase*, bool> o) {
+					return (std::get<0>(o) == System<T>::name);
 				});
 		if(it != gameSystems.end())
-			return static_cast<T*>(it->second);
+			return static_cast<T*>(std::get<1>(*it));
 		return nullptr;
 	}
 	Entity* findEntity(std::string name);
@@ -70,7 +80,7 @@ public:
 	 */
 	ComponentBase* createComponent(std::string name, json compData);
 	TriggerBase* createTrigger(std::string name, json trigData);
-	SystemBase* createSystem(std::string name, std::vector<std::string> compsNeeded, std::vector<std::string> attachedTriggers);
+	SystemBase* createSystem(std::string name, bool isPresentational, std::vector<std::string> compsNeeded, std::vector<std::string> attachedTriggers);
 	Entity* createEntity(std::string name, std::vector<std::string> compsToSub, std::vector<json> compsData, std::vector<std::string> trigsToSub, std::vector<json> trigsData);
 
 	//Used to generate references to systems by string
@@ -107,8 +117,10 @@ public:
 	 */
 	std::map<std::string, std::vector<std::string> > gameIdentities;
 	std::map<std::string, Entity*> gameEntities;
-	//std::map<std::string, SystemBase*> gameSystems;
-	std::vector<std::pair<std::string, SystemBase*> > gameSystems;
+
+	std::vector<std::tuple<std::string, SystemBase*, bool> > getGameSystems();
+	std::vector<std::tuple<std::string, SystemBase*, bool> > getPresentationSystems();
+	std::vector<std::tuple<std::string, SystemBase*, bool> > getLogicSystems();
 
 	//Used by systems to retrieve instances do not use otherwise
 	std::map<std::string, TriggerBase*> gameTriggers;

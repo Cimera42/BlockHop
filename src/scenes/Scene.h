@@ -21,7 +21,9 @@ public:
 
 	virtual void transition() {};
 	virtual void load() {};
-	virtual void run(std::chrono::duration<double> dt) {};
+	// virtual void run(std::chrono::duration<double> dt) {};
+	virtual void runLogic(double, double) {};
+	virtual void runPresentation(double, double) {};
 };
 
 

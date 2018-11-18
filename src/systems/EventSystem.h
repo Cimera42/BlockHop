@@ -19,7 +19,7 @@ public:
 	// Essentially a broadcaster - probably based on
 	// components/triggers that are attached to an entity
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_EVENTSYSTEM_H

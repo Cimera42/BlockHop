@@ -3,6 +3,7 @@
 //
 
 #include "PhysicsSystem.h"
+#include "../gameSettings.h"
 #include "../ecs/ecsManager.h"
 #include "../components/TransformComponent.h"
 #include "../components/PhysicsComponent.h"
@@ -39,8 +40,6 @@ btQuaternion fromVecToVecQuat(btVector3 from, btVector3 to)
 
 PhysicsSystem::PhysicsSystem()
 {
-	accumulator = 0;
-
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	overlappingPairCache = new btDbvtBroadphase();
@@ -375,16 +374,11 @@ void PhysicsSystem::subscribeCallback(Entity *entSubbed)
 }
 
 extern Window window;
-void PhysicsSystem::update(double dt)
+void PhysicsSystem::update(double dt, double alpha)
 {
-	accumulator += dt;
-
-	while(accumulator >= idealTimestep)
-	{
-		dynamicsWorld->stepSimulation(idealTimestep, 10);
-
-		accumulator -= idealTimestep;
-	}
+	// Update physics world according to `timeStep < maxSubSteps * fixedTimeStep`!
+	auto pft = GameSettings::get().physicsFixedTimestep;
+	dynamicsWorld->stepSimulation(btScalar(dt), (int) ceil(dt / pft), btScalar(pft)); //Default fixedTimeStep for physics is 1/60
 
 	//Run triggers
 	updateSystemTriggers();
@@ -407,6 +401,12 @@ void PhysicsSystem::update(double dt)
 			btQuaternion rot = transform.getRotation() * (-physicsComp->offsetRot);
 			transformComp->setPosition(glm::vec3(pos.getX(), pos.getY(), pos.getZ()));
 			transformComp->setRotation(glm::quat(rot.getW(), rot.getX(), rot.getY(), rot.getZ()));
+
+			auto velocity = rb->getLinearVelocity();
+			transformComp->setVelocity(glm::vec3(velocity.getX(), velocity.getY(), velocity.getZ()));
+
+			auto angularVelocity = rb->getAngularVelocity();
+			transformComp->setAngularVelocity(glm::vec3(angularVelocity.getX(), angularVelocity.getY(), angularVelocity.getZ()));
 		}
 	}
 }

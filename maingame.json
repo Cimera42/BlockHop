@@ -26,7 +26,16 @@
 	],
 	"systems": [
 		{
+			"name": "transformSystem",
+			"isPresentation": false,
+			"compsToSub": [
+				"transformComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
 			"name": "eventSystem",
+			"isPresentation": false,
 			"compsToSub": [
 				"eventComponentSTUB"
 			],
@@ -34,6 +43,7 @@
 		},
 		{
 			"name": "timeSystem",
+			"isPresentation": false,
 			"compsToSub": [
 				"timeoutComponent"
 			],
@@ -41,6 +51,7 @@
 		},
 		{
 			"name": "mouseInputSystem",
+			"isPresentation": false,
 			"compsToSub": [
 				"transformComponent",
 				"mouseControlComponent"
@@ -49,6 +60,7 @@
 		},
 		{
 			"name": "keyboardInputSystem",
+			"isPresentation": false,
 			"compsToSub": [
 				"transformComponent",
 				"keyboardControlComponent"
@@ -57,6 +69,7 @@
 		},
 		{
 			"name": "mouseButtonSystem",
+			"isPresentation": false,
 			"compsToSub": [
 				"mouseControlComponent"
 			],
@@ -64,6 +77,7 @@
 		},
 		{
 			"name": "physicsSystem",
+			"isPresentation": false,
 			"compsToSub": [
 				"transformComponent",
 				"physicsComponent"
@@ -73,7 +87,17 @@
 			]
 		},
 		{
+			"name": "animatedModelSystem",
+			"isPresentation": false,
+			"compsToSub": [
+				"transformComponent",
+				"animatedModelComponent"
+			],
+			"trigsToAttach": []
+		},
+		{
 			"name": "cameraSystem",
+			"isPresentation": true,
 			"compsToSub": [
 				"transformComponent",
 				"cameraComponent"
@@ -81,7 +105,8 @@
 			"trigsToAttach": []
 		},
 		{
-			"name": "animatedModelSystem",
+			"name": "renderModelSystem",
+			"isPresentation": true,
 			"compsToSub": [
 				"transformComponent",
 				"animatedModelComponent"
@@ -90,6 +115,7 @@
 		},
 		{
 			"name": "terrainSystem",
+			"isPresentation": true,
 			"compsToSub": [
 				"transformComponent",
 				"terrainComponent"
@@ -98,6 +124,7 @@
 		},
 		{
 			"name": "textSystem",
+			"isPresentation": true,
 			"compsToSub": [
 				"transformComponent",
 				"textComponent"
@@ -113,7 +140,7 @@
 					"name": "transformComponent",
 					"values": {
 						"position": [0, 0, 0],
-						"rotation": [1, 0 , 0, 0],
+						"rotation": [1, 0, 0, 0],
 						"scale": [1, 1, 1]
 					}
 				},

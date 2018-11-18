@@ -10,7 +10,7 @@ SYSTEM_EXPORT(EventSystem, "eventSystem")
 EventSystem::EventSystem() {}
 EventSystem::~EventSystem() {}
 
-void EventSystem::update(double dt)
+void EventSystem::update(double dt, double alpha)
 {
 	updateSystemTriggers();
 

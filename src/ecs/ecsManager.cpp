@@ -13,8 +13,8 @@ ECSManager::~ECSManager()
 	}
 	for(auto system : gameSystems)
 	{
-		Logger() << "Deleting system " << system.second->getName();
-		delete system.second;
+		Logger() << "Deleting system " << std::get<1>(system)->getName();
+		delete std::get<1>(system);
 	}
 	for(auto trigger : gameTriggers)
 	{
@@ -92,14 +92,14 @@ TriggerBase* ECSManager::createTrigger(std::string name, json trigData) {
 
 		//Get the system this trigger is to be attached to
 		bool foundSystem = false;
-		for(std::pair<std::string, SystemBase*> o : gameSystems) {
-			std::vector<TriggerBase*> triggers = o.second->getTriggers();
+		for(std::tuple<std::string, SystemBase*, bool> o : gameSystems) {
+			std::vector<TriggerBase*> triggers = std::get<1>(o)->getTriggers();
 			auto it = std::find_if(triggers.begin(), triggers.end(), [name](TriggerBase *t) {
 				return t->getName() == name;
 			});
 			if (it != triggers.end()) {
 				//Set name in trigger
-				t->setSystemName(o.first);
+				t->setSystemName(std::get<0>(o));
 				foundSystem = true;
 				break;
 			}
@@ -122,7 +122,7 @@ TriggerBase* ECSManager::createTrigger(std::string name, json trigData) {
 	return nullptr;
 }
 
-SystemBase* ECSManager::createSystem(std::string name, std::vector<std::string> compsNeeded, std::vector<std::string> attachedTriggers){
+SystemBase* ECSManager::createSystem(std::string name, bool isPresentational, std::vector<std::string> compsNeeded, std::vector<std::string> attachedTriggers){
 	try {
 		//Get system from map and instantiate with a list of required components
 		auto createFunc = gameSystemExports.at(name);
@@ -132,7 +132,14 @@ SystemBase* ECSManager::createSystem(std::string name, std::vector<std::string> 
 		//Add triggers that will be attached to this system
 		t->setAttachedTriggers(attachedTriggers);
 		//Add to global gameSystems store
-		gameSystems.push_back(std::make_pair(name, t));
+		auto sys = std::make_tuple(name, t, isPresentational);
+		gameSystems.push_back(sys);
+		//Also add to respective system
+		if(isPresentational) {
+			presentationSystems.push_back(sys);
+		} else {
+			logicSystems.push_back(sys);
+		}
 		return t;
 	}
 	catch (...) {
@@ -169,4 +176,16 @@ Entity* ECSManager::createEntity(std::string name, std::vector<std::string> comp
 	//Add to global gameEntities store
 	gameEntities.insert(std::make_pair(name, e));
 	return e;
+}
+
+std::vector<std::tuple<std::string, SystemBase *, bool> > ECSManager::getGameSystems() {
+	return this->gameSystems;
+}
+
+std::vector<std::tuple<std::string, SystemBase *, bool> > ECSManager::getPresentationSystems() {
+	return this->presentationSystems;
+}
+
+std::vector<std::tuple<std::string, SystemBase *, bool> > ECSManager::getLogicSystems() {
+	return this->logicSystems;
 };

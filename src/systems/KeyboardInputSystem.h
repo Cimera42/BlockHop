@@ -17,7 +17,7 @@ public:
 
 	bool isKeyPressed(int keyCode);
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_KEYBOARDINPUTSYSTEM_H

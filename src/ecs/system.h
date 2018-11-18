@@ -73,7 +73,8 @@ public:
 	/*
 	 * Updates are called by the engine to run the system.
 	 */
-	virtual void update(double dt) = 0;
+	//virtual void update(double dt) = 0;
+	virtual void update(double dt, double alpha) = 0;
 
 	virtual const std::string getName() = 0;
 

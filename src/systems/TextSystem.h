@@ -18,7 +18,7 @@ public:
 
 	Shader *textShader;
 
-	void update(double dt);
+	void update(double dt, double alpha);
 
 	void renderText(TransformComponent *transform, TextComponent *text);
 };

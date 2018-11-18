@@ -19,7 +19,7 @@ public:
 	glm::vec2 getLastPos() const;
 	void setLastPos(glm::vec2 inLastPos);
 
-	void update(double dt);
+	void update(double dt, double alpha);
 };
 
 #endif //BLOCKHOP_MOUSEINPUTSYSTEM_H
