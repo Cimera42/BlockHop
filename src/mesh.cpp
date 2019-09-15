@@ -4,9 +4,9 @@
 
 Mesh::Mesh(std::string inName)
 {
-	name = inName;	
+	name = inName;
 }
-Mesh::Mesh(std::string inName, aiMesh *assimpMesh) 
+Mesh::Mesh(std::string inName, aiMesh *assimpMesh)
 		: Mesh(inName)
 {
 	load(assimpMesh);
@@ -82,13 +82,21 @@ void Mesh::load(aiMesh* assimpMesh)
 		glm::vec3 glmVert = glm::vec3(vertex.x,vertex.y,vertex.z);
 		vertices.push_back(glmVert);
 
-		aiVector3D uv = assimpMesh->mTextureCoords[0][j];
-		glm::vec2 glmUv = glm::vec2(uv.x,uv.y);
-		uvs.push_back(glmUv);
+		glm::vec2 glmUv;
+		if(assimpMesh->mTextureCoords[0])
+		{
+			aiVector3D uv = assimpMesh->mTextureCoords[0][j];
+			glmUv = glm::vec2(uv.x, uv.y);
+			uvs.push_back(glmUv);
+		}
 
-		aiVector3D normal = assimpMesh->mNormals[j];
-		glm::vec3 glmNormal = glm::vec3(normal.x,normal.y,normal.z);
-		normals.push_back(glmNormal);
+		glm::vec3 glmNormal;
+		if(assimpMesh->mNormals)
+		{
+			aiVector3D normal = assimpMesh->mNormals[j];
+			glmNormal = glm::vec3(normal.x, normal.y, normal.z);
+			normals.push_back(glmNormal);
+		}
 
 		materialIndices.push_back(assimpMesh->mMaterialIndex);
 

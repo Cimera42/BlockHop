@@ -310,7 +310,10 @@ bool ModelAsset::load()
 	std::vector<std::string> texPaths;
 	for(unsigned int i = 0; i < materials.size(); i++)
 	{
-		texPaths.push_back(materials[i].image->getName());
+		if(materials[i].image)
+		{
+			texPaths.push_back(materials[i].image->getName());
+		}
 	}
 
 	//Load textures and place into singular OpenGL texture Array

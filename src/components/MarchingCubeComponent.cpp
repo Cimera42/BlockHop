@@ -5,6 +5,8 @@
 #include "MarchingCubeComponent.h"
 #include "../ecs/ecsManager.h"
 #include "../openGLFunctions.h"
+#include "../loaders/assetManager.h"
+#include "../mesh.h"
 
 COMPONENT_EXPORT(MarchingCubeComponent, "marchingCubeComponent")
 
@@ -311,15 +313,127 @@ int sq(int a)
 	return a*a;
 }
 
+#define EPSILON 0.000001
+float testCollide(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 rayOrigin, glm::vec3 rayDirection)
+{
+	glm::vec3 edge1, edge2;
+	glm::vec3 P, Q, T;
+	float det, inv_det, u, v;
+	float t;
+
+	edge1 = p2 - p1;
+	edge2 = p3 - p1;
+
+	P = glm::cross(rayDirection, edge2);
+	det = glm::dot(edge1, P);
+	if(det > -EPSILON && det < EPSILON) return 0;
+	inv_det = 1.0f / det;
+
+	T = rayOrigin - p1;
+	u = glm::dot(T,P) * inv_det;
+	if(u < 0.0f || u > 1.0f) return 0;
+
+	Q = glm::cross(T, edge1);
+	v = glm::dot(rayDirection, Q) * inv_det;
+	if(v < 0.0f || u + v > 1.0f) return 0;
+
+	t = glm::dot(edge2, Q) * inv_det;
+
+	if(t > EPSILON)
+	{
+		return t;
+	}
+	return 0;
+}
+
 void MarchingCubeComponent::setValues(json inValues)
 {
-	const int size = 110;
-	bool grid[size][size][size];
-	for(int i = 0; i < size; i++) {
-		for(int j = 0; j < size; j++) {
-			for(int k = 0; k < size; k++) {
-				// Sphere in centre of grid
-				grid[i][j][k] = sq(i-(size/2)) + sq(j-(size/2)) + sq(k-(size/2)) < sq((size/2)-1);
+	auto modelAsset = static_cast<ModelAsset*>(AssetManager::get().loadSync(inValues["filename"]));
+
+	const int size = inValues["size"];
+	glm::vec3 ray(0,1,0);
+	std::vector<std::vector<std::vector<bool> > > grid = std::vector<std::vector<std::vector<bool> > >(size, std::vector<std::vector<bool> >(size, std::vector<bool>(size, false)));
+	std::vector<std::vector<glm::vec3> > meshTriangleVertices(modelAsset->meshParts.size());
+	glm::vec3 max;
+	glm::vec3 min;
+
+	int n = 0;
+	for(std::pair<const std::string, MeshPart*> pair : modelAsset->meshParts)
+	{
+		auto meshPart = pair.second;
+		Mesh *mesh = modelAsset->normalMeshes[meshPart->mesh];
+		glm::mat4 transform;
+
+		auto node = meshPart->nodePart;
+		while(true)
+		{
+			transform *= node->defaultTransform;
+			if(node->nodeParent)
+				node = node->nodeParent;
+			else
+				break;
+		}
+
+		for(auto index : mesh->indices)
+		{
+			glm::vec3 vert = transform * glm::vec4(mesh->vertices[index], 1);
+			meshTriangleVertices[n].push_back(vert);
+
+			if(vert.x < min.x) min.x = vert.x;
+			if(vert.y < min.y) min.y = vert.y;
+			if(vert.z < min.z) min.z = vert.z;
+
+			if(vert.x > max.x) max.x = vert.x;
+			if(vert.y > max.y) max.y = vert.y;
+			if(vert.z > max.z) max.z = vert.z;
+		}
+
+		Logger() << max;
+		Logger() << min;
+
+		max = max - min;
+		n++;
+	}
+
+	for(auto meshVerts : meshTriangleVertices)
+	{
+		for(int i = 0; i < meshVerts.size(); i++) {
+			// Center mesh and normalise
+			meshVerts[i] = (meshVerts[i] - min) / max;
+		}
+
+		std::vector<std::vector<std::vector<float> > > intersectionDistances = std::vector<std::vector<std::vector<float> > >(size, std::vector<std::vector<float> >(size));
+
+		for(int i = 0; i < size; i++) {
+			for(int k = 0; k < size; k++)
+			{
+				for(int m = 0; m < meshVerts.size(); m += 3)
+				{
+					glm::vec3 point = ((glm::vec3(i, 0, k) / ((float) size)) * 1.1f) - 0.05f;
+
+					float t = testCollide(meshVerts[m], meshVerts[m + 1], meshVerts[m + 2], point, ray);
+					if(t != 0)
+					{
+						intersectionDistances[i][k].push_back(((t + 0.05f) / 1.1f) * size);
+					}
+				}
+
+				for(int j = 0; j < size; j++)
+				{
+					int colCount = 0;
+					for(auto t : intersectionDistances[i][k])
+					{
+						if(t >= j)
+						{
+							colCount++;
+						}
+					}
+
+					if(colCount % 2 == 1)
+					{
+						grid[i][j][k] = true;
+					}
+				}
 			}
 		}
 	}
@@ -340,7 +454,7 @@ void MarchingCubeComponent::setValues(json inValues)
 				if(grid[i+1][j+1][k+1]) mask |= 64;
 				if(grid[i  ][j+1][k+1]) mask |= 128;
 
-				if(!mask)
+				if(!mask || mask == 255)
 					continue;
 
 				if(edgeTable[mask] &    1) verts[ 0] = glm::vec3(0.5,   0,   0);

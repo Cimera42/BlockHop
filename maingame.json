@@ -222,7 +222,9 @@
 				{
 					"name": "marchingCubeComponent",
 					"values": {
-					}
+						"filename": "assets/models/57-tree/tree.fbx",
+						"size": 200
+ 					}
 				}
 			]
 		}

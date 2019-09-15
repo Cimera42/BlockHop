@@ -7,5 +7,5 @@ layout(location = 0) out vec4 outColour;
 void main()
 {
     float intensity = clamp(dot(normalize(vec3(1,1,1)), inNorm), 0,1);
-    outColour = vec4(vec3(intensity), 1);
+    outColour = vec4(intensity * vec3(0,1,0), 1);
 }
