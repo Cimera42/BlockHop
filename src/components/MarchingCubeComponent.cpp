@@ -348,6 +348,7 @@ float testCollide(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 rayOrigin,
 
 void MarchingCubeComponent::setValues(json inValues)
 {
+	auto start = std::chrono::high_resolution_clock::now();
 	auto modelAsset = static_cast<ModelAsset*>(AssetManager::get().loadSync(inValues["filename"]));
 
 	const int size = inValues["size"];
@@ -409,12 +410,28 @@ void MarchingCubeComponent::setValues(json inValues)
 			{
 				for(int m = 0; m < meshVerts.size(); m += 3)
 				{
+					// Add padding to edge of grid
 					glm::vec3 point = ((glm::vec3(i, 0, k) / ((float) size)) * 1.1f) - 0.05f;
 
-					float t = testCollide(meshVerts[m], meshVerts[m + 1], meshVerts[m + 2], point, ray);
-					if(t != 0)
+//					bool hasPos = false;
+//					bool hasNeg = false;
+//
+//					for(int p = 0; p < 3; p++)
+//					{
+//						if(!hasPos && (meshVerts[m+p].x >= point.x || meshVerts[m+p].y >= point.y || meshVerts[m+p].z >= point.z)) hasPos = true;
+//						if(!hasNeg && (meshVerts[m+p].x <= point.x || meshVerts[m+p].y <= point.y || meshVerts[m+p].z <= point.z)) hasNeg = true;
+//						if(hasPos && hasNeg)
+//							continue;
+//					}
+//
+//					if(hasPos && hasNeg)
 					{
-						intersectionDistances[i][k].push_back(((t + 0.05f) / 1.1f) * size);
+						float t = testCollide(meshVerts[m], meshVerts[m + 1], meshVerts[m + 2], point, ray);
+						if(t != 0)
+						{
+							// Remove padding from cast distance
+							intersectionDistances[i][k].push_back(((t + 0.05f) / 1.1f) * size);
+						}
 					}
 				}
 
@@ -437,6 +454,9 @@ void MarchingCubeComponent::setValues(json inValues)
 			}
 		}
 	}
+	auto finish = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = finish - start;
+	Logger() << "Elapsed time: " << elapsed.count();
 
 	for(int i = 0; i < size - 1; i++) {
 		for(int j = 0; j < size - 1; j++) {
