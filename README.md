@@ -3,9 +3,10 @@
 Project made using the CLion IDE.
 Built using [Mingw-w64](https://mingw-w64.org) _(posix threads)_
 
-Table of contents
-[Background](#background)
-[Models](#models)
+| Table of contents |
+|-|
+|[Background](#background)|
+|[Models](#models)|
 
 ### Background
 Was initially intended as a playground to get features I haven't done properly before working.
@@ -13,7 +14,7 @@ Was initially intended as a playground to get features I haven't done properly b
 | Feature            | Backend            | ECS Interface |
 |--------------------|--------------------|---------------|
 | Skeletal animation | Completed, needs refactoring          | Working   |
-| SDF text rendering | Completed          | Working   |
+| [SDF text rendering](https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf) | Completed          | Working   |
 | Sound              | Research            | Not Started   |
 | Physics engine     | [BulletPhysics](https://github.com/bulletphysics/bullet3) | Working |
 
